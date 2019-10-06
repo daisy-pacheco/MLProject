@@ -419,3 +419,1079 @@ trainData79$JOB_SATISFACTION.34_1993 <- trainData79$JOB_SATISFACTION_R4187200
 trainData79$JOB_SATISFACTION.35_1993 <- trainData79$JOB_SATISFACTION_R4187200
 trainData79$JOB_SATISFACTION.36_1993 <- trainData79$JOB_SATISFACTION_R4187200
 trainData79$JOB_SATISFACTION.37_1993 <- trainData79$JOB_SATISFACTION_R4187200
+
+
+### sector ###
+# 1979
+
+unique(trainData79$EMPLOYERS_ALL_COW_1979.01_E7820100)
+
+
+
+trainData79$publicPrivate.01_1979 <- trainData79 %>%
+  mutate(case_when(EMPLOYERS_ALL_COW_1979.01_E7820100 == 1 | 
+                     EMPLOYERS_ALL_COW_1979.01_E7820100 == 3 |
+                     EMPLOYERS_ALL_COW_1979.01_E7820100 == 4 ~ "Public", 
+                   EMPLOYERS_ALL_COW_1979.01_E7820100 == 2 ~ "Private"))
+
+# test
+  
+  
+  
+  case_when(EMPLOYERS_ALL_COW_1979.01_E7820100 == )
+trainData79$publicPrivate.02_1979 <- trainData79$publicPrivate_R0050800
+trainData79$publicPrivate.03_1979 <- trainData79$publicPrivate_R0050800
+trainData79$publicPrivate.04_1979 <- trainData79$publicPrivate_R0050800
+trainData79$publicPrivate.05_1979 <- trainData79$publicPrivate_R0050800
+
+# 1980
+trainData79$publicPrivate.01_1980 <- trainData79$publicPrivate_R0267800
+trainData79$publicPrivate.02_1980 <- trainData79$publicPrivate_R0267800
+trainData79$publicPrivate.03_1980 <- trainData79$publicPrivate_R0267800
+trainData79$publicPrivate.04_1980 <- trainData79$publicPrivate_R0267800
+trainData79$publicPrivate.05_1980 <- trainData79$publicPrivate_R0267800
+trainData79$publicPrivate.06_1980 <- trainData79$publicPrivate_R0267800
+trainData79$publicPrivate.07_1980 <- trainData79$publicPrivate_R0267800
+trainData79$publicPrivate.08_1980 <- trainData79$publicPrivate_R0267800
+trainData79$publicPrivate.09_1980 <- trainData79$publicPrivate_R0267800
+trainData79$publicPrivate.10_1980 <- trainData79$publicPrivate_R0267800
+
+# 1981
+trainData79$publicPrivate.01_1981 <- trainData79$publicPrivate_R0449200
+trainData79$publicPrivate.02_1981 <- trainData79$publicPrivate_R0449200
+trainData79$publicPrivate.03_1981 <- trainData79$publicPrivate_R0449200
+trainData79$publicPrivate.04_1981 <- trainData79$publicPrivate_R0449200
+trainData79$publicPrivate.05_1981 <- trainData79$publicPrivate_R0449200
+trainData79$publicPrivate.06_1981 <- trainData79$publicPrivate_R0449200
+trainData79$publicPrivate.07_1981 <- trainData79$publicPrivate_R0449200
+trainData79$publicPrivate.08_1981 <- trainData79$publicPrivate_R0449200
+trainData79$publicPrivate.09_1981 <- trainData79$publicPrivate_R0449200
+trainData79$publicPrivate.10_1981 <- trainData79$publicPrivate_R0449200
+trainData79$publicPrivate.11_1981 <- trainData79$publicPrivate_R0449200
+trainData79$publicPrivate.12_1981 <- trainData79$publicPrivate_R0449200
+
+# 1982
+trainData79$publicPrivate.01_1982 <- trainData79$publicPrivate_R0706500
+trainData79$publicPrivate.02_1982 <- trainData79$publicPrivate_R0706500
+trainData79$publicPrivate.03_1982 <- trainData79$publicPrivate_R0706500
+trainData79$publicPrivate.04_1982 <- trainData79$publicPrivate_R0706500
+trainData79$publicPrivate.05_1982 <- trainData79$publicPrivate_R0706500
+trainData79$publicPrivate.06_1982 <- trainData79$publicPrivate_R0706500
+trainData79$publicPrivate.07_1982 <- trainData79$publicPrivate_R0706500
+trainData79$publicPrivate.08_1982 <- trainData79$publicPrivate_R0706500
+trainData79$publicPrivate.09_1982 <- trainData79$publicPrivate_R0706500
+trainData79$publicPrivate.10_1982 <- trainData79$publicPrivate_R0706500
+trainData79$publicPrivate.11_1982 <- trainData79$publicPrivate_R0706500
+trainData79$publicPrivate.12_1982 <- trainData79$publicPrivate_R0706500
+trainData79$publicPrivate.13_1982 <- trainData79$publicPrivate_R0706500
+trainData79$publicPrivate.14_1982 <- trainData79$publicPrivate_R0706500
+trainData79$publicPrivate.15_1982 <- trainData79$publicPrivate_R0706500
+trainData79$publicPrivate.16_1982 <- trainData79$publicPrivate_R0706500
+trainData79$publicPrivate.17_1982 <- trainData79$publicPrivate_R0706500
+
+# 1983
+trainData79$publicPrivate.01_1983 <- trainData79$publicPrivate_R0946500
+trainData79$publicPrivate.02_1983 <- trainData79$publicPrivate_R0946500
+trainData79$publicPrivate.03_1983 <- trainData79$publicPrivate_R0946500
+trainData79$publicPrivate.04_1983 <- trainData79$publicPrivate_R0946500
+trainData79$publicPrivate.05_1983 <- trainData79$publicPrivate_R0946500
+trainData79$publicPrivate.06_1983 <- trainData79$publicPrivate_R0946500
+trainData79$publicPrivate.07_1983 <- trainData79$publicPrivate_R0946500
+trainData79$publicPrivate.08_1983 <- trainData79$publicPrivate_R0946500
+trainData79$publicPrivate.09_1983 <- trainData79$publicPrivate_R0946500
+trainData79$publicPrivate.10_1983 <- trainData79$publicPrivate_R0946500
+trainData79$publicPrivate.11_1983 <- trainData79$publicPrivate_R0946500
+trainData79$publicPrivate.12_1983 <- trainData79$publicPrivate_R0946500
+trainData79$publicPrivate.13_1983 <- trainData79$publicPrivate_R0946500
+trainData79$publicPrivate.14_1983 <- trainData79$publicPrivate_R0946500
+trainData79$publicPrivate.15_1983 <- trainData79$publicPrivate_R0946500
+trainData79$publicPrivate.16_1983 <- trainData79$publicPrivate_R0946500
+trainData79$publicPrivate.17_1983 <- trainData79$publicPrivate_R0946500
+trainData79$publicPrivate.18_1983 <- trainData79$publicPrivate_R0946500
+trainData79$publicPrivate.19_1983 <- trainData79$publicPrivate_R0946500
+trainData79$publicPrivate.20_1983 <- trainData79$publicPrivate_R0946500
+
+# 1984
+trainData79$publicPrivate.01_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.02_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.03_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.04_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.05_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.06_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.07_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.08_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.09_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.10_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.11_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.12_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.13_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.14_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.15_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.16_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.17_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.18_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.19_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.20_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.21_1984 <- trainData79$publicPrivate_R1256900
+trainData79$publicPrivate.22_1984 <- trainData79$publicPrivate_R1256900
+
+# 1985
+trainData79$publicPrivate.01_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.02_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.03_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.04_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.05_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.06_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.07_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.08_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.09_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.10_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.11_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.12_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.13_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.14_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.15_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.16_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.17_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.18_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.19_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.20_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.21_1985 <- trainData79$publicPrivate_R1652000
+trainData79$publicPrivate.22_1985 <- trainData79$publicPrivate_R1652000
+
+# 1986
+trainData79$publicPrivate.01_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.02_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.03_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.04_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.05_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.06_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.07_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.08_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.09_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.10_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.11_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.12_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.13_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.14_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.15_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.16_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.17_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.18_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.19_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.20_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.21_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.22_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.23_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.24_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.25_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.26_1986 <- trainData79$publicPrivate_R1925100
+trainData79$publicPrivate.27_1986 <- trainData79$publicPrivate_R1925100
+
+# 1987
+trainData79$publicPrivate.01_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.02_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.03_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.04_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.05_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.06_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.07_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.08_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.09_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.10_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.11_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.12_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.13_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.14_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.15_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.16_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.17_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.18_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.19_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.20_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.21_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.22_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.23_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.24_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.25_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.26_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.27_1987 <- trainData79$publicPrivate_R2319900
+trainData79$publicPrivate.28_1987 <- trainData79$publicPrivate_R2319900
+
+# 1988
+trainData79$publicPrivate.01_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.02_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.03_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.04_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.05_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.06_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.07_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.08_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.09_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.10_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.11_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.12_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.13_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.14_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.15_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.16_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.17_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.18_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.19_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.20_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.21_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.22_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.23_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.24_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.25_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.26_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.27_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.28_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.29_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.30_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.31_1988 <- trainData79$publicPrivate_R2532900
+trainData79$publicPrivate.32_1988 <- trainData79$publicPrivate_R2532900
+
+# 1989
+trainData79$publicPrivate.01_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.02_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.03_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.04_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.05_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.06_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.07_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.08_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.09_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.10_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.11_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.12_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.13_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.14_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.15_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.16_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.17_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.18_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.19_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.20_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.21_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.22_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.23_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.24_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.25_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.26_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.27_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.28_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.29_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.30_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.31_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.32_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.33_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.34_1989 <- trainData79$publicPrivate_R2930500
+trainData79$publicPrivate.35_1989 <- trainData79$publicPrivate_R2930500
+
+# 1990
+trainData79$publicPrivate.01_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.02_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.03_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.04_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.05_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.06_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.07_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.08_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.09_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.10_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.11_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.12_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.13_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.14_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.15_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.16_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.17_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.18_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.19_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.20_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.21_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.22_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.23_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.24_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.25_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.26_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.27_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.28_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.29_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.30_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.31_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.32_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.33_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.34_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.35_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.36_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.37_1990 <- trainData79$publicPrivate_R3136600
+trainData79$publicPrivate.38_1990 <- trainData79$publicPrivate_R3136600
+
+# 1991
+trainData79$publicPrivate.01_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.02_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.03_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.04_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.05_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.06_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.07_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.08_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.09_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.10_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.11_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.12_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.13_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.14_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.15_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.16_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.17_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.18_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.19_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.20_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.21_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.22_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.23_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.24_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.25_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.26_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.27_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.28_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.29_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.30_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.31_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.32_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.33_1991 <- trainData79$publicPrivate_R3527000
+trainData79$publicPrivate.34_1991 <- trainData79$publicPrivate_R3527000
+
+# 1992
+trainData79$publicPrivate.01_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.02_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.03_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.04_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.05_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.06_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.07_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.08_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.09_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.10_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.11_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.12_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.13_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.14_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.15_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.16_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.17_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.18_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.19_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.20_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.21_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.22_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.23_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.24_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.25_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.26_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.27_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.28_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.29_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.30_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.31_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.32_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.33_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.34_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.35_1992 <- trainData79$publicPrivate_R3732100
+trainData79$publicPrivate.36_1992 <- trainData79$publicPrivate_R3732100
+
+# 1993
+trainData79$publicPrivate.01_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.02_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.03_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.04_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.05_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.06_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.07_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.08_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.09_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.10_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.11_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.12_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.13_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.14_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.15_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.16_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.17_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.18_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.19_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.20_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.21_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.22_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.23_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.24_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.25_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.26_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.27_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.28_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.29_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.30_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.31_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.32_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.33_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.34_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.35_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.36_1993 <- trainData79$publicPrivate_R4187200
+trainData79$publicPrivate.37_1993 <- trainData79$publicPrivate_R4187200
+
+# 1994
+trainData79$publicPrivate.01_1994
+trainData79$publicPrivate.02_1994
+trainData79$publicPrivate.03_1994
+trainData79$publicPrivate.04_1994
+trainData79$publicPrivate.05_1994
+trainData79$publicPrivate.06_1994
+trainData79$publicPrivate.07_1994 
+trainData79$publicPrivate.08_1994
+trainData79$publicPrivate.09_1994 
+trainData79$publicPrivate.10_1994
+trainData79$publicPrivate.11_1994 
+trainData79$publicPrivate.12_1994 
+trainData79$publicPrivate.13_1994 
+trainData79$publicPrivate.14_1994 
+trainData79$publicPrivate.15_1994 
+trainData79$publicPrivate.16_1994 
+trainData79$publicPrivate.17_1994 
+trainData79$publicPrivate.18_1994 
+trainData79$publicPrivate.19_1994 
+trainData79$publicPrivate.20_1994 
+trainData79$publicPrivate.21_1994 
+trainData79$publicPrivate.22_1994 
+trainData79$publicPrivate.23_1994 
+trainData79$publicPrivate.24_1994 
+trainData79$publicPrivate.25_1994 
+trainData79$publicPrivate.26_1994 
+trainData79$publicPrivate.27_1994 
+trainData79$publicPrivate.28_1994 
+trainData79$publicPrivate.29_1994 
+trainData79$publicPrivate.30_1994 
+trainData79$publicPrivate.31_1994 
+trainData79$publicPrivate.32_1994 
+trainData79$publicPrivate.33_1994 
+trainData79$publicPrivate.34_1994 
+trainData79$publicPrivate.35_1994 
+trainData79$publicPrivate.36_1994 
+trainData79$publicPrivate.37_1994 
+trainData79$publicPrivate.38_1994 
+
+# 1996
+trainData79$publicPrivate.01_1996
+trainData79$publicPrivate.02_1996
+trainData79$publicPrivate.03_1996
+trainData79$publicPrivate.04_1996
+trainData79$publicPrivate.05_1996
+trainData79$publicPrivate.06_1996
+trainData79$publicPrivate.07_1996 
+trainData79$publicPrivate.08_1996
+trainData79$publicPrivate.09_1996 
+trainData79$publicPrivate.10_1996
+trainData79$publicPrivate.11_1996 
+trainData79$publicPrivate.12_1996 
+trainData79$publicPrivate.13_1996 
+trainData79$publicPrivate.14_1996 
+trainData79$publicPrivate.15_1996 
+trainData79$publicPrivate.16_1996 
+trainData79$publicPrivate.17_1996 
+trainData79$publicPrivate.18_1996 
+trainData79$publicPrivate.19_1996 
+trainData79$publicPrivate.20_1996 
+trainData79$publicPrivate.21_1996 
+trainData79$publicPrivate.22_1996 
+trainData79$publicPrivate.23_1996 
+trainData79$publicPrivate.24_1996 
+trainData79$publicPrivate.25_1996 
+trainData79$publicPrivate.26_1996 
+trainData79$publicPrivate.27_1996 
+trainData79$publicPrivate.28_1996 
+trainData79$publicPrivate.29_1996 
+trainData79$publicPrivate.30_1996 
+trainData79$publicPrivate.31_1996 
+trainData79$publicPrivate.32_1996 
+trainData79$publicPrivate.33_1996 
+trainData79$publicPrivate.34_1996 
+trainData79$publicPrivate.35_1996 
+trainData79$publicPrivate.36_1996 
+trainData79$publicPrivate.37_1996 
+trainData79$publicPrivate.38_1996 
+trainData79$publicPrivate.39_1996 
+trainData79$publicPrivate.40_1996 
+
+# 1998
+trainData79$publicPrivate.01_1998
+trainData79$publicPrivate.02_1998
+trainData79$publicPrivate.03_1998
+trainData79$publicPrivate.04_1998
+trainData79$publicPrivate.05_1998
+trainData79$publicPrivate.06_1998
+trainData79$publicPrivate.07_1998 
+trainData79$publicPrivate.08_1998
+trainData79$publicPrivate.09_1998 
+trainData79$publicPrivate.10_1998
+trainData79$publicPrivate.11_1998 
+trainData79$publicPrivate.12_1998 
+trainData79$publicPrivate.13_1998 
+trainData79$publicPrivate.14_1998 
+trainData79$publicPrivate.15_1998 
+trainData79$publicPrivate.16_1998 
+trainData79$publicPrivate.17_1998 
+trainData79$publicPrivate.18_1998 
+trainData79$publicPrivate.19_1998 
+trainData79$publicPrivate.20_1998 
+trainData79$publicPrivate.21_1998 
+trainData79$publicPrivate.22_1998 
+trainData79$publicPrivate.23_1998 
+trainData79$publicPrivate.24_1998 
+trainData79$publicPrivate.25_1998 
+trainData79$publicPrivate.26_1998 
+trainData79$publicPrivate.27_1998 
+trainData79$publicPrivate.28_1998 
+trainData79$publicPrivate.29_1998 
+trainData79$publicPrivate.30_1998 
+trainData79$publicPrivate.31_1998 
+trainData79$publicPrivate.32_1998 
+trainData79$publicPrivate.33_1998 
+trainData79$publicPrivate.34_1998 
+trainData79$publicPrivate.35_1998 
+trainData79$publicPrivate.36_1998 
+trainData79$publicPrivate.37_1998 
+trainData79$publicPrivate.38_1998 
+trainData79$publicPrivate.39_1998 
+trainData79$publicPrivate.40_1998 
+trainData79$publicPrivate.41_1998 
+trainData79$publicPrivate.42_1998 
+trainData79$publicPrivate.43_1998 
+trainData79$publicPrivate.44_1998 
+trainData79$publicPrivate.45_1998 
+
+# 2000
+trainData79$publicPrivate.01_2000
+trainData79$publicPrivate.02_2000
+trainData79$publicPrivate.03_2000
+trainData79$publicPrivate.04_2000
+trainData79$publicPrivate.05_2000
+trainData79$publicPrivate.06_2000
+trainData79$publicPrivate.07_2000 
+trainData79$publicPrivate.08_2000
+trainData79$publicPrivate.09_2000 
+trainData79$publicPrivate.10_2000
+trainData79$publicPrivate.11_2000 
+trainData79$publicPrivate.12_2000 
+trainData79$publicPrivate.13_2000 
+trainData79$publicPrivate.14_2000 
+trainData79$publicPrivate.15_2000 
+trainData79$publicPrivate.16_2000 
+trainData79$publicPrivate.17_2000 
+trainData79$publicPrivate.18_2000 
+trainData79$publicPrivate.19_2000 
+trainData79$publicPrivate.20_2000 
+trainData79$publicPrivate.21_2000 
+trainData79$publicPrivate.22_2000 
+trainData79$publicPrivate.23_2000 
+trainData79$publicPrivate.24_2000 
+trainData79$publicPrivate.25_2000 
+trainData79$publicPrivate.26_2000 
+trainData79$publicPrivate.27_2000 
+trainData79$publicPrivate.28_2000 
+trainData79$publicPrivate.29_2000 
+trainData79$publicPrivate.30_2000 
+trainData79$publicPrivate.31_2000 
+trainData79$publicPrivate.32_2000 
+trainData79$publicPrivate.33_2000 
+trainData79$publicPrivate.34_2000 
+trainData79$publicPrivate.35_2000 
+trainData79$publicPrivate.36_2000 
+trainData79$publicPrivate.37_2000 
+trainData79$publicPrivate.38_2000 
+trainData79$publicPrivate.39_2000 
+trainData79$publicPrivate.40_2000 
+trainData79$publicPrivate.41_2000 
+trainData79$publicPrivate.42_2000 
+trainData79$publicPrivate.43_2000 
+trainData79$publicPrivate.44_2000 
+trainData79$publicPrivate.45_2000 
+trainData79$publicPrivate.46_2000 
+trainData79$publicPrivate.47_2000 
+trainData79$publicPrivate.48_2000 
+
+# 2002
+trainData79$publicPrivate.01_2002
+trainData79$publicPrivate.02_2002
+trainData79$publicPrivate.03_2002
+trainData79$publicPrivate.04_2002
+trainData79$publicPrivate.05_2002
+trainData79$publicPrivate.06_2002
+trainData79$publicPrivate.07_2002 
+trainData79$publicPrivate.08_2002
+trainData79$publicPrivate.09_2002 
+trainData79$publicPrivate.10_2002
+trainData79$publicPrivate.11_2002 
+trainData79$publicPrivate.12_2002 
+trainData79$publicPrivate.13_2002 
+trainData79$publicPrivate.14_2002 
+trainData79$publicPrivate.15_2002 
+trainData79$publicPrivate.16_2002 
+trainData79$publicPrivate.17_2002 
+trainData79$publicPrivate.18_2002 
+trainData79$publicPrivate.19_2002 
+trainData79$publicPrivate.20_2002 
+trainData79$publicPrivate.21_2002 
+trainData79$publicPrivate.22_2002 
+trainData79$publicPrivate.23_2002 
+trainData79$publicPrivate.24_2002 
+trainData79$publicPrivate.25_2002 
+trainData79$publicPrivate.26_2002 
+trainData79$publicPrivate.27_2002 
+trainData79$publicPrivate.28_2002 
+trainData79$publicPrivate.29_2002 
+trainData79$publicPrivate.30_2002 
+trainData79$publicPrivate.31_2002 
+trainData79$publicPrivate.32_2002 
+trainData79$publicPrivate.33_2002 
+trainData79$publicPrivate.34_2002 
+trainData79$publicPrivate.35_2002 
+trainData79$publicPrivate.36_2002 
+trainData79$publicPrivate.37_2002 
+trainData79$publicPrivate.38_2002 
+trainData79$publicPrivate.39_2002 
+trainData79$publicPrivate.40_2002 
+trainData79$publicPrivate.41_2002 
+trainData79$publicPrivate.42_2002 
+trainData79$publicPrivate.43_2002 
+trainData79$publicPrivate.44_2002 
+trainData79$publicPrivate.45_2002 
+trainData79$publicPrivate.46_2002 
+trainData79$publicPrivate.47_2002 
+trainData79$publicPrivate.48_2002
+trainData79$publicPrivate.49_2002 
+trainData79$publicPrivate.50_2002 
+trainData79$publicPrivate.51_2002 
+trainData79$publicPrivate.52_2002 
+trainData79$publicPrivate.53_2002
+
+# 2004
+trainData79$publicPrivate.01_2004
+trainData79$publicPrivate.02_2004
+trainData79$publicPrivate.03_2004
+trainData79$publicPrivate.04_2004
+trainData79$publicPrivate.05_2004
+trainData79$publicPrivate.06_2004
+trainData79$publicPrivate.07_2004 
+trainData79$publicPrivate.08_2004
+trainData79$publicPrivate.09_2004 
+trainData79$publicPrivate.10_2004
+trainData79$publicPrivate.11_2004 
+trainData79$publicPrivate.12_2004 
+trainData79$publicPrivate.13_2004 
+trainData79$publicPrivate.14_2004 
+trainData79$publicPrivate.15_2004 
+trainData79$publicPrivate.16_2004 
+trainData79$publicPrivate.17_2004 
+trainData79$publicPrivate.18_2004 
+trainData79$publicPrivate.19_2004 
+trainData79$publicPrivate.20_2004 
+trainData79$publicPrivate.21_2004 
+trainData79$publicPrivate.22_2004 
+trainData79$publicPrivate.23_2004 
+trainData79$publicPrivate.24_2004 
+trainData79$publicPrivate.25_2004 
+trainData79$publicPrivate.26_2004 
+trainData79$publicPrivate.27_2004 
+trainData79$publicPrivate.28_2004 
+trainData79$publicPrivate.29_2004 
+trainData79$publicPrivate.30_2004 
+trainData79$publicPrivate.31_2004 
+trainData79$publicPrivate.32_2004 
+trainData79$publicPrivate.33_2004 
+trainData79$publicPrivate.34_2004 
+trainData79$publicPrivate.35_2004 
+trainData79$publicPrivate.36_2004 
+trainData79$publicPrivate.37_2004 
+trainData79$publicPrivate.38_2004 
+trainData79$publicPrivate.39_2004 
+trainData79$publicPrivate.40_2004 
+trainData79$publicPrivate.41_2004 
+trainData79$publicPrivate.42_2004 
+trainData79$publicPrivate.43_2004 
+trainData79$publicPrivate.44_2004 
+trainData79$publicPrivate.45_2004 
+trainData79$publicPrivate.46_2004 
+trainData79$publicPrivate.47_2004 
+trainData79$publicPrivate.48_2004
+trainData79$publicPrivate.49_2004 
+trainData79$publicPrivate.50_2004 
+trainData79$publicPrivate.51_2004 
+trainData79$publicPrivate.52_2004 
+trainData79$publicPrivate.53_2004
+
+# 2006
+trainData79$publicPrivate.01_2006
+trainData79$publicPrivate.02_2006
+trainData79$publicPrivate.03_2006
+trainData79$publicPrivate.04_2006
+trainData79$publicPrivate.05_2006
+trainData79$publicPrivate.06_2006
+trainData79$publicPrivate.07_2006 
+trainData79$publicPrivate.08_2006
+trainData79$publicPrivate.09_2006 
+trainData79$publicPrivate.10_2006
+trainData79$publicPrivate.11_2006 
+trainData79$publicPrivate.12_2006 
+trainData79$publicPrivate.13_2006 
+trainData79$publicPrivate.14_2006 
+trainData79$publicPrivate.15_2006 
+trainData79$publicPrivate.16_2006 
+trainData79$publicPrivate.17_2006 
+trainData79$publicPrivate.18_2006 
+trainData79$publicPrivate.19_2006 
+trainData79$publicPrivate.20_2006 
+trainData79$publicPrivate.21_2006 
+trainData79$publicPrivate.22_2006 
+trainData79$publicPrivate.23_2006 
+trainData79$publicPrivate.24_2006 
+trainData79$publicPrivate.25_2006 
+trainData79$publicPrivate.26_2006 
+trainData79$publicPrivate.27_2006 
+trainData79$publicPrivate.28_2006 
+trainData79$publicPrivate.29_2006 
+trainData79$publicPrivate.30_2006 
+trainData79$publicPrivate.31_2006 
+trainData79$publicPrivate.32_2006 
+trainData79$publicPrivate.33_2006 
+trainData79$publicPrivate.34_2006 
+trainData79$publicPrivate.35_2006 
+trainData79$publicPrivate.36_2006 
+trainData79$publicPrivate.37_2006 
+trainData79$publicPrivate.38_2006 
+trainData79$publicPrivate.39_2006 
+trainData79$publicPrivate.40_2006 
+trainData79$publicPrivate.41_2006 
+trainData79$publicPrivate.42_2006 
+trainData79$publicPrivate.43_2006 
+trainData79$publicPrivate.44_2006 
+trainData79$publicPrivate.45_2006 
+trainData79$publicPrivate.46_2006 
+trainData79$publicPrivate.47_2006 
+trainData79$publicPrivate.48_2006
+trainData79$publicPrivate.49_2006 
+trainData79$publicPrivate.50_2006 
+trainData79$publicPrivate.51_2006 
+trainData79$publicPrivate.52_2006 
+
+# 2008
+trainData79$publicPrivate.01_2008
+trainData79$publicPrivate.02_2008
+trainData79$publicPrivate.03_2008
+trainData79$publicPrivate.04_2008
+trainData79$publicPrivate.05_2008
+trainData79$publicPrivate.06_2008
+trainData79$publicPrivate.07_2008 
+trainData79$publicPrivate.08_2008
+trainData79$publicPrivate.09_2008 
+trainData79$publicPrivate.10_2008
+trainData79$publicPrivate.11_2008 
+trainData79$publicPrivate.12_2008 
+trainData79$publicPrivate.13_2008 
+trainData79$publicPrivate.14_2008 
+trainData79$publicPrivate.15_2008 
+trainData79$publicPrivate.16_2008 
+trainData79$publicPrivate.17_2008 
+trainData79$publicPrivate.18_2008 
+trainData79$publicPrivate.19_2008 
+trainData79$publicPrivate.20_2008 
+trainData79$publicPrivate.21_2008 
+trainData79$publicPrivate.22_2008 
+trainData79$publicPrivate.23_2008 
+trainData79$publicPrivate.24_2008 
+trainData79$publicPrivate.25_2008 
+trainData79$publicPrivate.26_2008 
+trainData79$publicPrivate.27_2008 
+trainData79$publicPrivate.28_2008 
+trainData79$publicPrivate.29_2008 
+trainData79$publicPrivate.30_2008 
+trainData79$publicPrivate.31_2008 
+trainData79$publicPrivate.32_2008 
+trainData79$publicPrivate.33_2008 
+trainData79$publicPrivate.34_2008 
+trainData79$publicPrivate.35_2008 
+trainData79$publicPrivate.36_2008 
+trainData79$publicPrivate.37_2008 
+trainData79$publicPrivate.38_2008 
+trainData79$publicPrivate.39_2008 
+trainData79$publicPrivate.40_2008 
+trainData79$publicPrivate.41_2008 
+trainData79$publicPrivate.42_2008 
+trainData79$publicPrivate.43_2008 
+trainData79$publicPrivate.44_2008 
+trainData79$publicPrivate.45_2008 
+trainData79$publicPrivate.46_2008 
+trainData79$publicPrivate.47_2008 
+trainData79$publicPrivate.48_2008
+trainData79$publicPrivate.49_2008 
+trainData79$publicPrivate.50_2008 
+trainData79$publicPrivate.51_2008 
+trainData79$publicPrivate.52_2008 
+trainData79$publicPrivate.53_2008 
+trainData79$publicPrivate.54_2008 
+trainData79$publicPrivate.55_2008 
+
+# 2010
+trainData79$publicPrivate.01_2010
+trainData79$publicPrivate.02_2010
+trainData79$publicPrivate.03_2010
+trainData79$publicPrivate.04_2010
+trainData79$publicPrivate.05_2010
+trainData79$publicPrivate.06_2010
+trainData79$publicPrivate.07_2010 
+trainData79$publicPrivate.08_2010
+trainData79$publicPrivate.09_2010 
+trainData79$publicPrivate.10_2010
+trainData79$publicPrivate.11_2010 
+trainData79$publicPrivate.12_2010 
+trainData79$publicPrivate.13_2010 
+trainData79$publicPrivate.14_2010 
+trainData79$publicPrivate.15_2010 
+trainData79$publicPrivate.16_2010 
+trainData79$publicPrivate.17_2010 
+trainData79$publicPrivate.18_2010 
+trainData79$publicPrivate.19_2010 
+trainData79$publicPrivate.20_2010 
+trainData79$publicPrivate.21_2010 
+trainData79$publicPrivate.22_2010 
+trainData79$publicPrivate.23_2010 
+trainData79$publicPrivate.24_2010 
+trainData79$publicPrivate.25_2010 
+trainData79$publicPrivate.26_2010 
+trainData79$publicPrivate.27_2010 
+trainData79$publicPrivate.28_2010 
+trainData79$publicPrivate.29_2010 
+trainData79$publicPrivate.30_2010 
+trainData79$publicPrivate.31_2010 
+trainData79$publicPrivate.32_2010 
+trainData79$publicPrivate.33_2010 
+trainData79$publicPrivate.34_2010 
+trainData79$publicPrivate.35_2010 
+trainData79$publicPrivate.36_2010 
+trainData79$publicPrivate.37_2010 
+trainData79$publicPrivate.38_2010 
+trainData79$publicPrivate.39_2010 
+trainData79$publicPrivate.40_2010 
+trainData79$publicPrivate.41_2010 
+trainData79$publicPrivate.42_2010 
+trainData79$publicPrivate.43_2010 
+trainData79$publicPrivate.44_2010 
+trainData79$publicPrivate.45_2010 
+trainData79$publicPrivate.46_2010 
+trainData79$publicPrivate.47_2010 
+trainData79$publicPrivate.48_2010
+trainData79$publicPrivate.49_2010 
+trainData79$publicPrivate.50_2010 
+trainData79$publicPrivate.51_2010 
+trainData79$publicPrivate.52_2010 
+trainData79$publicPrivate.53_2010 
+trainData79$publicPrivate.54_2010 
+trainData79$publicPrivate.55_2010 
+
+# 2012
+trainData79$publicPrivate.01_2012
+trainData79$publicPrivate.02_2012
+trainData79$publicPrivate.03_2012
+trainData79$publicPrivate.04_2012
+trainData79$publicPrivate.05_2012
+trainData79$publicPrivate.06_2012
+trainData79$publicPrivate.07_2012 
+trainData79$publicPrivate.08_2012
+trainData79$publicPrivate.09_2012 
+trainData79$publicPrivate.10_2012
+trainData79$publicPrivate.11_2012 
+trainData79$publicPrivate.12_2012 
+trainData79$publicPrivate.13_2012 
+trainData79$publicPrivate.14_2012 
+trainData79$publicPrivate.15_2012 
+trainData79$publicPrivate.16_2012 
+trainData79$publicPrivate.17_2012 
+trainData79$publicPrivate.18_2012 
+trainData79$publicPrivate.19_2012 
+trainData79$publicPrivate.20_2012 
+trainData79$publicPrivate.21_2012 
+trainData79$publicPrivate.22_2012 
+trainData79$publicPrivate.23_2012 
+trainData79$publicPrivate.24_2012 
+trainData79$publicPrivate.25_2012 
+trainData79$publicPrivate.26_2012 
+trainData79$publicPrivate.27_2012 
+trainData79$publicPrivate.28_2012 
+trainData79$publicPrivate.29_2012 
+trainData79$publicPrivate.30_2012 
+trainData79$publicPrivate.31_2012 
+trainData79$publicPrivate.32_2012 
+trainData79$publicPrivate.33_2012 
+trainData79$publicPrivate.34_2012 
+trainData79$publicPrivate.35_2012 
+trainData79$publicPrivate.36_2012 
+trainData79$publicPrivate.37_2012 
+trainData79$publicPrivate.38_2012 
+trainData79$publicPrivate.39_2012 
+trainData79$publicPrivate.40_2012 
+trainData79$publicPrivate.41_2012 
+trainData79$publicPrivate.42_2012 
+trainData79$publicPrivate.43_2012 
+trainData79$publicPrivate.44_2012 
+trainData79$publicPrivate.45_2012 
+trainData79$publicPrivate.46_2012 
+trainData79$publicPrivate.47_2012 
+trainData79$publicPrivate.48_2012
+trainData79$publicPrivate.49_2012 
+trainData79$publicPrivate.50_2012 
+trainData79$publicPrivate.51_2012 
+trainData79$publicPrivate.52_2012 
+trainData79$publicPrivate.53_2012 
+trainData79$publicPrivate.54_2012 
+trainData79$publicPrivate.55_2012 
+trainData79$publicPrivate.56_2012 
+trainData79$publicPrivate.57_2012 
+trainData79$publicPrivate.58_2012 
+trainData79$publicPrivate.59_2012 
+
+# 2014
+trainData79$publicPrivate.01_2014
+trainData79$publicPrivate.02_2014
+trainData79$publicPrivate.03_2014
+trainData79$publicPrivate.04_2014
+trainData79$publicPrivate.05_2014
+trainData79$publicPrivate.06_2014
+trainData79$publicPrivate.07_2014 
+trainData79$publicPrivate.08_2014
+trainData79$publicPrivate.09_2014 
+trainData79$publicPrivate.10_2014
+trainData79$publicPrivate.11_2014 
+trainData79$publicPrivate.12_2014 
+trainData79$publicPrivate.13_2014 
+trainData79$publicPrivate.14_2014 
+trainData79$publicPrivate.15_2014 
+trainData79$publicPrivate.16_2014 
+trainData79$publicPrivate.17_2014 
+trainData79$publicPrivate.18_2014 
+trainData79$publicPrivate.19_2014 
+trainData79$publicPrivate.20_2014 
+trainData79$publicPrivate.21_2014 
+trainData79$publicPrivate.22_2014 
+trainData79$publicPrivate.23_2014 
+trainData79$publicPrivate.24_2014 
+trainData79$publicPrivate.25_2014 
+trainData79$publicPrivate.26_2014 
+trainData79$publicPrivate.27_2014 
+trainData79$publicPrivate.28_2014 
+trainData79$publicPrivate.29_2014 
+trainData79$publicPrivate.30_2014 
+trainData79$publicPrivate.31_2014 
+trainData79$publicPrivate.32_2014 
+trainData79$publicPrivate.33_2014 
+trainData79$publicPrivate.34_2014 
+trainData79$publicPrivate.35_2014 
+trainData79$publicPrivate.36_2014 
+trainData79$publicPrivate.37_2014 
+trainData79$publicPrivate.38_2014 
+trainData79$publicPrivate.39_2014 
+trainData79$publicPrivate.40_2014 
+trainData79$publicPrivate.41_2014 
+trainData79$publicPrivate.42_2014 
+trainData79$publicPrivate.43_2014 
+trainData79$publicPrivate.44_2014 
+trainData79$publicPrivate.45_2014 
+trainData79$publicPrivate.46_2014 
+trainData79$publicPrivate.47_2014 
+trainData79$publicPrivate.48_2014
+trainData79$publicPrivate.49_2014 
+trainData79$publicPrivate.50_2014 
+trainData79$publicPrivate.51_2014 
+trainData79$publicPrivate.52_2014 
+trainData79$publicPrivate.53_2014 
+trainData79$publicPrivate.54_2014 
+trainData79$publicPrivate.55_2014 
+trainData79$publicPrivate.56_2014 
+trainData79$publicPrivate.57_2014 
+trainData79$publicPrivate.58_2014 
+trainData79$publicPrivate.59_2014 
+trainData79$publicPrivate.60_2014 
+trainData79$publicPrivate.61_2014 
+trainData79$publicPrivate.62_2014 
+trainData79$publicPrivate.63_2014 
+trainData79$publicPrivate.64_2014 
+trainData79$publicPrivate.65_2014 
+
+# 2016
+trainData79$publicPrivate.01_2016
+trainData79$publicPrivate.02_2016
+trainData79$publicPrivate.03_2016
+trainData79$publicPrivate.04_2016
+trainData79$publicPrivate.05_2016
+trainData79$publicPrivate.06_2016
+trainData79$publicPrivate.07_2016 
+trainData79$publicPrivate.08_2016
+trainData79$publicPrivate.09_2016 
+trainData79$publicPrivate.10_2016
+trainData79$publicPrivate.11_2016 
+trainData79$publicPrivate.12_2016 
+trainData79$publicPrivate.13_2016 
+trainData79$publicPrivate.14_2016 
+trainData79$publicPrivate.15_2016 
+trainData79$publicPrivate.16_2016 
+trainData79$publicPrivate.17_2016 
+trainData79$publicPrivate.18_2016 
+trainData79$publicPrivate.19_2016 
+trainData79$publicPrivate.20_2016 
+trainData79$publicPrivate.21_2016 
+trainData79$publicPrivate.22_2016 
+trainData79$publicPrivate.23_2016 
+trainData79$publicPrivate.24_2016 
+trainData79$publicPrivate.25_2016 
+trainData79$publicPrivate.26_2016 
+trainData79$publicPrivate.27_2016 
+trainData79$publicPrivate.28_2016 
+trainData79$publicPrivate.29_2016 
+trainData79$publicPrivate.30_2016 
+trainData79$publicPrivate.31_2016 
+trainData79$publicPrivate.32_2016 
+trainData79$publicPrivate.33_2016 
+trainData79$publicPrivate.34_2016 
+trainData79$publicPrivate.35_2016 
+trainData79$publicPrivate.36_2016 
+trainData79$publicPrivate.37_2016 
+trainData79$publicPrivate.38_2016 
+trainData79$publicPrivate.39_2016 
+trainData79$publicPrivate.40_2016 
+trainData79$publicPrivate.41_2016 
+trainData79$publicPrivate.42_2016 
+trainData79$publicPrivate.43_2016 
+trainData79$publicPrivate.44_2016 
+trainData79$publicPrivate.45_2016 
+trainData79$publicPrivate.46_2016 
+trainData79$publicPrivate.47_2016 
+trainData79$publicPrivate.48_2016
+trainData79$publicPrivate.49_2016 
+trainData79$publicPrivate.50_2016 
+trainData79$publicPrivate.51_2016 
+trainData79$publicPrivate.52_2016 
+trainData79$publicPrivate.53_2016 
+trainData79$publicPrivate.54_2016 
+trainData79$publicPrivate.55_2016 
+trainData79$publicPrivate.56_2016 
+trainData79$publicPrivate.57_2016 
+trainData79$publicPrivate.58_2016 
+trainData79$publicPrivate.59_2016 
+trainData79$publicPrivate.60_2016 
+trainData79$publicPrivate.61_2016 
+trainData79$publicPrivate.62_2016 
+trainData79$publicPrivate.63_2016 
+trainData79$publicPrivate.64_2016 
+trainData79$publicPrivate.65_2016 
+trainData79$publicPrivate.66_2016 
+
