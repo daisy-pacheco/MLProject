@@ -1,4 +1,5 @@
 library(dplyr)
+library(ggplot2)
 
 # switching variable trainData79$JOB_SATISFACTION_R4187200mes to words vs codes
 varNames <- read.csv("varNames.csv", header = FALSE)
