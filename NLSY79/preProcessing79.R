@@ -1,6 +1,6 @@
 library(dplyr)
 
-# switching variable trainData79$JOB_SATISFACTION_R4187200mes to words vs codes
+# switching variable names to words vs codes
 varNames <- read.csv("varNames.csv", header = FALSE)
 
 names(trainData79) <- varNames[match(names(trainData79), varNames[ ,'V1']),'V3']
@@ -688,5 +688,3 @@ trainData79 <- trainData79 %>%
 trainData79 <- trainData79 %>%
   mutate(publicPrivate.05_2016 = case_when(EMPLOYERS_ALL_COW_2016.05_E8696900  %in% c(1,3,4,5) ~ "Private", 
                                            EMPLOYERS_ALL_COW_2016.05_E8696900  == 2 ~ "Public"))
-
-### Religion raised in ###
