@@ -15,10 +15,7 @@ tinySample79 <- sample_n(trainData79, 20)
 ### FEATURE ENGINEERING ###
 
 # new column: average tenure per person per year
-tinySample79$avgTenure <- tinySample79 %>%
-  mutate(avgTenure = mean())
+tinySample79$
 
 
-tinySample79 %>% 
-  select(starts_with("TENURE"))
 
