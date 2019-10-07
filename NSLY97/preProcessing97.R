@@ -372,4 +372,7 @@ trainData97 <- trainData97 %>%
   mutate(PUBLIC.05_2015 = case_when(`COW_YEMP-58500.05_U0352200` %in% c(2, 3, 4) ~ 0, 
                                            `COW_YEMP-58500.05_U0352200` %in% c(1, 5) ~ 1))
 
+### tenure ###
+
+
 
