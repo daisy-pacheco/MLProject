@@ -1,4 +1,5 @@
 library(caret)
+library(dplyr)
 
 set.seed(456) 
 index <- createDataPartition(new_data$R0000100, p = 0.7, 
