@@ -21,6 +21,29 @@ tinySample79 <- sample_n(trainData79, 20)
 trainData79 <- trainData79 %>%
   mutate_at(vars(starts_with("CURRENTLY-WORKING")), funs(replace_na(., 0)))
 
+#### EXAMPLE LOOP PSEUDOCODE ####
+
+# first set JOB_SATISFACTION.01_Year through JOB_SATISFACTION.05_year to NA
+# find the job satisfaction yearCode from the variable they are currently assigned to
+# like trainData79$JOB_SATISFACTION.01_1984 <- trainData79$JOB_SATISFACTION_R1256900 << it's here
+# you have to look up the column name for currently_working_job_1_year each time, since they have
+# different endings
+
+for(i in 1:nrow(trainData79)){
+  if (trainData79[i,"currently_working_job_1_year"] == 1){
+    trainData79[i,"JOB_SATISFACTION.01_year"] <- trainData79[i,"JOB_SATISFACTION_yearCode"]
+  }else if (trainData79[i,"currently_working_job_2_year"] == 1){
+    trainData79[i,"JOB_SATISFACTION.02_year"] <- trainData79[i,"JOB_SATISFACTION_yearCode"]
+  }else if (trainData79[i,"currently_working_job_3_year"] == 1){
+    trainData79[i,"JOB_SATISFACTION.03_year"] <- trainData79[i,"JOB_SATISFACTION_yearCode"]
+  }else if (trainData79[i,"currently_working_job_4_year"] == 1){
+    trainData79[i,"JOB_SATISFACTION.04_year"] <- trainData79[i,"JOB_SATISFACTION_yearCode"]
+  }else{
+    trainData79[i,"JOB_SATISFACTION.05_year"] <- trainData79[i,"JOB_SATISFACTION_yearCode"]
+  }
+}
+
+
 # 1979
 trainData79$JOB_SATISFACTION.01_1979 <- NA
 trainData79$JOB_SATISFACTION.02_1979 <- NA
