@@ -914,7 +914,7 @@ logCPI1979 <- function(wage) {
 }
 
 trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1979")), 
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1979"),"NET_FAMILY_INCOME_R0217900"), 
             funs(logCPI1979))
 
 # 1980
@@ -924,7 +924,7 @@ logCPI1980 <- function(wage) {
 }
 
 trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1980")), 
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1980"),"NET_FAMILY_INCOME_R0406010"), 
             funs(logCPI1980))
 
 
@@ -935,7 +935,7 @@ logCPI1981 <- function(wage) {
 }
 
 trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1981")), 
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1981"),"NET_FAMILY_INCOME_R0618410"), 
             funs(logCPI1981))
 
 # 1982
@@ -945,7 +945,7 @@ logCPI1982 <- function(wage) {
 }
 
 trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1982")), 
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1982"),"NET_FAMILY_INCOME_R0898600"), 
             funs(logCPI1982))
 
 # 1983
@@ -955,7 +955,7 @@ logCPI1983 <- function(wage) {
 }
 
 trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1983")), 
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1983"),"NET_FAMILY_INCOME_R1144500"), 
             funs(logCPI1983))
 
 # 1984
@@ -965,7 +965,7 @@ logCPI1984 <- function(wage) {
 }
 
 trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1984")), 
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1984"),"NET_FAMILY_INCOME_R1519700"), 
             funs(logCPI1984))
 
 # 1985
@@ -975,7 +975,7 @@ logCPI1985 <- function(wage) {
 }
 
 trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1985")), 
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1985"),"NET_FAMILY_INCOME_R1890400"), 
             funs(logCPI1985))
 
 # 1986
@@ -985,7 +985,7 @@ logCPI1986 <- function(wage) {
 }
 
 trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1986")), 
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1986"),"NET_FAMILY_INCOME_R2257500"), 
             funs(logCPI1986))
 
 # 1987
@@ -995,7 +995,7 @@ logCPI1987 <- function(wage) {
 }
 
 trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1987")), 
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1987"),"NET_FAMILY_INCOME_R2444700"), 
             funs(logCPI1987))
 
 # 1988
@@ -1005,7 +1005,7 @@ logCPI1988 <- function(wage) {
 }
 
 trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1988")), 
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1988"),"NET_FAMILY_INCOME_R2870200"), 
             funs(logCPI1988))
 
 # 1989
@@ -1015,7 +1015,7 @@ logCPI1989 <- function(wage) {
 }
 
 trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1989")), 
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1989"),"NET_FAMILY_INCOME_R3074000"), 
             funs(logCPI1989))
 
 # 1990
@@ -1025,7 +1025,7 @@ logCPI1990 <- function(wage) {
 }
 
 trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1990")), 
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1990"),"NET_FAMILY_INCOME_R3400700"), 
             funs(logCPI1990))
 
 # 1991
@@ -1035,7 +1035,7 @@ logCPI1991 <- function(wage) {
 }
 
 trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1991")), 
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1991"),"NET_FAMILY_INCOME_R3656100"), 
             funs(logCPI1991))
 
 # 1992
@@ -1045,7 +1045,7 @@ logCPI1992 <- function(wage) {
 }
 
 trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1992")), 
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1992"),"NET_FAMILY_INCOME_R4006600"), 
             funs(logCPI1992))
 
 # 1993
@@ -1055,7 +1055,7 @@ logCPI1993 <- function(wage) {
 }
 
 trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1993")), 
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1993"),"NET_FAMILY_INCOME_R4417700"), 
             funs(logCPI1993))
 
 # 1994
@@ -1065,18 +1065,8 @@ logCPI1994 <- function(wage) {
 }
 
 trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1994")), 
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1994"),"NET_FAMILY_INCOME_R5080700"), 
             funs(logCPI1994))
-
-# 1995
-logCPI1995 <- function(wage) {
-  wageLogCPI <- log(wage * 1.58) 
-  return(wageLogCPI)
-}
-
-trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1995")), 
-            funs(logCPI1995))
 
 # 1996
 logCPI1996 <- function(wage) {
@@ -1085,18 +1075,8 @@ logCPI1996 <- function(wage) {
 }
 
 trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1996")), 
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1996"),"NET_FAMILY_INCOME_R5166000"), 
             funs(logCPI1996))
-
-# 1997
-logCPI1997 <- function(wage) {
-  wageLogCPI <- log(wage * 1.49) 
-  return(wageLogCPI)
-}
-
-trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1997")), 
-            funs(logCPI1997))
 
 # 1998
 logCPI1998 <- function(wage) {
@@ -1105,21 +1085,98 @@ logCPI1998 <- function(wage) {
 }
 
 trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1998")), 
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1998"),"NET_FAMILY_INCOME_R6478700"), 
             funs(logCPI1998))
 
-# 1999
-logCPI1999 <- function(wage) {
-  wageLogCPI <- log(wage * 1.44) 
+# 2000
+logCPI2000 <- function(wage) {
+  wageLogCPI <- log(wage * 1.40) 
   return(wageLogCPI)
 }
 
 trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1999")), 
-            funs(logCPI1999))
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_2000"),"NET_FAMILY_INCOME_R7006500"), 
+            funs(logCPI2000))
 
+# 2002
+logCPI2002 <- function(wage) {
+  wageLogCPI <- log(wage * 1.34) 
+  return(wageLogCPI)
+}
 
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_2002"),"NET_FAMILY_INCOME_R7703700"), 
+            funs(logCPI2002))
 
+# 2004
+logCPI2004 <- function(wage) {
+  wageLogCPI <- log(wage * 1.28) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_2004"),"NET_FAMILY_INCOME_R8496100"), 
+            funs(logCPI2004))
+
+# 2006
+logCPI2006 <- function(wage) {
+  wageLogCPI <- log(wage * 1.19) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_2006"),"NET_FAMILY_INCOME_T0987800"), 
+            funs(logCPI2006))
+
+# 2008
+logCPI2008 <- function(wage) {
+  wageLogCPI <- log(wage * 1.12) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_2008"),"NET_FAMILY_INCOME_T2210000"), 
+            funs(logCPI2008))
+
+# 2010
+logCPI2010 <- function(wage) {
+  wageLogCPI <- log(wage * 1.09) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_2010"),"NET_FAMILY_INCOME_T3107800"), 
+            funs(logCPI2010))
+
+# 2012
+logCPI2012<- function(wage) {
+  wageLogCPI <- log(wage * 1.05) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_2012"),"NET_FAMILY_INCOME_T4112300"), 
+            funs(logCPI2012))
+
+# 2014
+logCPI2014<- function(wage) {
+  wageLogCPI <- log(wage * 1.01) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_2014"),"NET_FAMILY_INCOME_T5022600"), 
+            funs(logCPI2014))
+
+# 2016
+logCPI2016<- function(wage) {
+  wageLogCPI <- log(wage * 1.00) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_2016"),"NET_FAMILY_INCOME_T5770800"), 
+            funs(logCPI2016))
 
 ### average age ###
 
