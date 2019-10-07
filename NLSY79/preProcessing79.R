@@ -1134,11 +1134,7 @@ trainData79 <- trainData79 %>%
             funs(ageToWeeks))
 
 # create age when started job
-
-# trainData79 <- trainData79 %>%
-# mutate(age_start_job1_year = age_year - tenure_job1_year)
-
-# mutate(mean_age_job1_year = (age year + age_start_job1_year)/2)
+# average starting age and ending age per position and year
 
 # 1979
 trainData79 <- trainData79 %>% 
@@ -1380,8 +1376,6 @@ trainData79 <- trainData79 %>%
          MEAN_AGE_JOB4_1994 = (AGEATINT_R5081700 + AGE_START_JOB4_1994) / 2,
          MEAN_AGE_JOB5_1994 = (AGEATINT_R5081700 + AGE_START_JOB5_1994) / 2)
 
-# 1995
-
 # 1996
 trainData79 <- trainData79 %>% 
   mutate(AGE_START_JOB1_1996 = AGEATINT_R5167000 - TENURE1_R5164600,
@@ -1546,4 +1540,45 @@ trainData79 <- trainData79 %>%
          MEAN_AGE_JOB3_2016 = (AGEATINT_R5771500 + AGE_START_JOB3_2016) / 2,
          MEAN_AGE_JOB4_2016 = (AGEATINT_R5771500 + AGE_START_JOB4_2016) / 2,
          MEAN_AGE_JOB5_2016 = (AGEATINT_R5771500 + AGE_START_JOB5_2016) / 2)
+
+
+# transform age back to years
+ageToYears <- function(age) {
+  ageYears <- age / 52
+  return(ageYears)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("AGEATINT")), 
+            funs(ageToYears))
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("MEAN_AGE_JOB")), 
+            funs(ageToYears))
+
+
+### job satisfaction flip scale ###
+# replacing NAs with 0
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("JOB_SATISFACTION")), funs(replace_na(., 0)))
+
+# function to flip
+scaleFlip <- function(score){
+    if(score == 4){
+      return(1)
+    }else if(score == 3){
+      return(2)
+    }else if(score == 2){
+      return(3)
+    }else if(score == 1){
+      return(4)
+    }else{
+      return(0)
+  }
+}
+
+# job satisfaction columns ## NOT WORKING YET ##
+jobSatisfactionColumns <- trainData79 %>%
+  select(starts_with("JOB_SATISFACTION")) %>%
+  mapply(. %>% scaleFlip)
 
