@@ -909,7 +909,7 @@ trainData79 <- trainData79 %>%
 
 # 1979
 logCPI1979 <- function(wage) {
-  wageLogCPI <- log(wage * 2.46) # check this CPI
+  wageLogCPI <- log(wage * 3.47) 
   return(wageLogCPI)
 }
 
@@ -919,7 +919,7 @@ trainData79 <- trainData79 %>%
 
 # 1980
 logCPI1980 <- function(wage) {
-  wageLogCPI <- log(wage * 2) # put in 1980 CPI here
+  wageLogCPI <- log(wage * 3.05) 
   return(wageLogCPI)
 }
 
@@ -927,7 +927,197 @@ trainData79 <- trainData79 %>%
   mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1980")), 
             funs(logCPI1980))
 
-# repeat for every year in the dataset
+
+# 1981
+logCPI1981 <- function(wage) {
+  wageLogCPI <- log(wage * 2.72) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1981")), 
+            funs(logCPI1981))
+
+# 1982
+logCPI1982 <- function(wage) {
+  wageLogCPI <- log(wage * 2.51) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1982")), 
+            funs(logCPI1982))
+
+# 1983
+logCPI1983 <- function(wage) {
+  wageLogCPI <- log(wage * 2.42) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1983")), 
+            funs(logCPI1983))
+
+# 1984
+logCPI1984 <- function(wage) {
+  wageLogCPI <- log(wage * 2.32) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1984")), 
+            funs(logCPI1984))
+
+# 1985
+logCPI1985 <- function(wage) {
+  wageLogCPI <- log(wage * 2.25) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1985")), 
+            funs(logCPI1985))
+
+# 1986
+logCPI1986 <- function(wage) {
+  wageLogCPI <- log(wage * 2.16) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1986")), 
+            funs(logCPI1986))
+
+# 1987
+logCPI1987 <- function(wage) {
+  wageLogCPI <- log(wage * 2.13) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1987")), 
+            funs(logCPI1987))
+
+# 1988
+logCPI1988 <- function(wage) {
+  wageLogCPI <- log(wage * 2.05) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1988")), 
+            funs(logCPI1988))
+
+# 1989
+logCPI1989 <- function(wage) {
+  wageLogCPI <- log(wage * 1.96) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1989")), 
+            funs(logCPI1989))
+
+# 1990
+logCPI1990 <- function(wage) {
+  wageLogCPI <- log(wage * 1.86) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1990")), 
+            funs(logCPI1990))
+
+# 1991
+logCPI1991 <- function(wage) {
+  wageLogCPI <- log(wage * 1.76) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1991")), 
+            funs(logCPI1991))
+
+# 1992
+logCPI1992 <- function(wage) {
+  wageLogCPI <- log(wage * 1.72) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1992")), 
+            funs(logCPI1992))
+
+# 1993
+logCPI1993 <- function(wage) {
+  wageLogCPI <- log(wage * 1.66) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1993")), 
+            funs(logCPI1993))
+
+# 1994
+logCPI1994 <- function(wage) {
+  wageLogCPI <- log(wage * 1.62) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1994")), 
+            funs(logCPI1994))
+
+# 1995
+logCPI1995 <- function(wage) {
+  wageLogCPI <- log(wage * 1.58) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1995")), 
+            funs(logCPI1995))
+
+# 1996
+logCPI1996 <- function(wage) {
+  wageLogCPI <- log(wage * 1.53) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1996")), 
+            funs(logCPI1996))
+
+# 1997
+logCPI1997 <- function(wage) {
+  wageLogCPI <- log(wage * 1.49) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1997")), 
+            funs(logCPI1997))
+
+# 1998
+logCPI1998 <- function(wage) {
+  wageLogCPI <- log(wage * 1.47) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1998")), 
+            funs(logCPI1998))
+
+# 1999
+logCPI1999 <- function(wage) {
+  wageLogCPI <- log(wage * 1.44) 
+  return(wageLogCPI)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1999")), 
+            funs(logCPI1999))
+
 
 
 
@@ -958,7 +1148,6 @@ trainData79 <- trainData79 %>%
 trainData79 <- trainData79 %>%
   mutate(MEAN_AGE_JOB1_1979 = (AGEATINT_R0216500 + AGE_START_JOB1_1979) / 2,
          MEAN_AGE_JOB2_1979 = (AGEATINT_R0216500 + AGE_START_JOB2_1979) / 2)
-
 
 # 1979
 trainData79$MEAN_AGE_JOB1_1979 <- NA
