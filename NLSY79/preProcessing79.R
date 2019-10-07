@@ -928,3 +928,267 @@ trainData79 <- trainData79 %>%
             funs(logCPI1980))
 
 # repeat for every year in the dataset
+
+
+
+### average age ###
+
+# transforming age from years to weeks
+ageToWeeks <- function(age) {
+  ageWeeks <- age * 52 # check this CPI
+  return(ageWeeks)
+}
+
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("AGEATINT")), 
+            funs(ageToWeeks))
+
+# create age when started job
+
+# trainData79 <- trainData79 %>%
+# mutate(age_start_job1_year = age_year - tenure_job1_year)
+
+# mutate(mean_age_job1_year = (age year + age_start_job1_year)/2)
+
+
+trainData79 <- trainData79 %>% 
+  mutate(AGE_START_JOB1_1979 = AGEATINT_R0216500 - TENURE1_R0068710,
+         AGE_START_JOB2_1979 = AGEATINT_R0216500 - TENURE2_R0069010)
+
+trainData79 <- trainData79 %>%
+  mutate(MEAN_AGE_JOB1_1979 = (AGEATINT_R0216500 + AGE_START_JOB1_1979) / 2,
+         MEAN_AGE_JOB2_1979 = (AGEATINT_R0216500 + AGE_START_JOB2_1979) / 2)
+
+
+# 1979
+trainData79$MEAN_AGE_JOB1_1979 <- NA
+trainData79$MEAN_AGE_JOB2_1979 <- NA
+trainData79$MEAN_AGE_JOB3_1979 <- NA
+trainData79$MEAN_AGE_JOB4_1979 <- NA
+trainData79$MEAN_AGE_JOB5_1979 <- NA
+
+trainData79$MEAN_AGE_JOB1_1980 <- NA
+trainData79$MEAN_AGE_JOB2_1980 <- NA
+trainData79$MEAN_AGE_JOB3_1980 <- NA
+trainData79$MEAN_AGE_JOB4_1980 <- NA
+trainData79$MEAN_AGE_JOB5_1980 <- NA
+
+trainData79$MEAN_AGE_JOB1_1981 <- NA
+trainData79$MEAN_AGE_JOB2_1981 <- NA
+trainData79$MEAN_AGE_JOB3_1981 <- NA
+trainData79$MEAN_AGE_JOB4_1981 <- NA
+trainData79$MEAN_AGE_JOB5_1981 <- NA
+
+trainData79$MEAN_AGE_JOB1_1982 <- NA
+trainData79$MEAN_AGE_JOB2_1982 <- NA
+trainData79$MEAN_AGE_JOB3_1982 <- NA
+trainData79$MEAN_AGE_JOB4_1982 <- NA
+trainData79$MEAN_AGE_JOB5_1982 <- NA
+
+trainData79$MEAN_AGE_JOB1_1983 <- NA
+trainData79$MEAN_AGE_JOB2_1983 <- NA
+trainData79$MEAN_AGE_JOB3_1983 <- NA
+trainData79$MEAN_AGE_JOB4_1983 <- NA
+trainData79$MEAN_AGE_JOB5_1983 <- NA
+
+trainData79$MEAN_AGE_JOB1_1984 <- NA
+trainData79$MEAN_AGE_JOB2_1984 <- NA
+trainData79$MEAN_AGE_JOB3_1984 <- NA
+trainData79$MEAN_AGE_JOB4_1984 <- NA
+trainData79$MEAN_AGE_JOB5_1984 <- NA
+
+trainData79$MEAN_AGE_JOB1_1985 <- NA
+trainData79$MEAN_AGE_JOB2_1985 <- NA
+trainData79$MEAN_AGE_JOB3_1985 <- NA
+trainData79$MEAN_AGE_JOB4_1985 <- NA
+trainData79$MEAN_AGE_JOB5_1985 <- NA
+
+trainData79$MEAN_AGE_JOB1_1986 <- NA
+trainData79$MEAN_AGE_JOB2_1986 <- NA
+trainData79$MEAN_AGE_JOB3_1986 <- NA
+trainData79$MEAN_AGE_JOB4_1986 <- NA
+trainData79$MEAN_AGE_JOB5_1986 <- NA
+
+trainData79$MEAN_AGE_JOB1_1987 <- NA
+trainData79$MEAN_AGE_JOB2_1987 <- NA
+trainData79$MEAN_AGE_JOB3_1987 <- NA
+trainData79$MEAN_AGE_JOB4_1987 <- NA
+trainData79$MEAN_AGE_JOB5_1987 <- NA
+
+trainData79$MEAN_AGE_JOB1_1988 <- NA
+trainData79$MEAN_AGE_JOB2_1988 <- NA
+trainData79$MEAN_AGE_JOB3_1988 <- NA
+trainData79$MEAN_AGE_JOB4_1988 <- NA
+trainData79$MEAN_AGE_JOB5_1988 <- NA
+
+trainData79$MEAN_AGE_JOB1_1989 <- NA
+trainData79$MEAN_AGE_JOB2_1989 <- NA
+trainData79$MEAN_AGE_JOB3_1989 <- NA
+trainData79$MEAN_AGE_JOB4_1989 <- NA
+trainData79$MEAN_AGE_JOB5_1989 <- NA
+
+trainData79$MEAN_AGE_JOB1_1990 <- NA
+trainData79$MEAN_AGE_JOB2_1990 <- NA
+trainData79$MEAN_AGE_JOB3_1990 <- NA
+trainData79$MEAN_AGE_JOB4_1990 <- NA
+trainData79$MEAN_AGE_JOB5_1990 <- NA
+
+trainData79$MEAN_AGE_JOB1_1991 <- NA
+trainData79$MEAN_AGE_JOB2_1991 <- NA
+trainData79$MEAN_AGE_JOB3_1991 <- NA
+trainData79$MEAN_AGE_JOB4_1991 <- NA
+trainData79$MEAN_AGE_JOB5_1991 <- NA
+
+trainData79$MEAN_AGE_JOB1_1992 <- NA
+trainData79$MEAN_AGE_JOB2_1992 <- NA
+trainData79$MEAN_AGE_JOB3_1992 <- NA
+trainData79$MEAN_AGE_JOB4_1992 <- NA
+trainData79$MEAN_AGE_JOB5_1992 <- NA
+
+trainData79$MEAN_AGE_JOB1_1993 <- NA
+trainData79$MEAN_AGE_JOB2_1993 <- NA
+trainData79$MEAN_AGE_JOB3_1993 <- NA
+trainData79$MEAN_AGE_JOB4_1993 <- NA
+trainData79$MEAN_AGE_JOB5_1993 <- NA
+
+trainData79$MEAN_AGE_JOB1_1994 <- NA
+trainData79$MEAN_AGE_JOB2_1994 <- NA
+trainData79$MEAN_AGE_JOB3_1994 <- NA
+trainData79$MEAN_AGE_JOB4_1994 <- NA
+trainData79$MEAN_AGE_JOB5_1994 <- NA
+
+trainData79$MEAN_AGE_JOB1_1995 <- NA
+trainData79$MEAN_AGE_JOB2_1995 <- NA
+trainData79$MEAN_AGE_JOB3_1995 <- NA
+trainData79$MEAN_AGE_JOB4_1995 <- NA
+trainData79$MEAN_AGE_JOB5_1995 <- NA
+
+trainData79$MEAN_AGE_JOB1_1996 <- NA
+trainData79$MEAN_AGE_JOB2_1996 <- NA
+trainData79$MEAN_AGE_JOB3_1996 <- NA
+trainData79$MEAN_AGE_JOB4_1996 <- NA
+trainData79$MEAN_AGE_JOB5_1996 <- NA
+
+trainData79$MEAN_AGE_JOB1_1997 <- NA
+trainData79$MEAN_AGE_JOB2_1997 <- NA
+trainData79$MEAN_AGE_JOB3_1997 <- NA
+trainData79$MEAN_AGE_JOB4_1997 <- NA
+trainData79$MEAN_AGE_JOB5_1997 <- NA
+
+trainData79$MEAN_AGE_JOB1_1998 <- NA
+trainData79$MEAN_AGE_JOB2_1998 <- NA
+trainData79$MEAN_AGE_JOB3_1998 <- NA
+trainData79$MEAN_AGE_JOB4_1998 <- NA
+trainData79$MEAN_AGE_JOB5_1998 <- NA
+
+trainData79$MEAN_AGE_JOB1_1999 <- NA
+trainData79$MEAN_AGE_JOB2_1999 <- NA
+trainData79$MEAN_AGE_JOB3_1999 <- NA
+trainData79$MEAN_AGE_JOB4_1999 <- NA
+trainData79$MEAN_AGE_JOB5_1999 <- NA
+
+trainData79$MEAN_AGE_JOB1_2000 <- NA
+trainData79$MEAN_AGE_JOB2_2000 <- NA
+trainData79$MEAN_AGE_JOB3_2000 <- NA
+trainData79$MEAN_AGE_JOB4_2000 <- NA
+trainData79$MEAN_AGE_JOB5_2000 <- NA
+
+trainData79$MEAN_AGE_JOB1_2001 <- NA
+trainData79$MEAN_AGE_JOB2_2001 <- NA
+trainData79$MEAN_AGE_JOB3_2001 <- NA
+trainData79$MEAN_AGE_JOB4_2001 <- NA
+trainData79$MEAN_AGE_JOB5_2001 <- NA
+
+trainData79$MEAN_AGE_JOB1_2002 <- NA
+trainData79$MEAN_AGE_JOB2_2002 <- NA
+trainData79$MEAN_AGE_JOB3_2002 <- NA
+trainData79$MEAN_AGE_JOB4_2002 <- NA
+trainData79$MEAN_AGE_JOB5_2002 <- NA
+
+trainData79$MEAN_AGE_JOB1_2003 <- NA
+trainData79$MEAN_AGE_JOB2_2003 <- NA
+trainData79$MEAN_AGE_JOB3_2003 <- NA
+trainData79$MEAN_AGE_JOB4_2003 <- NA
+trainData79$MEAN_AGE_JOB5_2003 <- NA
+
+trainData79$MEAN_AGE_JOB1_2004 <- NA
+trainData79$MEAN_AGE_JOB2_2004 <- NA
+trainData79$MEAN_AGE_JOB3_2004 <- NA
+trainData79$MEAN_AGE_JOB4_2004 <- NA
+trainData79$MEAN_AGE_JOB5_2004 <- NA
+
+trainData79$MEAN_AGE_JOB1_2005 <- NA
+trainData79$MEAN_AGE_JOB2_2005 <- NA
+trainData79$MEAN_AGE_JOB3_2005 <- NA
+trainData79$MEAN_AGE_JOB4_2005 <- NA
+trainData79$MEAN_AGE_JOB5_2005 <- NA
+
+trainData79$MEAN_AGE_JOB1_2006 <- NA
+trainData79$MEAN_AGE_JOB2_2006 <- NA
+trainData79$MEAN_AGE_JOB3_2006 <- NA
+trainData79$MEAN_AGE_JOB4_2006 <- NA
+trainData79$MEAN_AGE_JOB5_2006 <- NA
+
+trainData79$MEAN_AGE_JOB1_2007 <- NA
+trainData79$MEAN_AGE_JOB2_2007 <- NA
+trainData79$MEAN_AGE_JOB3_2007 <- NA
+trainData79$MEAN_AGE_JOB4_2007 <- NA
+trainData79$MEAN_AGE_JOB5_2007 <- NA
+
+trainData79$MEAN_AGE_JOB1_2008 <- NA
+trainData79$MEAN_AGE_JOB2_2008 <- NA
+trainData79$MEAN_AGE_JOB3_2008 <- NA
+trainData79$MEAN_AGE_JOB4_2008 <- NA
+trainData79$MEAN_AGE_JOB5_2008 <- NA
+
+trainData79$MEAN_AGE_JOB1_2009 <- NA
+trainData79$MEAN_AGE_JOB2_2009 <- NA
+trainData79$MEAN_AGE_JOB3_2009 <- NA
+trainData79$MEAN_AGE_JOB4_2009 <- NA
+trainData79$MEAN_AGE_JOB5_2009 <- NA
+
+trainData79$MEAN_AGE_JOB1_2010 <- NA
+trainData79$MEAN_AGE_JOB2_2010 <- NA
+trainData79$MEAN_AGE_JOB3_2010 <- NA
+trainData79$MEAN_AGE_JOB4_2010 <- NA
+trainData79$MEAN_AGE_JOB5_2010 <- NA
+
+trainData79$MEAN_AGE_JOB1_2011 <- NA
+trainData79$MEAN_AGE_JOB2_2011 <- NA
+trainData79$MEAN_AGE_JOB3_2011 <- NA
+trainData79$MEAN_AGE_JOB4_2011 <- NA
+trainData79$MEAN_AGE_JOB5_2011 <- NA
+
+trainData79$MEAN_AGE_JOB1_2012 <- NA
+trainData79$MEAN_AGE_JOB2_2012 <- NA
+trainData79$MEAN_AGE_JOB3_2012 <- NA
+trainData79$MEAN_AGE_JOB4_2012 <- NA
+trainData79$MEAN_AGE_JOB5_2012 <- NA
+
+trainData79$MEAN_AGE_JOB1_2013 <- NA
+trainData79$MEAN_AGE_JOB2_2013 <- NA
+trainData79$MEAN_AGE_JOB3_2013 <- NA
+trainData79$MEAN_AGE_JOB4_2013 <- NA
+trainData79$MEAN_AGE_JOB5_2013 <- NA
+
+trainData79$MEAN_AGE_JOB1_2014 <- NA
+trainData79$MEAN_AGE_JOB2_2014 <- NA
+trainData79$MEAN_AGE_JOB3_2014 <- NA
+trainData79$MEAN_AGE_JOB4_2014 <- NA
+trainData79$MEAN_AGE_JOB5_2014 <- NA
+
+trainData79$MEAN_AGE_JOB1_2015 <- NA
+trainData79$MEAN_AGE_JOB2_2015 <- NA
+trainData79$MEAN_AGE_JOB3_2015 <- NA
+trainData79$MEAN_AGE_JOB4_2015 <- NA
+trainData79$MEAN_AGE_JOB5_2015 <- NA
+
+trainData79$MEAN_AGE_JOB1_2016 <- NA
+trainData79$MEAN_AGE_JOB2_2016 <- NA
+trainData79$MEAN_AGE_JOB3_2016 <- NA
+trainData79$MEAN_AGE_JOB4_2016 <- NA
+trainData79$MEAN_AGE_JOB5_2016 <- NA
+
+
+
+
