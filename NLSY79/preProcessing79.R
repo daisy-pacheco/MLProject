@@ -926,3 +926,25 @@ trainData79 <- trainData79 %>%
   mutate(PUBLIC.05_2016 = case_when(EMPLOYERS_ALL_COW_2016.05_E8696900  %in% c(1,3,4,5) ~ 0, 
                                            EMPLOYERS_ALL_COW_2016.05_E8696900  == 2 ~ 1))
 
+### wages ###
+
+# 1979
+test <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1979")), 
+            funs(logCPI1979))
+
+logCPI1979 <- function(wage) {
+  wageLogCPI <- log(wage * 2.46)
+  return(wageLogCPI)
+}
+
+# 1980
+test <- trainData79 %>%
+  mutate_at(vars(starts_with("EMPLOYERS_ALL_HRLY_WAGE_1980")), 
+            funs(logCPI1980))
+
+logCPI1980 <- function(wage) {
+  wageLogCPI <- log(wage * 2) # put in 1980 CPI here
+  return(wageLogCPI)
+}
+
