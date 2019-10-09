@@ -1616,26 +1616,26 @@ trainData79 <- trainData79 %>%
 
 ### job satisfaction flip scale ###
 # replacing NAs with 0
-trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("JOB_SATISFACTION")), funs(replace_na(., 0)))
+#trainData79 <- trainData79 %>%
+ # mutate_at(vars(starts_with("JOB_SATISFACTION")), funs(replace_na(., 0)))
 
 # function to flip
-scaleFlip <- function(score){
-    if(score == 4){
-      return(1)
-    }else if(score == 3){
-      return(2)
-    }else if(score == 2){
-      return(3)
-    }else if(score == 1){
-      return(4)
-    }else{
-      return(0)
-  }
-}
+#scaleFlip <- function(score){
+#   if(score == 4){
+#      return(1)
+#    }else if(score == 3){
+#      return(2)
+#    }else if(score == 2){
+#      return(3)
+#    }else if(score == 1){
+#      return(4)
+#    }else{
+#      return(0)
+#  }
+#}
 
 # job satisfaction columns ## NOT WORKING YET ##
-jobSatisfactionColumns <- trainData79 %>%
-  select(starts_with("JOB_SATISFACTION")) %>%
-  mapply(. %>% scaleFlip)
+# jobSatisfactionColumns <- trainData79 %>%
+#  select(starts_with("JOB_SATISFACTION")) %>%
+#  mapply(. %>% scaleFlip)
 
