@@ -13,6 +13,10 @@ tinySample79 <- sample_n(trainData79, 20)
 
 ##### FEATURE ENGINEERING #####
 
+### replacing all "skip" values with NA
+trainData79 <- trainData79 %>% 
+  mutate_each(funs(replace(., .< 0, NA)))
+
 ### job satisfaction ###
 
 # replacing all NAs with 0 in the "currently working" columns
@@ -1609,6 +1613,43 @@ trainData79 <- trainData79 %>%
   mutate_at(vars(starts_with("MEAN_AGE_JOB")), 
             funs(ageToYears))
 
+##### SELECTING RELEVANT COLUMNS #####
+
+workingTrainData79 <- trainData79 %>%
+  select(CASEID_R0000100,
+         starts_with("JOB_SATISFACTION"), 
+         starts_with("MEAN_AGE"),
+         starts_with("AGEATINT"),
+         starts_with("TENURE"),
+         starts_with("EMPLOYERS_ALL_HRLY_WAGE"),
+         starts_with("NET_FAMILY_INCOME"),
+         starts_with("ROSENBERG"),
+         starts_with("ROTTER"),
+         starts_with("HIGHEST_GRADE"),
+         `R_REL-1_COL_R0010300`,
+         starts_with("URBAN-RURAL"),
+         starts_with("EMPLOYERS_ALL_UNION"),
+         starts_with("PUBLIC"))
+
+##### FACTORS #####
+
+workingTrainData79 <- workingTrainData79 %>%
+  mutate_at(vars(starts_with("JOB_SATISFACTION"),
+            starts_with("ROSENBERG"),
+            starts_with("ROTTER"),
+            starts_with("HIGHEST_GRADE"),
+            `R_REL-1_COL_R0010300`,
+            starts_with("URBAN-RURAL"),
+            starts_with("EMPLOYERS_ALL_UNION"),
+            starts_with("PUBLIC")),
+            funs(factor))
+
+##### SAVING WORKING DATASET #####
+
+# save(workingTrainData79, file = "workingTrainDataSet.RData")
+
+
+##### FOR THE FINAL ######
 
 ### job satisfaction flip scale ###
 # replacing NAs with 0
@@ -1635,31 +1676,3 @@ trainData79 <- trainData79 %>%
 # jobSatisfactionColumns <- trainData79 %>%
 #  select(starts_with("JOB_SATISFACTION")) %>%
 #  mapply(. %>% scaleFlip)
-
-workingTrainData79 <- trainData79 %>%
-  select(CASEID_R0000100,
-         starts_with("JOB_SATISFACTION"), 
-         starts_with("MEAN_AGE"),
-         starts_with("AGEATINT"),
-         starts_with("TENURE"),
-         starts_with("EMPLOYERS_ALL_HRLY_WAGE"),
-         starts_with("NET_FAMILY_INCOME"),
-         starts_with("ROSENBERG"),
-         starts_with("ROTTER"),
-         starts_with("HIGHEST_GRADE"),
-         `R_REL-1_COL_R0010300`,
-         starts_with("URBAN-RURAL"),
-         starts_with("EMPLOYERS_ALL_UNION"),
-         starts_with("PUBLIC"))
-
-workingTrainData79 <- workingTrainData79 %>%
-  mutate_at(vars(starts_with("JOB_SATISFACTION"),
-            starts_with("ROSENBERG"),
-            starts_with("ROTTER"),
-            starts_with("HIGHEST_GRADE"),
-            `R_REL-1_COL_R0010300`,
-            starts_with("URBAN-RURAL"),
-            starts_with("EMPLOYERS_ALL_UNION"),
-            starts_with("PUBLIC")),
-            funs(factor))
-
