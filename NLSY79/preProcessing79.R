@@ -1,11 +1,9 @@
-library(dplyr)
 library(tidyverse)
 
 # switching variable names to words vs codes
 varNames <- read.csv("varNames79.csv", header = FALSE)
 
 names(trainData79) <- varNames[match(names(trainData79), varNames[ ,'V1']),'V3']
-
 
 # making a tiny sample for testing feature engineering 
 set.seed(456) 
@@ -20,8 +18,6 @@ tinySample79 <- sample_n(trainData79, 20)
 # replacing all NAs with 0 in the "currently working" columns
 trainData79 <- trainData79 %>%
   mutate_at(vars(starts_with("CURRENTLY-WORKING")), funs(replace_na(., 0)))
-
-#### EXAMPLE LOOP PSEUDOCODE ####
 
 # 1979
 trainData79$JOB_SATISFACTION.01_1979 <- NA
@@ -1616,12 +1612,12 @@ trainData79 <- trainData79 %>%
 
 ### job satisfaction flip scale ###
 # replacing NAs with 0
-#trainData79 <- trainData79 %>%
- # mutate_at(vars(starts_with("JOB_SATISFACTION")), funs(replace_na(., 0)))
+# trainData79 <- trainData79 %>%
+#  mutate_at(vars(starts_with("JOB_SATISFACTION")), funs(replace_na(., 0)))
 
 # function to flip
-#scaleFlip <- function(score){
-#   if(score == 4){
+# scaleFlip <- function(score){
+#    if(score == 4){
 #      return(1)
 #    }else if(score == 3){
 #      return(2)
@@ -1635,7 +1631,35 @@ trainData79 <- trainData79 %>%
 #}
 
 # job satisfaction columns ## NOT WORKING YET ##
+
 # jobSatisfactionColumns <- trainData79 %>%
 #  select(starts_with("JOB_SATISFACTION")) %>%
 #  mapply(. %>% scaleFlip)
+
+workingTrainData79 <- trainData79 %>%
+  select(CASEID_R0000100,
+         starts_with("JOB_SATISFACTION"), 
+         starts_with("MEAN_AGE"),
+         starts_with("AGEATINT"),
+         starts_with("TENURE"),
+         starts_with("EMPLOYERS_ALL_HRLY_WAGE"),
+         starts_with("NET_FAMILY_INCOME"),
+         starts_with("ROSENBERG"),
+         starts_with("ROTTER"),
+         starts_with("HIGHEST_GRADE"),
+         `R_REL-1_COL_R0010300`,
+         starts_with("URBAN-RURAL"),
+         starts_with("EMPLOYERS_ALL_UNION"),
+         starts_with("PUBLIC"))
+
+workingTrainData79 <- workingTrainData79 %>%
+  mutate_at(vars(starts_with("JOB_SATISFACTION"),
+            starts_with("ROSENBERG"),
+            starts_with("ROTTER"),
+            starts_with("HIGHEST_GRADE"),
+            `R_REL-1_COL_R0010300`,
+            starts_with("URBAN-RURAL"),
+            starts_with("EMPLOYERS_ALL_UNION"),
+            starts_with("PUBLIC")),
+            funs(factor))
 
