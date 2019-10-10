@@ -1634,10 +1634,7 @@ workingTrainData79 <- trainData79 %>%
 ##### FACTORS #####
 
 workingTrainData79 <- workingTrainData79 %>%
-  mutate_at(vars(starts_with("JOB_SATISFACTION"),
-            starts_with("ROSENBERG"),
-            starts_with("ROTTER"),
-            starts_with("HIGHEST_GRADE"),
+  mutate_at(vars(starts_with("HIGHEST_GRADE"),
             `R_REL-1_COL_R0010300`,
             starts_with("URBAN-RURAL"),
             starts_with("EMPLOYERS_ALL_UNION"),
