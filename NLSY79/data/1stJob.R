@@ -1,7 +1,8 @@
 library(dplyr)
 
 workingTrainData79_1stJob <- workingTrainData79 %>%
-  select(starts_with("JOB_SATISFACTION.01"),
+  select(CASEID_R0000100,
+         starts_with("JOB_SATISFACTION.01"),
          starts_with("MEAN_AGE_JOB1"), 
          starts_with("TENURE1"), 
          starts_with("EMPLOYERS_ALL_HRLY_WAGE_1979.01"), 
