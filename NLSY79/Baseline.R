@@ -1,13 +1,12 @@
 library(dplyr)
 library(extrafont)
 library(ggplot2)
-library(sandwich)
-library(texreg)
+library(stargazer)
 library(MASS)
 
 
 workingTrainData79_1stJob <- workingTrainData79 %>%
-  select(CASEID_R0000100,
+  dplyr::select(CASEID_R0000100,
          starts_with("JOB_SATISFACTION.01"),
          starts_with("MEAN_AGE_JOB1"), 
          starts_with("TENURE1"), 
@@ -76,7 +75,7 @@ workingTrainData79_1stJob <- workingTrainData79 %>%
 
 # 1980
 just1stJob80 <- workingTrainData79_1stJob %>%
-  select(JOB_SATISFACTION.01_1980, 
+  dplyr::select(JOB_SATISFACTION.01_1980, 
          MEAN_AGE_JOB1_1980, 
          TENURE1_R0333221,
          EMPLOYERS_ALL_HRLY_WAGE_1980.01_E8070100,
@@ -124,8 +123,6 @@ just1stJob80 <- just1stJob80 %>%
 just1stJob80$religion <- as.factor(just1stJob80$religion)
 
 
-unique(just1stJob80$religion)
-
 # models 
 
 # https://rpubs.com/rslbliss/r_logistic_ws
@@ -138,82 +135,50 @@ model1_80 <- polr(jobSatisfaction ~ age +
                   wage, 
                 data = just1stJob80)
 
-summary(model1_80)
+model1_80ctable <- coef(summary(model1_80))
+model1_80or <- exp(coef(model1_80))
+model1_80conf <- exp(confint(model1_80))
+model1_80p <- pnorm(abs(model1_80ctable[, "t value"]), lower.tail = FALSE) * 2
 
-model2_80 <- polr(jobSatisfaction ~ .,
+model2_80 <- polr(jobSatisfaction ~ age + 
+                    tenure + 
+                    wage +
+                    selfEsteem +
+                    urban, 
                   data = just1stJob80)
 
-summary(model2_80)
+model2_80ctable <- coef(summary(model2_80))
+model2_80or <- exp(coef(model2_80))
+model2_80conf <- exp(confint(model2_80))
+model2_80p <- pnorm(abs(model2_80ctable[, "t value"]), lower.tail = FALSE) * 2
 
-htmlreg(list(model1_80, model2_80), 
-          title = "Stepwise Modeling of NLSY79 Job Satisfaction in 1980",
-          file = "models.doc")
+
+stargazer(model1_80,
+          coef = list(model1_80or),
+          ci = T,
+          ci.custom = list(model1_80conf),
+          p = c(model1_80p),
+          header = FALSE,
+          title = "Odd-ratios of Job Satisfaction",
+          type = "latex", 
+          out = "model.tex")
+
+stargazer(model1_80,
+          coef = list(model1_80or),
+          ci = T,
+          ci.custom = list(model1_80conf),
+          p = c(model1_80p),
+          header = FALSE,
+          title = "Odd-ratios of Job Satisfaction",
+          type = "text", 
+          out = "model.doc")
+
+
+# RMSE
 
 RSS <- c(crossprod(model2_80$residuals))
 MSE <- RSS / length(model2_80$residuals)
 RMSE <- sqrt(MSE)
-
-
-# 1987
-
-just1stJob87 <- workingTrainData79_1stJob %>%
-  select(JOB_SATISFACTION.01_1987, 
-         MEAN_AGE_JOB1_1987, 
-         TENURE1_R2372510,
-         EMPLOYERS_ALL_HRLY_WAGE_1987.01_E8140100,
-         ROSENBERG_IRT_SCORE_R2350020,
-         ROTTER_SCORE_R0153710, # 1979
-         HIGHEST_GRADE_COMPLETED_R2306500,
-         `R_REL-1_COL_R0010300`,
-         NET_FAMILY_INCOME_R2444700,
-         `URBAN-RURAL_R2446900`,
-         EMPLOYERS_ALL_UNION_1987.01_E6700100,
-         PUBLIC.01_1987)
-
-just1stJob87 <- just1stJob87 %>%
-  filter(!is.na(JOB_SATISFACTION.01_1987))
-
-model1_87 <- lm(JOB_SATISFACTION.01_1987 ~ MEAN_AGE_JOB1_1987 + 
-                  TENURE1_R2372510 + 
-                  EMPLOYERS_ALL_HRLY_WAGE_1987.01_E8140100, 
-                data = just1stJob87)
-
-summary(model1_87)
-
-model2_87 <- lm(JOB_SATISFACTION.01_1987 ~ ., data = just1stJob87)
-
-summary(model2_87)
-
-# 2006
-
-just1stJob06 <- workingTrainData79_1stJob %>%
-  select(JOB_SATISFACTION.01_T0277600, 
-         MEAN_AGE_JOB1_2006, 
-         TENURE1_T0986300,
-         EMPLOYERS_ALL_HRLY_WAGE_2006.01_E8270100,
-         ROSENBERG_IRT_SCORE_T0899820,
-         ROTTER_SCORE_R0153710, # 1979
-         HIGHEST_GRADE_COMPLETED_T0014400,
-         `R_REL-1_COL_R0010300`,
-         NET_FAMILY_INCOME_T0987800,
-         `URBAN-RURAL_T0990400`,
-         EMPLOYERS_ALL_UNION_2006.01_E6830100,
-         PUBLIC.01_2006)
-
-just1stJob06 <- just1stJob06 %>%
-  filter(!is.na(JOB_SATISFACTION.01_T0277600))
-
-model1_06 <- lm(JOB_SATISFACTION.01_T0277600 ~ MEAN_AGE_JOB1_2006 + 
-                  TENURE1_T0986300 + 
-                  EMPLOYERS_ALL_HRLY_WAGE_2006.01_E8270100, 
-                data = just1stJob06)
-
-summary(model1_06)
-
-model2_06 <- lm(JOB_SATISFACTION.01_T0277600 ~ ., data = just1stJob06)
-
-summary(model2_06)
-
 
 
 ### data viz ###
