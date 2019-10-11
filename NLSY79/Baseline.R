@@ -22,6 +22,15 @@ workingTrainData79_1stJob <- workingTrainData79 %>%
          starts_with("EMPLOYERS_ALL_HRLY_WAGE_1994.01"),
          starts_with("EMPLOYERS_ALL_HRLY_WAGE_1996.01"),
          starts_with("EMPLOYERS_ALL_HRLY_WAGE_1998.01"),
+         starts_with("EMPLOYERS_ALL_HRLY_WAGE_2000.01"),
+         starts_with("EMPLOYERS_ALL_HRLY_WAGE_2002.01"),
+         starts_with("EMPLOYERS_ALL_HRLY_WAGE_2004.01"),
+         starts_with("EMPLOYERS_ALL_HRLY_WAGE_2006.01"),
+         starts_with("EMPLOYERS_ALL_HRLY_WAGE_2008.01"),
+         starts_with("EMPLOYERS_ALL_HRLY_WAGE_2010.01"),
+         starts_with("EMPLOYERS_ALL_HRLY_WAGE_2012.01"),
+         starts_with("EMPLOYERS_ALL_HRLY_WAGE_2014.01"),
+         starts_with("EMPLOYERS_ALL_HRLY_WAGE_2016.01"),
          starts_with("ROSENBERG"),
          starts_with("ROTTER"),
          starts_with("HIGHEST_GRADE_COMPLETED"),
@@ -46,6 +55,15 @@ workingTrainData79_1stJob <- workingTrainData79 %>%
          starts_with("EMPLOYERS_ALL_UNION_1994.01"),
          starts_with("EMPLOYERS_ALL_UNION_1996.01"),
          starts_with("EMPLOYERS_ALL_UNION_1998.01"),
+         starts_with("EMPLOYERS_ALL_UNION_2000.01"),
+         starts_with("EMPLOYERS_ALL_UNION_2002.01"),
+         starts_with("EMPLOYERS_ALL_UNION_2004.01"),
+         starts_with("EMPLOYERS_ALL_UNION_2006.01"),
+         starts_with("EMPLOYERS_ALL_UNION_2008.01"),
+         starts_with("EMPLOYERS_ALL_UNION_2010.01"),
+         starts_with("EMPLOYERS_ALL_UNION_2012.01"),
+         starts_with("EMPLOYERS_ALL_UNION_2014.01"),
+         starts_with("EMPLOYERS_ALL_UNION_2016.01"),
          starts_with("PUBLIC.01"))
 
 # 1980
@@ -63,22 +81,18 @@ just1stJob80 <- workingTrainData79_1stJob %>%
          EMPLOYERS_ALL_UNION_1980.01_E6630100,
          PUBLIC.01_1980)
 
-just1stJob80$JOB_SATISFACTION.01_1980 <- as.numeric(just1stJob80$JOB_SATISFACTION.01_1980)
-just1stJob80$ROSENBERG_IRT_SCORE_R0304420 <- as.numeric(just1stJob80$ROSENBERG_IRT_SCORE_R0304420)
-just1stJob80$ROTTER_SCORE_R0153710 <- as.numeric(just1stJob80$ROTTER_SCORE_R0153710)
-
 just1stJob80 <- just1stJob80 %>%
   filter(!is.na(JOB_SATISFACTION.01_1980),
          NET_FAMILY_INCOME_R0406010 != "-Inf")
 
-model1 <- lm(JOB_SATISFACTION.01_1980 ~ ., data = just1stJob80)
-
-summary(model1)
-
-model2 <- lm(JOB_SATISFACTION.01_1980 ~ MEAN_AGE_JOB1_1980 + 
+model1 <- lm(JOB_SATISFACTION.01_1980 ~ MEAN_AGE_JOB1_1980 + 
                TENURE1_R0333221 + 
                EMPLOYERS_ALL_HRLY_WAGE_1980.01_E8070100, 
              data = just1stJob80)
+
+summary(model1)
+
+model2 <- lm(JOB_SATISFACTION.01_1980 ~ ., data = just1stJob80)
 
 summary(model2)
 

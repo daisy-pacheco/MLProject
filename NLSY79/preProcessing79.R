@@ -5,12 +5,6 @@ varNames <- read.csv("varNames79.csv", header = FALSE)
 
 names(trainData79) <- varNames[match(names(trainData79), varNames[ ,'V1']),'V3']
 
-# making a tiny sample for testing feature engineering 
-set.seed(456) 
-
-tinySample79 <- sample_n(trainData79, 20)
-
-
 ##### FEATURE ENGINEERING #####
 
 ### replacing all "skip" values with NA
@@ -1643,7 +1637,7 @@ workingTrainData79 <- workingTrainData79 %>%
 
 ##### SAVING WORKING DATASET #####
 
-# save(workingTrainData79, file = "workingTrainDataSet.RData")
+# save(workingTrainData79, file = "workingTrainDataSet79.RData")
 
 
 ##### FOR THE FINAL ######
