@@ -1,4 +1,6 @@
 library(dplyr)
+library(ggplot2)
+library(ggthemes)
 
 workingTrainData79_1stJob <- workingTrainData79 %>%
   select(CASEID_R0000100,
@@ -66,6 +68,8 @@ workingTrainData79_1stJob <- workingTrainData79 %>%
          starts_with("EMPLOYERS_ALL_UNION_2016.01"),
          starts_with("PUBLIC.01"))
 
+### baseline models ###
+
 # 1980
 just1stJob80 <- workingTrainData79_1stJob %>%
   select(JOB_SATISFACTION.01_1980, 
@@ -96,6 +100,19 @@ model2 <- lm(JOB_SATISFACTION.01_1980 ~ ., data = just1stJob80)
 
 summary(model2)
 
+
+
+### data viz ###
+plot1980 <- ggplot(aes(x = as.factor(JOB_SATISFACTION.01_1980)), 
+                   data = just1stJob80) +
+  geom_bar(stat = "count", aes(fill = PUBLIC.01_1980), color = "white") + 
+  theme(text = element_text(family = "Times")) +
+  labs(title = "Job Satisfaction: Public vs. Private Employees NLSY79",
+       y = "Count",
+       x = "Job Satisfaction: From 1 (best) to 4 (worst)",
+       fill = "Public Employee")
+
+plot1980
 
 
 
