@@ -1,6 +1,9 @@
 library(dplyr)
+library(extrafont)
+extrafont::loadfonts(device="win")
+
 library(ggplot2)
-library(ggthemes)
+
 
 workingTrainData79_1stJob <- workingTrainData79 %>%
   select(CASEID_R0000100,
@@ -83,22 +86,37 @@ just1stJob80 <- workingTrainData79_1stJob %>%
          NET_FAMILY_INCOME_R0406010,
          `URBAN-RURAL_R0393510`,
          EMPLOYERS_ALL_UNION_1980.01_E6630100,
-         PUBLIC.01_1980)
+         PUBLIC.01_1980) %>%
+  rename(
+    jobSatisfaction = JOB_SATISFACTION.01_1980,
+    age = MEAN_AGE_JOB1_1980,
+    tenure = TENURE1_R0333221, 
+    wage = EMPLOYERS_ALL_HRLY_WAGE_1980.01_E8070100,
+    selfEsteem = ROSENBERG_IRT_SCORE_R0304420,
+    locusOfControl = ROTTER_SCORE_R0153710,
+    education = HIGHEST_GRADE_COMPLETED_R0017300,
+    religion = `R_REL-1_COL_R0010300`,
+    familyIncome = NET_FAMILY_INCOME_R0406010,
+    urban = `URBAN-RURAL_R0393510`,
+    union = EMPLOYERS_ALL_UNION_1980.01_E6630100,
+    public = PUBLIC.01_1980
+  )
 
 just1stJob80 <- just1stJob80 %>%
-  filter(!is.na(JOB_SATISFACTION.01_1980),
-         NET_FAMILY_INCOME_R0406010 != "-Inf")
+  filter(!is.na(jobSatisfaction),
+         familyIncome != "-Inf")
 
-model1_80 <- lm(JOB_SATISFACTION.01_1980 ~ MEAN_AGE_JOB1_1980 + 
-               TENURE1_R0333221 + 
-               EMPLOYERS_ALL_HRLY_WAGE_1980.01_E8070100, 
+model1_80 <- lm(jobSatisfaction ~ age + 
+               tenure + 
+               wage, 
              data = just1stJob80)
 
 summary(model1_80)
 
-model2_80 <- lm(JOB_SATISFACTION.01_1980 ~ ., data = just1stJob80)
+model2_80 <- lm(jobSatisfaction ~ ., data = just1stJob80)
 
 summary(model2_80)
+
 
 # 1987
 
@@ -160,17 +178,44 @@ model2_06 <- lm(JOB_SATISFACTION.01_T0277600 ~ ., data = just1stJob06)
 
 summary(model2_06)
 
+
+
 ### data viz ###
-plot1980 <- ggplot(aes(x = as.factor(JOB_SATISFACTION.01_1980)), 
+plotPublic <- ggplot(aes(x = as.factor(jobSatisfaction)), 
                    data = just1stJob80) +
-  geom_bar(stat = "count", aes(fill = PUBLIC.01_1980), color = "white") + 
-  theme(text = element_text(family = "Times")) +
+  geom_bar(stat = "count", aes(fill = public), color = "white") + 
+  theme(text = element_text(family = "Times New Roman")) +
   labs(title = "Job Satisfaction: Public vs. Private Employees NLSY79",
        y = "Count",
        x = "Job Satisfaction: From 1 (best) to 4 (worst)",
        fill = "Public Employee")
 
-plot1980
+plotPublic
+
+plotAge <- ggplot(aes(x = age,
+                      y = jobSatisfaction), 
+                     data = just1stJob80) +
+  geom_jitter(aes(color = age)) + 
+  theme(text = element_text(family = "Times")) +
+  labs(title = "Job Satisfaction: By mean age at job NLSY79",
+       y = "Job Satisfaction: From 1 (best) to 4 (worst)",
+       x = "Age",
+       color = "Mean age at job")
+
+plotAge
+
+plotTenure <- ggplot(aes(x = tenure,
+                      y = jobSatisfaction), 
+                  data = just1stJob80) +
+  geom_jitter(aes(color = tenure)) + 
+  xlim(0, 200) +
+  theme(text = element_text(family = "Times")) +
+  labs(title = "Job Satisfaction: By tenure at job NLSY79",
+       y = "Job Satisfaction: From 1 (best) to 4 (worst)",
+       x = "Length of tenure in weeks",
+       color = "Tenure")
+
+plotTenure
 
 
 
