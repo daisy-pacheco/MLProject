@@ -1,8 +1,9 @@
 library(dplyr)
 library(extrafont)
-extrafont::loadfonts(device="win")
-
 library(ggplot2)
+library(sandwich)
+library(texreg)
+library(MASS)
 
 
 workingTrainData79_1stJob <- workingTrainData79 %>%
@@ -106,16 +107,51 @@ just1stJob80 <- just1stJob80 %>%
   filter(!is.na(jobSatisfaction),
          familyIncome != "-Inf")
 
-model1_80 <- lm(jobSatisfaction ~ age + 
-               tenure + 
-               wage, 
-             data = just1stJob80)
+just1stJob80 <- just1stJob80 %>%
+  mutate(education = case_when(education %in% c(0, 1, 2, 3, 4, 5, 6, 7) ~ "SomeLower",
+                                  education %in% c(8, 9, 10, 11, 12) ~ "SomeHighSchool",
+                                  education %in% c(13, 14, 15, 16) ~ "SomeCollege",
+                                  education %in% c(17, 18, 19, 20) ~ "Advanced",
+                                  education == 95 ~ "Other")) 
+just1stJob80$education <- as.factor(just1stJob80$education)
+
+just1stJob80 <- just1stJob80 %>%
+  mutate(religion = case_when(religion %in% c(1, 2, 3, 4, 5, 6) ~ "Christian",
+                              religion == 7 ~ "Catholic",
+                              religion == 8 ~ "Jewish",
+                              religion == 0 ~ "NonReligious",
+                              religion == 9 ~ "Other")) 
+just1stJob80$religion <- as.factor(just1stJob80$religion)
+
+
+unique(just1stJob80$religion)
+
+# models 
+
+# https://rpubs.com/rslbliss/r_logistic_ws
+# https://stats.stackexchange.com/questions/35071/what-is-rank-deficiency-and-how-to-deal-with-it
+
+just1stJob80$jobSatisfaction <- as.factor(just1stJob80$jobSatisfaction)
+
+model1_80 <- polr(jobSatisfaction ~ age + 
+                  tenure + 
+                  wage, 
+                data = just1stJob80)
 
 summary(model1_80)
 
-model2_80 <- lm(jobSatisfaction ~ ., data = just1stJob80)
+model2_80 <- polr(jobSatisfaction ~ .,
+                  data = just1stJob80)
 
 summary(model2_80)
+
+htmlreg(list(model1_80, model2_80), 
+          title = "Stepwise Modeling of NLSY79 Job Satisfaction in 1980",
+          file = "models.doc")
+
+RSS <- c(crossprod(model2_80$residuals))
+MSE <- RSS / length(model2_80$residuals)
+RMSE <- sqrt(MSE)
 
 
 # 1987
