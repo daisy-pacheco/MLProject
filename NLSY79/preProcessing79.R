@@ -13,9 +13,35 @@ trainData79 <- trainData79 %>%
 
 ### job satisfaction ###
 
+# replacing NAs with 0
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("JOB_SATISFACTION")), 
+            funs(replace_na(., 0)))
+
+# flip scale so 4 = 1, 3 = 2, 2 = 3, and 1 = 4
+scaleFlip <- function(score){
+    if(score == 4){
+      score <- 1
+    }else if(score == 3){
+      score <- 2
+    }else if(score == 2){
+      score <- 3
+    }else if(score == 1){
+      score <- 4
+    }else{
+      return(0)
+  }
+}
+
+test <- trainData79 %>% 
+  mutate_at(vars(starts_with("JOB_SATISFACTION")), 
+             funs(scaleFlip))
+
+
 # replacing all NAs with 0 in the "currently working" columns
 trainData79 <- trainData79 %>%
-  mutate_at(vars(starts_with("CURRENTLY-WORKING")), funs(replace_na(., 0)))
+  mutate_at(vars(starts_with("CURRENTLY-WORKING")), 
+            funs(replace_na(., 0)))
 
 # 1979
 trainData79$JOB_SATISFACTION.01_1979 <- NA
@@ -1607,6 +1633,11 @@ trainData79 <- trainData79 %>%
   mutate_at(vars(starts_with("MEAN_AGE_JOB")), 
             funs(ageToYears))
 
+# same for tenure, while we're at it
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("TENURE")), 
+            funs(ageToYears))
+
 ##### SELECTING RELEVANT COLUMNS #####
 
 workingTrainData79 <- trainData79 %>%
@@ -1640,30 +1671,3 @@ workingTrainData79 <- workingTrainData79 %>%
 # save(workingTrainData79, file = "workingTrainDataSet79.RData")
 
 
-##### FOR THE FINAL ######
-
-### job satisfaction flip scale ###
-# replacing NAs with 0
-# trainData79 <- trainData79 %>%
-#  mutate_at(vars(starts_with("JOB_SATISFACTION")), funs(replace_na(., 0)))
-
-# function to flip
-# scaleFlip <- function(score){
-#    if(score == 4){
-#      return(1)
-#    }else if(score == 3){
-#      return(2)
-#    }else if(score == 2){
-#      return(3)
-#    }else if(score == 1){
-#      return(4)
-#    }else{
-#      return(0)
-#  }
-#}
-
-# job satisfaction columns ## NOT WORKING YET ##
-
-# jobSatisfactionColumns <- trainData79 %>%
-#  select(starts_with("JOB_SATISFACTION")) %>%
-#  mapply(. %>% scaleFlip)
