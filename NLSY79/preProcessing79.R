@@ -11,6 +11,7 @@ names(trainData79) <- varNames[match(names(trainData79), varNames[ ,'Code']),'Na
 trainData79 <- trainData79 %>% 
   mutate_each(funs(replace(., .< 0, NA)))
 
+
 ### job satisfaction ###
 
 # replacing NAs with 0
@@ -18,7 +19,7 @@ trainData79 <- trainData79 %>%
   mutate_at(vars(starts_with("JOB_SATISFACTION")), 
             funs(replace_na(., 0)))
 
-# flip scale so 4 = 1, 3 = 2, 2 = 3, and 1 = 4
+# flip scale so 4 = 1, 3 = 2, 2 = 3, and 1 = 4 *** NOT WORKING YET ***
 scaleFlip <- function(score){
     if(score == 4){
       score <- 1
@@ -1200,6 +1201,12 @@ logCPI2016<- function(wage) {
 trainData79 <- trainData79 %>%
   mutate_at(vars(starts_with("HOURLY_PAY_2016"),"NET_FAMILY_INCOME_2016"), 
             funs(logCPI2016))
+
+# replacing -Inf caused by 0 with 0 
+trainData79 <- trainData79 %>%
+  mutate_at(vars(starts_with("NET_FAMILY_INCOME")), 
+            funs(replace(., .< 0, 0)))
+
 
 ### average age ###
 
