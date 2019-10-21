@@ -1,6 +1,5 @@
 library(tidyverse)
 library(xray)
-library(rsample)
 
 original_data <- readr::read_csv('data/fulldata.csv')
 names_dictionary <- readr::read_csv('data/dictionary.csv')
@@ -76,6 +75,13 @@ data_mutations <- columnar_data %>%
       TRUE ~ 0
     )
   ) %>%
+  dplyr::mutate(
+    full_time = as_factor(case_when(
+      hours_worked_week >= 35 ~ 1,
+      is.na(hours_worked_week) ~ NA_real_,
+      TRUE ~ 0
+    )
+  )) %>%
   dplyr::mutate(avg_age_per_job = ((age - tenure) + age) / 2) %>% 
   dplyr::mutate(
     gender = as_factor(
@@ -142,14 +148,13 @@ data_mutations <- columnar_data %>%
       year > 2000 & industry >= 9370 & industry <= 9870 ~ "pulicadmin",
       TRUE ~ 'other'
     ))
-  ) %>% 
-  dplyr::filter(hours_worked_week >= 35)
+  )
   
 job_satisfaction_data <- data_mutations %>% 
   dplyr::filter(!is.na(job_satisfaction)) %>%
   dplyr::select(-military_pay, -sample_id)
 
-## train test split
+# train test split
 set.seed(123)
 
 uniqueIds <- job_satisfaction_data$id %>% unique
@@ -160,8 +165,17 @@ test <- uniqueIds[-trainIds]
 trainData <- job_satisfaction_data[job_satisfaction_data$id %in% train, ]
 testData <- job_satisfaction_data[job_satisfaction_data$id %in% test, ]
 
+# centering
+test <- trainData %>%
+  group_by(id) %>% 
+  mutate(job_satisfaction_mean_per_person = mean(job_satisfaction),
+         job_satisfaction_dif_from_mean_per_person = job_satisfaction - job_satisfaction_mean_per_person) %>%
+  ungroup %>%
+  mutate(job_satisfaction_grand_mean_centered = job_satisfaction_mean_per_person - mean(job_satisfaction_mean_per_person))
 
-## experiments  
+
+
+# experiments  
 xray::anomalies(job_satisfaction_data)
 
 lm_fit <- lm(
