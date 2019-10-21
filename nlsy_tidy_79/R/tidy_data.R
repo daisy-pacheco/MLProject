@@ -1,6 +1,6 @@
 library(tidyverse)
 library(xray)
-
+library(rsample)
 
 original_data <- readr::read_csv('data/fulldata.csv')
 names_dictionary <- readr::read_csv('data/dictionary.csv')
@@ -149,7 +149,19 @@ job_satisfaction_data <- data_mutations %>%
   dplyr::filter(!is.na(job_satisfaction)) %>%
   dplyr::select(-military_pay, -sample_id)
 
-  
+## train test split
+set.seed(123)
+
+uniqueIds <- job_satisfaction_data$id %>% unique
+trainIds <- sample(1:length(uniqueIds), size = ceiling(0.7 * length(uniqueIds)))
+train <- uniqueIds[trainIds]
+test <- uniqueIds[-trainIds]
+
+trainData <- job_satisfaction_data[job_satisfaction_data$id %in% train, ]
+testData <- job_satisfaction_data[job_satisfaction_data$id %in% test, ]
+
+
+## experiments  
 xray::anomalies(job_satisfaction_data)
 
 lm_fit <- lm(
