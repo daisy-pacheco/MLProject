@@ -46,8 +46,14 @@ columnar_data <- tidy_data_fix %>%
 
 data_mutations <- columnar_data %>% 
   dplyr::mutate(
-    job_satisfaction = ifelse(is.na(job_satisfaction), job_satisfaction_global, job_satisfaction)
-  ) %>% 
+    job_satisfaction = 
+      dplyr::case_when(
+        currently_working == 1 & is.na(job_satisfaction) ~ job_satisfaction_global,
+        currently_working == 0 & is.na(job_satisfaction) ~ NA_real_,
+        currently_working == NA ~ NA_real_,
+        TRUE ~ job_satisfaction
+        )
+    ) %>% 
   dplyr::select(-job_satisfaction_global) %>% 
   dplyr::mutate(
     job_satisfaction = dplyr::case_when(
@@ -142,6 +148,7 @@ data_mutations <- columnar_data %>%
 job_satisfaction_data <- data_mutations %>% 
   dplyr::filter(!is.na(job_satisfaction)) %>%
   dplyr::select(-military_pay, -sample_id)
+
   
 xray::anomalies(job_satisfaction_data)
 

@@ -359,6 +359,7 @@ for(i in 1:nrow(trainData79)){
   }
 }
 
+
 ### sector ###
 # 1979
 trainData79 <- trainData79 %>%
@@ -1647,6 +1648,7 @@ trainData79 <- trainData79 %>%
 trainData79 <- trainData79 %>%
   mutate_at(vars(starts_with("TENURE")), 
             funs(ageToYears))
+
 
 ##### SELECTING RELEVANT COLUMNS #####
 
