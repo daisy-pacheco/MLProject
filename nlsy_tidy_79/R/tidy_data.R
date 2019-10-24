@@ -229,7 +229,6 @@ trainData <- trainData %>%
                 -tenure_mean_per_person) %>%
   ungroup
 
-<<<<<<< HEAD
 # group mean centering level 1 (job) variables
 trainData <- trainData %>%
   dplyr::group_by(id) %>% 
@@ -243,8 +242,7 @@ trainData <- trainData %>%
                 -tenure_mean_per_person) %>%
   ungroup
 
-=======
->>>>>>> 4298e04df3f8104d2d9e5bf4638edf62601d68f9
+
 # grand mean centering level 2 (individual) variables
 trainData <- trainData %>%
   dplyr:: mutate(rotter_score_centered = rotter_score - (mean(rotter_score, na.rm = TRUE)),
