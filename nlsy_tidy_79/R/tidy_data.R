@@ -1,7 +1,5 @@
 library(tidyverse)
 library(xray)
-library(rsample)
-library(ranger)
 
 original_data <- readr::read_csv('data/fulldata.csv')
 names_dictionary <- readr::read_csv('data/dictionary.csv')
@@ -77,6 +75,13 @@ data_mutations <- columnar_data %>%
       TRUE ~ 0
     )
   ) %>%
+  dplyr::mutate(
+    full_time = as_factor(case_when(
+      hours_worked_week >= 35 ~ 1,
+      is.na(hours_worked_week) ~ NA_real_,
+      TRUE ~ 0
+    )
+  )) %>%
   dplyr::mutate(avg_age_per_job = ((age - tenure) + age) / 2) %>% 
   dplyr::mutate(
     gender = as_factor(
@@ -143,14 +148,13 @@ data_mutations <- columnar_data %>%
       year > 2000 & industry >= 9370 & industry <= 9870 ~ "pulicadmin",
       TRUE ~ 'other'
     ))
-  ) %>% 
-  dplyr::filter(hours_worked_week >= 35)
+  )
   
 job_satisfaction_data <- data_mutations %>% 
   dplyr::filter(!is.na(job_satisfaction)) %>%
   dplyr::select(-military_pay, -sample_id)
 
-## train test split
+# train test split
 set.seed(123)
 
 uniqueIds <- job_satisfaction_data$id %>% unique
@@ -161,29 +165,17 @@ test <- uniqueIds[-trainIds]
 trainData <- job_satisfaction_data[job_satisfaction_data$id %in% train, ]
 testData <- job_satisfaction_data[job_satisfaction_data$id %in% test, ]
 
-## Random forest
+# centering
+test <- trainData %>%
+  group_by(id) %>% 
+  mutate(job_satisfaction_mean_per_person = mean(job_satisfaction),
+         job_satisfaction_dif_from_mean_per_person = job_satisfaction - job_satisfaction_mean_per_person) %>%
+  ungroup %>%
+  mutate(job_satisfaction_grand_mean_centered = job_satisfaction_mean_per_person - mean(job_satisfaction_mean_per_person))
 
-trainData <- trainData %>% 
-  select(job_satisfaction, avg_age_per_job, tenure, hourly_pay)
 
-trainData <- trainData[complete.cases(trainData),]
 
-# number of features
-n_features <- length(setdiff(names(trainData), "job_satisfaction"))
-
-# train a default random forest model
-job_satisfaction_rf1 <- ranger(
-  job_satisfaction ~ ., 
-  data = trainData,
-  mtry = floor(n_features / 3),
-  importance = "impurity",
-  respect.unordered.factors = "order",
-  seed = 123
-)
-
-p1 <- vip::vip(job_satisfaction_rf1, num_features = 3, bar = FALSE)
-
-## experiments  
+# experiments  
 xray::anomalies(job_satisfaction_data)
 
 lm_fit <- lm(
