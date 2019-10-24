@@ -165,14 +165,24 @@ test <- uniqueIds[-trainIds]
 trainData <- job_satisfaction_data[job_satisfaction_data$id %in% train, ]
 testData <- job_satisfaction_data[job_satisfaction_data$id %in% test, ]
 
-# centering
-test <- trainData %>%
-  group_by(id) %>% 
-  mutate(job_satisfaction_mean_per_person = mean(job_satisfaction),
-         job_satisfaction_dif_from_mean_per_person = job_satisfaction - job_satisfaction_mean_per_person) %>%
-  ungroup %>%
-  mutate(job_satisfaction_grand_mean_centered = job_satisfaction_mean_per_person - mean(job_satisfaction_mean_per_person))
+# group mean centering level 1 (job) variables
+trainData <- trainData %>%
+  dplyr::group_by(id) %>% 
+  dplyr:: mutate(hourly_pay_mean_per_person = mean(hourly_pay, na.rm = TRUE),
+         hourly_pay_centered = hourly_pay - hourly_pay_mean_per_person,
+         avg_age_per_job_mean_per_person = mean(avg_age_per_job, na.rm = TRUE),
+         avg_age_per_job_centered = avg_age_per_job - avg_age_per_job_mean_per_person,
+         tenure_mean_per_person = mean(tenure, na.rm = TRUE),
+         tenure_centered = tenure - tenure_mean_per_person) %>%
+  dplyr::select(-hourly_pay_mean_per_person, -avg_age_per_job_mean_per_person, 
+                -tenure_mean_per_person) %>%
+  ungroup
 
+# grand mean centering level 2 (individual) variables
+trainData <- trainData %>%
+  dplyr:: mutate(rotter_score_centered = rotter_score - (mean(rotter_score, na.rm = TRUE)),
+                 rosenberg_score_centered = rosenberg_score - (mean(rosenberg_score, na.rm = TRUE)),
+                 net_family_income_centered = net_family_income - (mean(net_family_income, na.rm = TRUE)))
 
 
 # experiments  
@@ -184,3 +194,11 @@ lm_fit <- lm(
 )
 
 summary(lm_fit)
+
+lm_fit2 <- lm(
+  job_satisfaction ~ industry + public + avg_age_per_job_centered + tenure_centered + ethnicity + religion + urban_rural + gender,
+  data = trainData
+)
+
+summary(lm_fit2)
+
