@@ -154,6 +154,57 @@ job_satisfaction_data <- data_mutations %>%
   dplyr::filter(!is.na(job_satisfaction)) %>%
   dplyr::select(-military_pay, -sample_id)
 
+# experiments  
+xray::anomalies(job_satisfaction_data)
+
+lm_fit <- lm(
+  job_satisfaction ~ cpi + industry + public + avg_age_per_job + year + tenure + ethnicity + religion + urban_rural + gender,
+  data = job_satisfaction_data
+)
+
+summary(lm_fit)
+
+# Visualizing missing values
+
+job_satisfaction_data %>%
+  is.na() %>%
+  reshape2::melt() %>%
+  ggplot(aes(Var2, Var1, fill=value)) + 
+  geom_raster() + 
+  coord_flip() +
+  scale_y_continuous(NULL, expand = c(0, 0)) +
+  scale_fill_grey(name = "", 
+                  labels = c("Present", 
+                             "Missing")) +
+  xlab("Observation") +
+  theme(axis.text.y  = element_text(size = 8))
+
+# highest_grade:
+
+x <- columnar_data$highest_grade
+
+y <- na_locf(x)
+
+z <- cbind(columnar_data$id,x,y)
+
+# rotter_score and rosenberg_score
+
+data_to_impute <- columnar_data %>% 
+  select(id, year, rosenberg_score, rotter_score)
+
+imputed_data <- na_interpolation(data_to_impute, option = "linear")
+
+imputed_data <- mice(data_to_impute, maxit = 1, m = 1, seed = 9, pred=quickpred(data_to_impute, mincor = 0.0, exclude = c("id")))
+
+
+
+plot(na.interpolation(tsAirgap, option = "linear") - AirPassengers, ylim = c(-mean(AirPassengers), mean(AirPassengers)), ylab = "Difference", main = "Linear")
+m3 <- mean((na.interpolation(tsAirgap, option = "linear") - AirPassengers)^2)
+
+
+
+
+
 # train test split
 set.seed(123)
 
@@ -165,14 +216,40 @@ test <- uniqueIds[-trainIds]
 trainData <- job_satisfaction_data[job_satisfaction_data$id %in% train, ]
 testData <- job_satisfaction_data[job_satisfaction_data$id %in% test, ]
 
-# centering
-test <- trainData %>%
-  group_by(id) %>% 
-  mutate(job_satisfaction_mean_per_person = mean(job_satisfaction),
-         job_satisfaction_dif_from_mean_per_person = job_satisfaction - job_satisfaction_mean_per_person) %>%
-  ungroup %>%
-  mutate(job_satisfaction_grand_mean_centered = job_satisfaction_mean_per_person - mean(job_satisfaction_mean_per_person))
+# group mean centering level 1 (job) variables
+trainData <- trainData %>%
+  dplyr::group_by(id) %>% 
+  dplyr:: mutate(hourly_pay_mean_per_person = mean(hourly_pay, na.rm = TRUE),
+         hourly_pay_centered = hourly_pay - hourly_pay_mean_per_person,
+         avg_age_per_job_mean_per_person = mean(avg_age_per_job, na.rm = TRUE),
+         avg_age_per_job_centered = avg_age_per_job - avg_age_per_job_mean_per_person,
+         tenure_mean_per_person = mean(tenure, na.rm = TRUE),
+         tenure_centered = tenure - tenure_mean_per_person) %>%
+  dplyr::select(-hourly_pay_mean_per_person, -avg_age_per_job_mean_per_person, 
+                -tenure_mean_per_person) %>%
+  ungroup
 
+<<<<<<< HEAD
+# group mean centering level 1 (job) variables
+trainData <- trainData %>%
+  dplyr::group_by(id) %>% 
+  dplyr:: mutate(hourly_pay_mean_per_person = mean(hourly_pay, na.rm = TRUE),
+         hourly_pay_centered = hourly_pay - hourly_pay_mean_per_person,
+         avg_age_per_job_mean_per_person = mean(avg_age_per_job, na.rm = TRUE),
+         avg_age_per_job_centered = avg_age_per_job - avg_age_per_job_mean_per_person,
+         tenure_mean_per_person = mean(tenure, na.rm = TRUE),
+         tenure_centered = tenure - tenure_mean_per_person) %>%
+  dplyr::select(-hourly_pay_mean_per_person, -avg_age_per_job_mean_per_person, 
+                -tenure_mean_per_person) %>%
+  ungroup
+
+=======
+>>>>>>> 4298e04df3f8104d2d9e5bf4638edf62601d68f9
+# grand mean centering level 2 (individual) variables
+trainData <- trainData %>%
+  dplyr:: mutate(rotter_score_centered = rotter_score - (mean(rotter_score, na.rm = TRUE)),
+                 rosenberg_score_centered = rosenberg_score - (mean(rosenberg_score, na.rm = TRUE)),
+                 net_family_income_centered = net_family_income - (mean(net_family_income, na.rm = TRUE)))
 
 
 # experiments  
@@ -184,3 +261,11 @@ lm_fit <- lm(
 )
 
 summary(lm_fit)
+
+lm_fit2 <- lm(
+  job_satisfaction ~ industry + public + avg_age_per_job_centered + tenure_centered + ethnicity + religion + urban_rural + gender,
+  data = trainData
+)
+
+summary(lm_fit2)
+
