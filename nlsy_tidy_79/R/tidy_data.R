@@ -1,6 +1,7 @@
 library(tidyverse)
 library(xray)
 library(rsample)
+library(ranger)
 
 original_data <- readr::read_csv('data/fulldata.csv')
 names_dictionary <- readr::read_csv('data/dictionary.csv')
@@ -160,6 +161,27 @@ test <- uniqueIds[-trainIds]
 trainData <- job_satisfaction_data[job_satisfaction_data$id %in% train, ]
 testData <- job_satisfaction_data[job_satisfaction_data$id %in% test, ]
 
+## Random forest
+
+trainData <- trainData %>% 
+  select(job_satisfaction, avg_age_per_job, tenure, hourly_pay)
+
+trainData <- trainData[complete.cases(trainData),]
+
+# number of features
+n_features <- length(setdiff(names(trainData), "job_satisfaction"))
+
+# train a default random forest model
+job_satisfaction_rf1 <- ranger(
+  job_satisfaction ~ ., 
+  data = trainData,
+  mtry = floor(n_features / 3),
+  importance = "impurity",
+  respect.unordered.factors = "order",
+  seed = 123
+)
+
+p1 <- vip::vip(job_satisfaction_rf1, num_features = 3, bar = FALSE)
 
 ## experiments  
 xray::anomalies(job_satisfaction_data)
