@@ -179,31 +179,61 @@ job_satisfaction_data %>%
   xlab("Observation") +
   theme(axis.text.y  = element_text(size = 8))
 
-# highest_grade:
+### imputation with means:
 
-x <- columnar_data$highest_grade
+library(zoo)
 
-y <- na_locf(x)
+imputed_data <- trainData %>% 
+  group_by(id) %>%
+  mutate(rosenberg_score_imp = na.approx(rosenberg_score, na.rm=FALSE)) %>% 
+  mutate(rotter_score_imp = na.approx(rotter_score, na.rm=FALSE)) %>% 
+  fill(highest_grade, .direction = c("down")) %>% 
+  fill(highest_grade, .direction = c("up")) %>% 
+  mutate(net_family_income_mean = ifelse(is.na(net_family_income), mean(net_family_income, na.rm=T), net_family_income)) %>% 
+  mutate(hours_worked_week_mean = ifelse(is.na(hours_worked_week), mean(hours_worked_week, na.rm=T), hours_worked_week)) %>% 
+  mutate(hourly_pay_mean = ifelse(is.na(hourly_pay), mean(hourly_pay, na.rm=T), hourly_pay))
 
-z <- cbind(columnar_data$id,x,y)
+# Explanation for highest_grade: When the direction is down the missing is replaced with the previous value within id. Direction up the replacement of missing will be with the next available value.
 
-# rotter_score and rosenberg_score
+### this works, but not with group_by(id):
+library(imputeTS)
 
-data_to_impute <- columnar_data %>% 
-  select(id, year, rosenberg_score, rotter_score)
+data_to_imputeTS <- trainData %>% 
+  select(id, net_family_income, hours_worked_week, hourly_pay)
 
-imputed_data <- na_interpolation(data_to_impute, option = "linear")
+imputed_dataTS <- na_interpolation(data_to_imputeTS, option = "linear") # the problem with this is that it does not take into account the longitudinal aspect
 
-imputed_data <- mice(data_to_impute, maxit = 1, m = 1, seed = 9, pred=quickpred(data_to_impute, mincor = 0.0, exclude = c("id")))
+# Error in is.finite(maxgap): default method not implemented for type 'list':
+imputed_dataTS <- data_to_imputeTS %>% 
+  group_by(id) %>% 
+  na_interpolation(data_to_imputeTS, option = "linear")
 
+### this works, but not with group_by(id):
+library(Hmisc)
 
+impute_arg <- aregImpute(~ highest_grade + net_family_income + hours_worked_week + hourly_pay +
+                           union, data = trainData, n.impute = 2)
 
-plot(na.interpolation(tsAirgap, option = "linear") - AirPassengers, ylim = c(-mean(AirPassengers), mean(AirPassengers)), ylab = "Difference", main = "Linear")
-m3 <- mean((na.interpolation(tsAirgap, option = "linear") - AirPassengers)^2)
+### this gave me negative values:
+library(caret)
+library(RANN)
 
+data_to_impute <- trainData %>% 
+  select(-id, -rosenberg_score, -rotter_score, -sector, -union)
+as.data.frame(data_to_impute)
 
+imputed_data_all = preProcess(data_to_impute, "knnImpute")
 
+imputed_data_all_pred = predict(imputed_data_all, data_to_impute)
 
+### mice
+
+library(mice)
+
+data_to_impute_numeric <- trainData %>% 
+  select(-religion, -ethnicity, -gender, -highest_grade, -urban_rural, -industry, -union, -full_time)
+
+imputed_Data_numeric <- mice(data_to_impute_numeric, m=5, maxit = 50, method = 'pmm', seed = 500)
 
 # train test split
 set.seed(123)
