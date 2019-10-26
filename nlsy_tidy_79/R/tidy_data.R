@@ -1,5 +1,4 @@
 library(tidyverse)
-library(xray)
 
 original_data <- readr::read_csv('data/fulldata.csv')
 names_dictionary <- readr::read_csv('data/dictionary.csv')
@@ -65,24 +64,14 @@ data_mutations <- columnar_data %>%
   ) %>% 
   dplyr::mutate(
     hourly_pay = log((hourly_pay * cpi) + 1),
-    net_family_income = ((net_family_income * cpi) + 1),
+    net_family_income = log((net_family_income * cpi) + 1),
     tenure = tenure / 52
   ) %>% 
-  dplyr::mutate(
-    public = case_when(
-      year <= 1993 & sector == 2 ~ 1, 
-      year > 1993 & sector == 1 ~ 1,
-      TRUE ~ 0
-    )
-  ) %>%
-  dplyr::mutate(
-    full_time = as_factor(case_when(
-      hours_worked_week >= 35 ~ 1,
-      is.na(hours_worked_week) ~ NA_real_,
-      TRUE ~ 0
-    )
-  )) %>%
   dplyr::mutate(avg_age_per_job = ((age - tenure) + age) / 2) %>% 
+  group_by(id) %>%
+  fill(highest_grade, .direction = c("down")) %>% # when the direction is down the missing is replaced with the previous value within id
+  fill(highest_grade, .direction = c("up")) %>%   # when direction is up the replacement of missing will be with the next available value
+  ungroup %>% 
   dplyr::mutate(
     gender = as_factor(
       ifelse(gender == 1, "male","female")
@@ -154,87 +143,6 @@ job_satisfaction_data <- data_mutations %>%
   dplyr::filter(!is.na(job_satisfaction)) %>%
   dplyr::select(-military_pay, -sample_id)
 
-# experiments  
-xray::anomalies(job_satisfaction_data)
-
-lm_fit <- lm(
-  job_satisfaction ~ cpi + industry + public + avg_age_per_job + year + tenure + ethnicity + religion + urban_rural + gender,
-  data = job_satisfaction_data
-)
-
-summary(lm_fit)
-
-# Visualizing missing values
-
-job_satisfaction_data %>%
-  is.na() %>%
-  reshape2::melt() %>%
-  ggplot(aes(Var2, Var1, fill=value)) + 
-  geom_raster() + 
-  coord_flip() +
-  scale_y_continuous(NULL, expand = c(0, 0)) +
-  scale_fill_grey(name = "", 
-                  labels = c("Present", 
-                             "Missing")) +
-  xlab("Observation") +
-  theme(axis.text.y  = element_text(size = 8))
-
-### imputation with means:
-
-library(zoo)
-
-imputed_data <- trainData %>% 
-  group_by(id) %>%
-  mutate(rosenberg_score_imp = na.approx(rosenberg_score, na.rm=FALSE)) %>% 
-  mutate(rotter_score_imp = na.approx(rotter_score, na.rm=FALSE)) %>% 
-  fill(highest_grade, .direction = c("down")) %>% 
-  fill(highest_grade, .direction = c("up")) %>% 
-  mutate(net_family_income_mean = ifelse(is.na(net_family_income), mean(net_family_income, na.rm=T), net_family_income)) %>% 
-  mutate(hours_worked_week_mean = ifelse(is.na(hours_worked_week), mean(hours_worked_week, na.rm=T), hours_worked_week)) %>% 
-  mutate(hourly_pay_mean = ifelse(is.na(hourly_pay), mean(hourly_pay, na.rm=T), hourly_pay))
-
-# Explanation for highest_grade: When the direction is down the missing is replaced with the previous value within id. Direction up the replacement of missing will be with the next available value.
-
-### this works, but not with group_by(id):
-library(imputeTS)
-
-data_to_imputeTS <- trainData %>% 
-  select(id, net_family_income, hours_worked_week, hourly_pay)
-
-imputed_dataTS <- na_interpolation(data_to_imputeTS, option = "linear") # the problem with this is that it does not take into account the longitudinal aspect
-
-# Error in is.finite(maxgap): default method not implemented for type 'list':
-imputed_dataTS <- data_to_imputeTS %>% 
-  group_by(id) %>% 
-  na_interpolation(data_to_imputeTS, option = "linear")
-
-### this works, but not with group_by(id):
-library(Hmisc)
-
-impute_arg <- aregImpute(~ highest_grade + net_family_income + hours_worked_week + hourly_pay +
-                           union, data = trainData, n.impute = 2)
-
-### this gave me negative values:
-library(caret)
-library(RANN)
-
-data_to_impute <- trainData %>% 
-  select(-id, -rosenberg_score, -rotter_score, -sector, -union)
-as.data.frame(data_to_impute)
-
-imputed_data_all = preProcess(data_to_impute, "knnImpute")
-
-imputed_data_all_pred = predict(imputed_data_all, data_to_impute)
-
-### mice
-
-library(mice)
-
-data_to_impute_numeric <- trainData %>% 
-  select(-religion, -ethnicity, -gender, -highest_grade, -urban_rural, -industry, -union, -full_time)
-
-imputed_Data_numeric <- mice(data_to_impute_numeric, m=5, maxit = 50, method = 'pmm', seed = 500)
-
 # train test split
 set.seed(123)
 
@@ -243,45 +151,97 @@ trainIds <- sample(1:length(uniqueIds), size = ceiling(0.7 * length(uniqueIds)))
 train <- uniqueIds[trainIds]
 test <- uniqueIds[-trainIds]
 
-trainData <- job_satisfaction_data[job_satisfaction_data$id %in% train, ]
-testData <- job_satisfaction_data[job_satisfaction_data$id %in% test, ]
+train_data <- job_satisfaction_data[job_satisfaction_data$id %in% train, ]
+test_data <- job_satisfaction_data[job_satisfaction_data$id %in% test, ]
 
-# group mean centering level 1 (job) variables
-trainData <- trainData %>%
+
+# handling missing data
+
+## visualizing missing values
+library(Amelia)
+missmap(train_data)
+
+library(xray)
+xray::anomalies(test)
+
+## imputation with means for numeric and MICE for categorical:
+
+library(zoo)
+
+imputed_data <- train_data %>% 
+  group_by(id) %>%
+  mutate(net_family_income = ifelse(is.na(net_family_income), 
+                                        mean(net_family_income, na.rm = T), 
+                                        net_family_income)) %>% 
+  mutate(rosenberg_score = ifelse(is.na(rosenberg_score), 
+                                      mean(rosenberg_score, na.rm = T), 
+                                      rosenberg_score)) %>% 
+  mutate(rotter_score = ifelse(is.na(rotter_score), 
+                                   mean(rotter_score, na.rm = T), 
+                                   rotter_score)) %>% 
+  mutate(tenure = ifelse(is.na(tenure), 
+                             mean(tenure, na.rm = T), 
+                             tenure)) %>% 
+  mutate(hours_worked_week = ifelse(is.na(hours_worked_week), 
+                                        mean(hours_worked_week, na.rm = T), 
+                                        hours_worked_week)) %>% 
+  mutate(hourly_pay = ifelse(is.na(hourly_pay), 
+                                 mean(hourly_pay, na.rm = T), 
+                                 hourly_pay)) %>% 
+  select(-union, -sector) %>% 
+  ungroup()
+
+set.seed(123)
+require(mice)
+data_binary <- train_data %>% select(id, union)
+imputed_binary <- mice(data_binary, method = "logreg")
+data_binary <- complete(imputed_binary)
+
+train_data$sector <- as_factor(train_data$sector)
+data_catgorical <- train_data %>% select(id, sector)
+imputed_categorical <- mice(data_catgorical, method = "polyreg")
+data_catgorical <- complete(imputed_categorical)
+
+mice_imputed <- cbind(data_binary, data_catgorical)
+mice_imputed$id <- NULL
+
+imputed_data_final <- cbind(imputed_data, mice_imputed)
+
+imputed_data_final <- imputed_data_final %>% 
+  select(id, religion, ethnicity, gender, year, highest_grade, urban_rural, age, net_family_income, rosenberg_score,
+         rotter_score, job_number, tenure, hours_worked_week, hourly_pay, industry, job_satisfaction, avg_age_per_job, 
+         sector, union) %>% 
+  mutate(full_time = as_factor(case_when(
+             hours_worked_week >= 35 ~ 1,
+             is.na(hours_worked_week) ~ NA_real_,
+             TRUE ~ 0))) %>% 
+  mutate(public = case_when(year <= 1993 & sector == 2 ~ 1, 
+                            year > 1993 & sector == 1 ~ 1,
+                            TRUE ~ 0))
+
+
+# centering 
+## group mean centering level 1 (job) variables
+centered_data <- imputed_data_final %>%
   dplyr::group_by(id) %>% 
   dplyr:: mutate(hourly_pay_mean_per_person = mean(hourly_pay, na.rm = TRUE),
-         hourly_pay_centered = hourly_pay - hourly_pay_mean_per_person,
-         avg_age_per_job_mean_per_person = mean(avg_age_per_job, na.rm = TRUE),
-         avg_age_per_job_centered = avg_age_per_job - avg_age_per_job_mean_per_person,
-         tenure_mean_per_person = mean(tenure, na.rm = TRUE),
-         tenure_centered = tenure - tenure_mean_per_person) %>%
+                 hourly_pay_centered = hourly_pay - hourly_pay_mean_per_person,
+                 avg_age_per_job_mean_per_person = mean(avg_age_per_job, na.rm = TRUE),
+                 avg_age_per_job_centered = avg_age_per_job - avg_age_per_job_mean_per_person,
+                 tenure_mean_per_person = mean(tenure, na.rm = TRUE),
+                 tenure_centered = tenure - tenure_mean_per_person) %>%
   dplyr::select(-hourly_pay_mean_per_person, -avg_age_per_job_mean_per_person, 
                 -tenure_mean_per_person) %>%
   ungroup
 
-# group mean centering level 1 (job) variables
-trainData <- trainData %>%
-  dplyr::group_by(id) %>% 
-  dplyr:: mutate(hourly_pay_mean_per_person = mean(hourly_pay, na.rm = TRUE),
-         hourly_pay_centered = hourly_pay - hourly_pay_mean_per_person,
-         avg_age_per_job_mean_per_person = mean(avg_age_per_job, na.rm = TRUE),
-         avg_age_per_job_centered = avg_age_per_job - avg_age_per_job_mean_per_person,
-         tenure_mean_per_person = mean(tenure, na.rm = TRUE),
-         tenure_centered = tenure - tenure_mean_per_person) %>%
-  dplyr::select(-hourly_pay_mean_per_person, -avg_age_per_job_mean_per_person, 
-                -tenure_mean_per_person) %>%
-  ungroup
-
-
-# grand mean centering level 2 (individual) variables
-trainData <- trainData %>%
+## grand mean centering level 2 (individual) variables
+centered_data <- centered_data %>%
   dplyr:: mutate(rotter_score_centered = rotter_score - (mean(rotter_score, na.rm = TRUE)),
                  rosenberg_score_centered = rosenberg_score - (mean(rosenberg_score, na.rm = TRUE)),
                  net_family_income_centered = net_family_income - (mean(net_family_income, na.rm = TRUE)))
 
 
 # experiments  
-xray::anomalies(job_satisfaction_data)
 
 lm_fit <- lm(
   job_satisfaction ~ cpi + industry + public + avg_age_per_job + year + tenure + ethnicity + religion + urban_rural + gender,
@@ -292,8 +252,9 @@ summary(lm_fit)
 
 lm_fit2 <- lm(
   job_satisfaction ~ industry + public + avg_age_per_job_centered + tenure_centered + ethnicity + religion + urban_rural + gender,
-  data = trainData
+  data = centered_data
 )
 
 summary(lm_fit2)
+
 
