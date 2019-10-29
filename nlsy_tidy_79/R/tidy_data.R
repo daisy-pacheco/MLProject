@@ -173,9 +173,11 @@ imputed_data <- train_data %>%
   mutate(net_family_income = ifelse(is.na(net_family_income), 
                                         mean(net_family_income, na.rm = T), 
                                         net_family_income)) %>% 
+  mutate(rosenberg_score = na.approx(rosenberg_score, na.rm=FALSE)) %>% 
   mutate(rosenberg_score = ifelse(is.na(rosenberg_score), 
                                       mean(rosenberg_score, na.rm = T), 
                                       rosenberg_score)) %>% 
+  mutate(rotter_score = na.approx(rotter_score, na.rm=FALSE)) %>% 
   mutate(rotter_score = ifelse(is.na(rotter_score), 
                                    mean(rotter_score, na.rm = T), 
                                    rotter_score)) %>% 
