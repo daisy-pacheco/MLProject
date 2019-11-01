@@ -1,76 +1,82 @@
 library(tidyverse)
-library(lme4)
-library(DMwR)
-library(glmmLasso)
+library(ordinalNet)
 
 train_data <- centered_data
 train_data$highest_grade <- relevel(train_data$highest_grade, "primary_school")
 
+# dropping missings since both mixor and ordinalNet drop them anyway
+## could consider dropping personality variables instead
+train_data <- train_data[complete.cases(train_data), ]
+
+### MIXOR ###
+library(mixor)
 
 # all jobs
-model1 <- lmer(job_satisfaction ~ hourly_pay_centered + 
-                 avg_age_per_job_centered +
-                 tenure_centered + (1 | id) + (1 | job_number), 
-               data = train_data)
+mixor1 <- mixor(job_satisfaction ~
+                  hourly_pay_centered + 
+                  avg_age_per_job_centered +
+                  tenure_centered +
+                  job_number, 
+                id = id, 
+                link = "logit",
+                data = train_data)
 
-summary(model1)
+summary(mixor1)
+plot(mixor1)
 
-model2 <- lmer(job_satisfaction ~ hourly_pay_centered + 
-                    avg_age_per_job_centered +
-                    tenure_centered + 
-                    industry +
-                    union +
-                    full_time +
-                    public +
-                    (1 | id) + (1 | job_number), 
-                  data = train_data)
+## predicting
+preds <- predict(mixor1)
+cm <- table(preds$class, subsample$job_satisfaction)
 
-summary(model2)
+precrecall <- function(mytable, verbose=TRUE) {
+  truePositives <- mytable[1, 1]
+  falsePositives <- sum(mytable[1, ]) - truePositives
+  falseNegatives <- sum(mytable[ ,1]) - truePositives
+  precision <- truePositives / (truePositives + falsePositives)
+  recall <- truePositives / (truePositives + falseNegatives)
+  if (verbose) {
+    print(mytable)
+    cat("\n precision =", round(precision, 2), 
+        "\n recall =", round(recall, 2), "\n")
+  }
+  invisible(c(precision, recall))
+}
 
-model3 <- lmer(job_satisfaction ~ hourly_pay_centered + 
-                 avg_age_per_job_centered +
-                 tenure_centered + 
-                 industry +
-                 union +
-                 full_time +
-                 public +
-                 gender +
-                 religion +
-                 ethnicity + 
-                 highest_grade +
-                 urban_rural +
-                 net_family_income_centered +
-                 rotter_score_centered + 
-                 rosenberg_score_centered +
-                 (1 | id) + (1 | job_number), 
-               data = train_data)
+## precision and recall
+precrecall(cm) 
 
-summary(model3)
+## accuracy
+sum(diag(cm)) / sum(cm)
+
 
 # full time only
 full_time <- train_data %>% 
   filter(hours_worked_week >= 35)
 
-model4 <- lmer(job_satisfaction ~ hourly_pay_centered + 
+mixor2 <- mixor(job_satisfaction ~
+                  hourly_pay_centered + 
+                  avg_age_per_job_centered +
+                  tenure_centered +
+                  job_number, 
+                id = id, 
+                link = "logit",
+                data = full_time)
+
+summary(mixor2)
+
+
+### LME4 ###
+library(lme4)
+
+# all jobs
+lmeModel1 <- lmer(job_satisfaction ~ hourly_pay_centered + 
                  avg_age_per_job_centered +
                  tenure_centered + (1 | id) + (1 | job_number), 
-               data = full_time)
+               data = train_data)
 
-summary(model4)
+summary(lmeModel1)
 
-model5 <- lmer(job_satisfaction ~ hourly_pay_centered + 
-                 avg_age_per_job_centered +
-                 tenure_centered + 
-                 industry +
-                 union +
-                 public +
-                 (1 | id) + (1 | job_number), 
-               data = full_time)
-
-summary(model5)
-
-
-model6 <- lmer(job_satisfaction ~ hourly_pay_centered + 
+lmeModel2 <- lmer(job_satisfaction ~ hourly_pay_centered + 
                  avg_age_per_job_centered +
                  tenure_centered + 
                  industry +
@@ -88,16 +94,51 @@ model6 <- lmer(job_satisfaction ~ hourly_pay_centered +
                  (1 | id) + (1 | job_number), 
                data = train_data)
 
-summary(model6)
+summary(lmeModel2)
 
-# regularization
-df <- train_data[complete.cases(train_data),]
+# full time only
+full_time <- train_data %>% 
+  filter(hours_worked_week >= 35)
 
-model_reg <- glmmLasso(fix = job_satisfaction ~ hourly_pay_centered + 
-                         avg_age_per_job_centered +
-                         tenure_centered, 
-                       rnd = list(job_satisfaction = ~ 1 + id), 
-                       lambda = 10,
-                       data = df)
+lmeModel3 <- lmer(job_satisfaction ~ hourly_pay_centered + 
+                 avg_age_per_job_centered +
+                 tenure_centered + (1 | id) + (1 | job_number), 
+               data = full_time)
+
+summary(lmeModel3)
+
+lmeModel4 <- lmer(job_satisfaction ~ hourly_pay_centered + 
+                 avg_age_per_job_centered +
+                 tenure_centered + 
+                 industry +
+                 union +
+                 full_time +
+                 public +
+                 gender +
+                 religion +
+                 ethnicity + 
+                 highest_grade +
+                 urban_rural +
+                 net_family_income_centered +
+                 rotter_score_centered + 
+                 rosenberg_score_centered +
+                 (1 | id) + (1 | job_number), 
+               data = train_data)
+
+summary(lmeModel4)
 
 
+### REGULARIZATION ###
+y <- as.factor(df$job_satisfaction)
+x <- df %>% 
+  select(hourly_pay_centered, avg_age_per_job_centered, tenure_centered) %>% 
+  as.matrix()
+
+fit1 <- ordinalNet(x = x, y = y,   
+                   family = "cumulative", 
+                   link = "logit",
+                   parallelTerms = TRUE, 
+                   nonparallelTerms = FALSE)
+
+summary(fit1)
+coef(fit1)
