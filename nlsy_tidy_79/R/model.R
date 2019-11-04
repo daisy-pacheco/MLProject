@@ -72,7 +72,8 @@ library(lme4)
 lmeModel1 <- lmer(job_satisfaction ~ hourly_pay_centered + 
                  avg_age_per_job_centered +
                  tenure_centered + (1 | id) + (1 | job_number), 
-               data = train_data)
+               data = train_data,
+               REML = FALSE)
 
 summary(lmeModel1)
 
@@ -92,9 +93,12 @@ lmeModel2 <- lmer(job_satisfaction ~ hourly_pay_centered +
                  rotter_score_centered + 
                  rosenberg_score_centered +
                  (1 | id) + (1 | job_number), 
-               data = train_data)
+               data = train_data,
+               REML = FALSE)
 
 summary(lmeModel2)
+
+anova(lmeModel1,lmeModel2)
 
 # full time only
 full_time <- train_data %>% 
@@ -112,7 +116,6 @@ lmeModel4 <- lmer(job_satisfaction ~ hourly_pay_centered +
                  tenure_centered + 
                  industry +
                  union +
-                 full_time +
                  public +
                  gender +
                  religion +
@@ -123,7 +126,7 @@ lmeModel4 <- lmer(job_satisfaction ~ hourly_pay_centered +
                  rotter_score_centered + 
                  rosenberg_score_centered +
                  (1 | id) + (1 | job_number), 
-               data = train_data)
+               data = full_time)
 
 summary(lmeModel4)
 
