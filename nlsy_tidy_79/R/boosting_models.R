@@ -72,6 +72,8 @@ best_gbm_perf_validation <- h2o::h2o.performance(
 h2o.varimp(best_gbm)
 h2o.varimp_plot(best_gbm)
 
+
+
 train_lime <- as.data.frame(train_data)
 explainer_lime <- lime::lime(train_lime, model = best_gbm)
 
@@ -92,7 +94,6 @@ validation_lime_js1 <- validation_lime_js1[sample(nrow(validation_lime_js1), 3),
 
 validation_lime_js0 <-  validation_lime %>% 
   dplyr::filter(job_satisfaction == 0)
-
 validation_lime_js0 <- validation_lime_js0[sample(nrow(validation_lime_js0), 3), ]
 
 explanation_lime_js1 <- lime::explain(validation_lime_js1, explainer_lime, n_labels = 2, n_features = 5)
