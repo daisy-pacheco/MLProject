@@ -1,5 +1,4 @@
 library(tidyverse)
-library(ordinalNet)
 
 train_data <- centered_data
 train_data$highest_grade <- relevel(train_data$highest_grade, "primary_school")
@@ -8,6 +7,23 @@ train_data$highest_grade <- relevel(train_data$highest_grade, "primary_school")
 ## could consider dropping personality variables instead
 train_data <- train_data[complete.cases(train_data), ]
 
+train_data <- train_data %>% 
+  select(-net_family_income, -rosenberg_score, -rotter_score, 
+         -tenure, -avg_age_per_job, -hourly_pay, -sector) %>% 
+  mutate(public = factor(public),
+         job_satisfaction = factor(job_satisfaction))
+
+# tiny sample for tests
+set.seed(123)
+ids <- train_data$id %>% unique
+sampleIds <- sample(1:length(ids), size = ceiling(0.1* length(ids)))
+sample <- ids[sampleIds]
+sample <- train_data[train_data$id %in% sample, ]
+
+full_time_sample <- sample %>% 
+  filter(hours_worked_week >= 35)
+
+
 ### MIXOR ###
 library(mixor)
 
@@ -15,14 +31,49 @@ library(mixor)
 mixor1 <- mixor(job_satisfaction ~
                   hourly_pay_centered + 
                   avg_age_per_job_centered +
-                  tenure_centered +
-                  job_number, 
+                  tenure_centered,
                 id = id, 
                 link = "logit",
-                data = train_data)
+                data = sample)
 
 summary(mixor1)
 plot(mixor1)
+
+mixor2 <- mixor(job_satisfaction ~ 
+                  hourly_pay_centered + 
+                  avg_age_per_job_centered +
+                  tenure_centered +
+                  religion +
+                  ethnicity +
+                  gender +
+                  year +
+                  highest_grade +
+                  urban_rural +
+                  net_family_income_centered +
+                  rosenberg_score_centered +
+                  rotter_score_centered +
+                  job_number +
+                  full_time +
+                  industry +
+                  union +
+                  public,
+                id = id, 
+                link = "logit",
+                data = sample)
+
+summary(mixor2)
+plot(mixor2)
+
+
+
+
+
+
+
+
+
+
+
 
 ## predicting
 preds <- predict(mixor1)
@@ -49,99 +100,4 @@ precrecall(cm)
 sum(diag(cm)) / sum(cm)
 
 
-# full time only
-full_time <- train_data %>% 
-  filter(hours_worked_week >= 35)
 
-mixor2 <- mixor(job_satisfaction ~
-                  hourly_pay_centered + 
-                  avg_age_per_job_centered +
-                  tenure_centered +
-                  job_number, 
-                id = id, 
-                link = "logit",
-                data = full_time)
-
-summary(mixor2)
-
-
-### LME4 ###
-library(lme4)
-
-# all jobs
-lmeModel1 <- lmer(job_satisfaction ~ hourly_pay_centered + 
-                 avg_age_per_job_centered +
-                 tenure_centered + (1 | id) + (1 | job_number), 
-               data = train_data,
-               REML = FALSE)
-
-summary(lmeModel1)
-
-lmeModel2 <- lmer(job_satisfaction ~ hourly_pay_centered + 
-                 avg_age_per_job_centered +
-                 tenure_centered + 
-                 industry +
-                 union +
-                 full_time +
-                 public +
-                 gender +
-                 religion +
-                 ethnicity + 
-                 highest_grade +
-                 urban_rural +
-                 net_family_income_centered +
-                 rotter_score_centered + 
-                 rosenberg_score_centered +
-                 (1 | id) + (1 | job_number), 
-               data = train_data,
-               REML = FALSE)
-
-summary(lmeModel2)
-
-anova(lmeModel1,lmeModel2)
-
-# full time only
-full_time <- train_data %>% 
-  filter(hours_worked_week >= 35)
-
-lmeModel3 <- lmer(job_satisfaction ~ hourly_pay_centered + 
-                 avg_age_per_job_centered +
-                 tenure_centered + (1 | id) + (1 | job_number), 
-               data = full_time)
-
-summary(lmeModel3)
-
-lmeModel4 <- lmer(job_satisfaction ~ hourly_pay_centered + 
-                 avg_age_per_job_centered +
-                 tenure_centered + 
-                 industry +
-                 union +
-                 public +
-                 gender +
-                 religion +
-                 ethnicity + 
-                 highest_grade +
-                 urban_rural +
-                 net_family_income_centered +
-                 rotter_score_centered + 
-                 rosenberg_score_centered +
-                 (1 | id) + (1 | job_number), 
-               data = full_time)
-
-summary(lmeModel4)
-
-
-### REGULARIZATION ###
-y <- as.factor(train_data$job_satisfaction)
-x <- train_data %>% 
-  select(hourly_pay_centered, avg_age_per_job_centered, tenure_centered) %>% 
-  as.matrix()
-
-fit1 <- ordinalNet(x = x, y = y,   
-                   family = "cumulative", 
-                   link = "logit",
-                   parallelTerms = TRUE, 
-                   nonparallelTerms = FALSE)
-
-summary(fit1)
-coef(fit1)
