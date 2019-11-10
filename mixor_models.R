@@ -83,10 +83,48 @@ sum(diag(cm)) / sum(cm)
 # kable table
 library(kableExtra)
 
-public_info <- public_model[4]
-full_time_info <- full_time_model[4]
+## grabbing model results and joining
+full_time_info <- as.data.frame(full_time_model[4]) %>% 
+  format(scientific = F) %>% 
+  rownames_to_column() %>% 
+  rename(Variable = rowname) %>% 
+  mutate(Estimate = as.numeric(Model.Estimate),
+         StdError = as.numeric(Model.Std..Error),
+         Pvalue = as.numeric(Model.P...z..),
+         Significant = case_when(Pvalue <= 0.1 & Pvalue > 0.05 ~ "*", 
+                                 Pvalue <= 0.05 & Pvalue > 0.01 ~ "**", 
+                                 Pvalue <= 0.01 ~ "***",
+                                 TRUE ~ " ")) %>% 
+  mutate_if(is.numeric, round, digits = 4) %>% 
+  select(-Model.Estimate, -Model.Std..Error, -Model.z.value, -Model.P...z..)
 
+public_info <- as.data.frame(public_model[4]) %>% 
+  format(scientific = F) %>% 
+  rownames_to_column() %>% 
+  rename(Variable = rowname) %>% 
+  mutate(EstimatePublic = as.numeric(Model.Estimate),
+         StandardErrorPublic = as.numeric(Model.Std..Error),
+         PvaluePublic = as.numeric(Model.P...z..),
+         SignificantPublic = case_when(PvaluePublic <= 0.1 & PvaluePublic > 0.05 ~ "*", 
+                                       PvaluePublic <= 0.05 & PvaluePublic > 0.01 ~ "**", 
+                                       PvaluePublic <= 0.01 ~ "***",
+                                 TRUE ~ " ")) %>% 
+  mutate_if(is.numeric, round, digits = 4) %>% 
+  select(-Model.Estimate, -Model.Std..Error, -Model.z.value, -Model.P...z..)
 
-public_info %>% kable() %>% kable_styling()
+results_table <- left_join(full_time_info, public_info, by = "Variable")
+results_table[] <- replace(as.matrix(results_table), is.na(results_table), "")
+colnames(results_table) <- c("Variable", "Estimate", "StdError", "Pvalue", "Significant", 
+                             "Estimate", "StdError", "Pvalue", "Significant")
 
+## creating table
+final_table <- results_table %>%
+  kable() %>% 
+  kable_styling() %>% 
+  column_spec(1, bold = T, border_right = T) %>%
+  column_spec(5, border_right = T) %>% 
+  add_header_above(c(" " = 1, "All Full Time Employees" = 4, "Public Sector Only" = 4)) %>% 
+  add_header_above(c(" ", "Mixed-Effects Longitudinal Model of Job Satisfaction" = 8)) %>% 
+  footnote(general = "* = 0.1, ** = 0.05, *** = 0.01")
 
+final_table
