@@ -62,11 +62,12 @@ plot_coeff_evolution = function(regularization, type = 'Lasso')
   coeff[ ,variable:=rep(lambda, each = length(unique(name)))]
   ggplot(coeff, aes(x = variable, y = value, color = name)) +
     geom_line() +
-    xlab(paste0(type,' regularisation')) +
+    xlab('Value of lambda') +
     ylab('Value of coefficient') +
     scale_x_log10() + 
     geom_vline(xintercept = lasso_cv$lambda.1se, linetype = "longdash") + 
-    geom_vline(xintercept = lasso_cv$lambda.min, linetype = "longdash")
+    geom_vline(xintercept = lasso_cv$lambda.min, linetype = "longdash") + 
+    theme(axis.text=element_text(size=14), axis.title=element_text(size=14,face="bold"))
 }
 
 plot_coeff_evolution(lasso, "Lasso")
