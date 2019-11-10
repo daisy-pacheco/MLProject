@@ -119,7 +119,7 @@ colnames(results_table) <- c("Variable", "Estimate", "StdError", "Pvalue", "Sign
 
 ## creating table
 final_table <- results_table %>%
-  kable() %>% 
+  kable("latex") %>% 
   kable_styling() %>% 
   column_spec(1, bold = T, border_right = T) %>%
   column_spec(5, border_right = T) %>% 
