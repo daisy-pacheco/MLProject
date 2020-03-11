@@ -51,6 +51,7 @@ data_mutations_97 <- columnar_data_97 %>%
       TRUE ~ job_satisfaction
     )
   ) %>% 
+  ungroup() %>% 
   mutate(
     unique_employer_id = paste0(id, "_", employer_id),
     start_date = as.Date(paste0("1", "/", start_month, "/", start_year), format("%d/%m/%Y")),
@@ -66,7 +67,9 @@ data_mutations_97 <- columnar_data_97 %>%
   select(id, year, job_number, employer_id, 
          job_satisfaction,
          age, avg_age_job_year, tenure,
-         hours_worked, hourly_pay, unique_employer_id)
+         hours_worked, hourly_pay, unique_employer_id, 
+         personality_2, personality_4, personality_6, personality_8, personality_10,
+         personality_1, personality_3, personality_5, personality_7, personality_9)
 
 # imputation 
 ## linear interpolation for values measured at least twice
