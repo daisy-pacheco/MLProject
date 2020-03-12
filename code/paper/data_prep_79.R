@@ -1,7 +1,7 @@
 library(tidyverse)
 
 original_data <- read_csv('data/paper/fulldata_79.csv')
-names_dictionary <- read_csv('data/paper/dictionary_79.csv')
+names_dictionary <- read.csv('data/paper/dictionary_79.csv', sep = ";")
 cpi <- read_csv('data/paper/CPI.csv')
 
 tidy_data <- original_data %>% 
