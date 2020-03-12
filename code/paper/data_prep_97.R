@@ -22,10 +22,12 @@ tidy_data_97 <- original_data_97 %>%
 yearly_variables_97 <- tidy_data_97 %>% 
   filter(is.na(job_number)) %>% 
   select(id, year, variable, value) %>% 
+  mutate(row = row_number()) %>%
   pivot_wider(
     names_from = variable,
     values_from = value
-  )
+  ) %>% 
+  select(-row)
 
 tidy_data_fix_97 <- tidy_data_97 %>% 
   filter(!is.na(job_number)) %>% 
@@ -68,9 +70,10 @@ data_mutations_97 <- columnar_data_97 %>%
          job_satisfaction,
          age, avg_age_job_year, tenure,
          hours_worked, hourly_pay, unique_employer_id, 
-         personality_2, personality_4, personality_6, personality_8, personality_10,
-         personality_1, personality_3, personality_5, personality_7, personality_9)
+         starts_with("personality"))
 
+
+### IMPUTATION NOT ADAPTED YET ###
 # imputation 
 ## linear interpolation for values measured at least twice
 ## otherwise, mean imputation
