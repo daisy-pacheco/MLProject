@@ -26,20 +26,26 @@ tidy_data <- original_data %>%
 yearly_variables <- tidy_data %>% 
   filter(is.na(job_number)) %>% 
   select(id, year, variable, value) %>% 
+  mutate(row = row_number()) %>%
   pivot_wider(
     names_from = variable,
     values_from = value
   ) %>% 
-  select(-highest_grade, -urban_rural, -net_family_income, 
-         -military_pay, -sample_id)
+  select(id,year, age,
+         job_satisfaction_global, 
+         starts_with("personality"))
 
 tidy_data_fix <- tidy_data %>% 
   filter(!is.na(job_number)) %>% 
   left_join(yearly_variables)
 
 columnar_data <- tidy_data_fix %>% 
-  group_by(id, variable, job_number, year, job_satisfaction_global, 
-           rotter_score, age, rosenberg_score) %>% 
+  group_by(id, year, age, variable, 
+           job_number, job_satisfaction_global, 
+           personality_1, personality_2, personality_3,
+           personality_4, personality_5, personality_6,
+           personality_7, personality_8, personality_9,
+           personality_10) %>% 
   mutate(row = row_number()) %>%
   pivot_wider(
     names_from = variable,
@@ -84,8 +90,9 @@ data_mutations <- columnar_data %>%
          job_satisfaction,
          age, avg_age_job_year, tenure,
          hours_worked_week, hourly_pay,
-         rotter_score, rosenberg_score)
+         starts_with("personality"))
 
+### NOT ADAPTED YET ###
 # imputation 
 ## linear interpolation for values measured at least twice
 ## otherwise, mean imputation
