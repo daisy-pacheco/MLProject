@@ -2,10 +2,13 @@ library(tidyverse)
 
 original_data_97 <- read_csv("data/paper/fulldata_97.csv")
 names_dictionary_97 <- read.csv("data/paper/dictionary_97.csv", sep = ";")
+cpi <- read_csv('data/paper/CPI.csv')
 
 tidy_data_97 <- original_data_97 %>% 
   tidyr::pivot_longer(
-    -c(R0000100),
+    -c(R0000100, T3162500, T3162501, T3162502,
+       T3162503, T3162504, T3162505, T3162506,
+       T3162507, T3162508, T3162509),
     names_to = "variable_id",
     values_to = "value",
     values_drop_na = TRUE
@@ -15,7 +18,17 @@ tidy_data_97 <- original_data_97 %>%
   ) %>% 
   dplyr::filter(value >= 0)  %>% 
   dplyr::rename(
-    id = R0000100
+    id = R0000100,
+    personality_1 =	T3162500,
+    personality_2	= T3162501,
+    personality_3 = T3162502,
+    personality_4	= T3162503,
+    personality_5	= T3162504,
+    personality_6	= T3162505,
+    personality_7	= T3162506,
+    personality_8	= T3162507,
+    personality_9	= T3162508,
+    personality_10 = T3162509
   ) %>% 
   dplyr::select(-variable_id)
 
@@ -27,9 +40,16 @@ yearly_variables_97 <- tidy_data_97 %>%
     names_from = variable,
     values_from = value
   ) %>% 
-  select(-row)
+  select(-row) %>% 
+  group_by(id, year) %>% 
+  summarize_all(funs(mean(., na.rm = TRUE)))
+
+personality_97 <- tidy_data_97 %>% 
+  select(id, starts_with("personality")) %>% 
+  unique()
 
 tidy_data_fix_97 <- tidy_data_97 %>% 
+  select(-starts_with("personality")) %>% 
   filter(!is.na(job_number)) %>% 
   left_join(yearly_variables_97)
 
@@ -40,7 +60,8 @@ columnar_data_97 <- tidy_data_fix_97 %>%
     names_from = variable,
     values_from = value
   ) %>% 
-  left_join(cpi)
+  left_join(cpi) %>% 
+  select(-row)
 
 data_mutations_97 <- columnar_data_97 %>% 
   mutate(
@@ -69,8 +90,10 @@ data_mutations_97 <- columnar_data_97 %>%
   select(id, year, job_number, employer_id, 
          job_satisfaction,
          age, avg_age_job_year, tenure,
-         hours_worked, hourly_pay, unique_employer_id, 
-         starts_with("personality"))
+         hours_worked, hourly_pay, unique_employer_id)
+
+mutations_with_personality_97 <- data_mutations_97 %>% 
+  left_join(personality_97) 
 
 
 ### IMPUTATION NOT ADAPTED YET ###
