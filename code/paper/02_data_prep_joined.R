@@ -2,13 +2,27 @@ library(tidyverse)
 library(zoo)
 
 # load data
-cohort_79 <- load("prepped_79.RData")
-cohort_97 <- load("prepped_97.RData")
+load("prepped_79.RData")
+load("prepped_97.RData")
+
+cohort_79 <- mutations_with_personality_79
+cohort_97 <- mutations_with_personality_97 %>% 
+  rename(hours_worked_week = hours_worked) %>% 
+  select(-unique_employer_id)
 
 # join data
-joined_data <- rbind(cohort_79, cohort_97) # make sure have same columns first
+joined_data <- rbind(cohort_79, cohort_97) 
 
 # train test split
+unique_ids <- joined_data$id %>% unique
+train_id_sample <- sample(1:length(unique_ids), 
+                   size = ceiling(0.7 * length(unique_ids)))
+
+train_ids <- unique_ids[train_id_sample]
+test_ids <- unique_ids[-train_id_sample]
+
+train_data <- joined_data[joined_data$id %in% train_ids, ]
+test_data <- joined_data[joined_data$id %in% test_ids, ]
 
 # imputation NOT DONE --- OLD VERSION!!!
 ## linear interpolation for values measured at least twice
