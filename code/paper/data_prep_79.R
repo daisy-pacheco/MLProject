@@ -6,11 +6,7 @@ cpi <- read_csv('data/paper/CPI.csv')
 
 tidy_data_79 <- original_data_79 %>% 
   tidyr::pivot_longer(
-    -c(R0000100, R0214700, R0214800, R0010300, T4998600, 
-       T4998601, T4998602, T4998603, T4998604, T4998605,
-       T4998606, T4998607, T4998608, T4998609, T5733900,
-       T5733901, T5733902, T5733903, T5733904, T5733905,
-       T5733906, T5733907, T5733908, T5733909),
+    -c(R0000100, R0214700, R0214800, R0010300),
     names_to = "variable_id",
     values_to = "value",
     values_drop_na = TRUE
@@ -23,64 +19,32 @@ tidy_data_79 <- original_data_79 %>%
     id = R0000100,
     ethnicity = R0214700,
     gender = R0214800,
-    religion = R0010300,
-    personality_14_1 = T4998600,
-    personality_14_2 = T4998601,
-    personality_14_3 = T4998602,
-    personality_14_4 = T4998603,
-    personality_14_5 = T4998604,
-    personality_14_6 = T4998605,
-    personality_14_7 = T4998606,
-    personality_14_8 = T4998607,
-    personality_14_9 = T4998608,
-    personality_14_10 = T4998609,
-    personality_16_1 = T5733900,
-    personality_16_2 = T5733901,
-    personality_16_3 = T5733902,
-    personality_16_4 = T5733903,
-    personality_16_5 = T5733904,
-    personality_16_6 = T5733905,
-    personality_16_7 = T5733906,
-    personality_16_8 = T5733907,
-    personality_16_9 = T5733908,
-    personality_16_10 =  T5733909
+    religion = R0010300
   ) %>% 
   dplyr::select(-variable_id, -religion, 
                 -ethnicity, -gender)
 
-yearly_variables_79 <- tidy_data_79 %>% 
-  filter(is.na(job_number)) %>% 
-  select(id, year, variable, value) %>% 
-  mutate(row = row_number()) %>%
+personality_vars_79 <- tidy_data_79 %>% 
+  filter(grepl("personality", variable)) %>% 
+  mutate(value = ifelse(value < 1, NA, value)) %>% 
+  select(-job_number) %>% 
   pivot_wider(
     names_from = variable,
     values_from = value
   ) %>% 
-  select(id, year, age,
-         job_satisfaction_global) %>% 
-  group_by(id, year) %>% 
-  summarize_all(funs(mean(., na.rm = TRUE)))
+  group_by(id) %>% 
+  summarise_all(funs(mean(., na.rm = TRUE))) %>% 
+  select(-year)
 
-personality_79 <- tidy_data_79 %>% 
-  select(id, starts_with("personality")) %>% 
-  unique() %>% 
-  rowwise() %>% 
-  mutate(personality_1 = mean(personality_14_1, personality_16_1, na.rm = TRUE),
-         personality_2 = mean(personality_14_2, personality_16_2, na.rm = TRUE),
-         personality_3 = mean(personality_14_3, personality_16_3, na.rm = TRUE),
-         personality_4 = mean(personality_14_4, personality_16_4, na.rm = TRUE),
-         personality_5 = mean(personality_14_5, personality_16_5, na.rm = TRUE),
-         personality_6 = mean(personality_14_6, personality_16_6, na.rm = TRUE),
-         personality_7 = mean(personality_14_7, personality_16_7, na.rm = TRUE),
-         personality_8 = mean(personality_14_8, personality_16_8, na.rm = TRUE),
-         personality_9 = mean(personality_14_9, personality_16_9, na.rm = TRUE),
-         personality_10 = mean(personality_14_10, personality_16_10, na.rm = TRUE)) %>% 
-  select(id, personality_1, personality_2, personality_3, personality_4, 
-         personality_5, personality_6, personality_7, personality_8, personality_9,
-         personality_10)
+yearly_variables_79 <- tidy_data_79 %>% 
+  dplyr::filter(variable %in% c("job_satisfaction_global", "age")) %>% 
+  dplyr::select(id, year, variable, value) %>%
+  tidyr::pivot_wider(
+    names_from = variable,
+    values_from = value
+  )
 
 tidy_data_fix_79 <- tidy_data_79 %>% 
-  select(-starts_with("personality")) %>% 
   filter(!is.na(job_number)) %>% 
   left_join(yearly_variables_79)
 
@@ -133,7 +97,7 @@ data_mutations_79 <- columnar_data_79 %>%
          hours_worked_week, hourly_pay)
 
 mutations_with_personality_79 <- data_mutations_79 %>% 
-  left_join(personality_79) 
+  left_join(personality_vars_79) 
 
 ### NOT ADAPTED YET ###
 # imputation 
