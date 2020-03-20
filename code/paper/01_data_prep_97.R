@@ -90,33 +90,8 @@ data_mutations_97 <- columnar_data_97 %>%
   ) 
 
 mutations_with_personality_97 <- data_mutations_97 %>% 
-  left_join(personality_vars_97) 
+  left_join(personality_vars_97)%>% 
+  mutate(id = paste(id, "_97"),
+         cohort = "1997")
 
-
-### IMPUTATION NOT ADAPTED YET ###
-# imputation 
-## linear interpolation for values measured at least twice
-## otherwise, mean imputation
-library(zoo)
-
-imputed_data_97 <- data_mutations_97 %>% 
-  group_by(id) %>% 
-  mutate(tenure = ifelse(is.na(tenure), 
-                         mean(tenure, na.rm = T), 
-                         tenure)) %>% 
-  mutate(hours_worked = ifelse(is.na(hours_worked), 
-                               mean(hours_worked, na.rm = T), 
-                               hours_worked)) %>% 
-  mutate(hourly_pay = ifelse(is.na(hourly_pay), 
-                             mean(hourly_pay, na.rm = T), 
-                             hourly_pay)) %>% 
-  ungroup()
-
-imputed_data_final_97 <- imputed_data_97 %>% 
-  filter(hours_worked >= 35)
-
-
-
-test <- columnar_data_97 %>% 
-  group_by(id, employer_id, year) %>% 
-  summarize(mean_satisfaction = mean(job_satisfaction, na.rm = TRUE))
+# save(mutations_with_personality_97, file = "./data/prepped_97.RData")

@@ -97,64 +97,8 @@ data_mutations_79 <- columnar_data_79 %>%
          hours_worked_week, hourly_pay)
 
 mutations_with_personality_79 <- data_mutations_79 %>% 
-  left_join(personality_vars_79) 
+  left_join(personality_vars_79) %>% 
+  mutate(id = paste(id, "_79"),
+         cohort = "1979")
 
-### NOT ADAPTED YET ###
-# imputation 
-## linear interpolation for values measured at least twice
-## otherwise, mean imputation
-library(zoo)
-
-imputed_data <- data_mutations %>% 
-  group_by(id) %>% 
-  mutate(rosenberg_score = na.approx(rosenberg_score, na.rm = FALSE)) %>% 
-  mutate(rosenberg_score = ifelse(is.na(rosenberg_score), 
-                                  mean(rosenberg_score, na.rm = T), 
-                                  rosenberg_score)) %>% 
-  mutate(rotter_score = na.approx(rotter_score, na.rm = FALSE)) %>% 
-  mutate(rotter_score = ifelse(is.na(rotter_score), 
-                               mean(rotter_score, na.rm = T), 
-                               rotter_score)) %>% 
-  mutate(tenure = ifelse(is.na(tenure), 
-                         mean(tenure, na.rm = T), 
-                         tenure)) %>% 
-  mutate(hours_worked_week = ifelse(is.na(hours_worked_week), 
-                                    mean(hours_worked_week, na.rm = T), 
-                                    hours_worked_week)) %>% 
-  mutate(hourly_pay = ifelse(is.na(hourly_pay), 
-                             mean(hourly_pay, na.rm = T), 
-                             hourly_pay)) %>% 
-  ungroup()
-
-imputed_data_final <- imputed_data %>% 
-  filter(hours_worked_week >= 35)
-
-
-### COME BACK TO CENTERING LATER ###
-## group mean centering level 1 (job) variables
-centered_data <- imputed_data_final %>%
-  dplyr::group_by(id) %>% 
-  dplyr:: mutate(hourly_pay_mean_per_person = mean(hourly_pay, na.rm = TRUE),
-                 hourly_pay_centered = hourly_pay - hourly_pay_mean_per_person,
-                 avg_age_per_job_mean_per_person = mean(avg_age_per_job, na.rm = TRUE),
-                 avg_age_per_job_centered = avg_age_per_job - avg_age_per_job_mean_per_person,
-                 tenure_mean_per_person = mean(tenure, na.rm = TRUE),
-                 tenure_centered = tenure - tenure_mean_per_person,
-                 hours_mean_per_person = mean(hours_worked_week, na.rm = TRUE),
-                 hours_worked_week_centered = hours_worked_week - hours_mean_per_person) %>%
-  dplyr::select(-hourly_pay_mean_per_person, -avg_age_per_job_mean_per_person, 
-                -tenure_mean_per_person, -hours_mean_per_person) %>%
-  ungroup
-
-## grand mean centering level 2 (individual) variables
-centered_data <- centered_data %>%
-  dplyr:: mutate(rotter_score_centered = rotter_score - (mean(rotter_score, na.rm = TRUE)),
-                 rosenberg_score_centered = rosenberg_score - (mean(rosenberg_score, na.rm = TRUE)))
-
-# final transformations, dropping uncentered, dropping NAs
-prepped_data <- centered_data %>% 
-  dplyr::select(-age, -rosenberg_score, -rotter_score, -tenure, 
-         -hourly_pay) %>% 
-  dplyr::drop_na()
-
-save(prepped_data, file = "prepped_data_79.RData")
+# save(mutations_with_personality_79, file = "./data/prepped_79.RData")
