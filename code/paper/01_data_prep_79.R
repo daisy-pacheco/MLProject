@@ -33,8 +33,19 @@ personality_vars_79 <- tidy_data_79 %>%
     values_from = value
   ) %>% 
   group_by(id) %>% 
-  summarise_all(funs(mean(., na.rm = TRUE))) %>% 
-  select(-year)
+  mutate(personality_1 = mean(c(personality_1_14, personality_1_16), na.rm = TRUE),
+         personality_2 = mean(c(personality_2_14, personality_2_16), na.rm = TRUE),
+         personality_3 = mean(c(personality_3_14, personality_3_16), na.rm = TRUE),
+         personality_4 = mean(c(personality_4_14, personality_4_16), na.rm = TRUE),
+         personality_5 = mean(c(personality_5_14, personality_5_16), na.rm = TRUE),
+         personality_6 = mean(c(personality_6_14, personality_6_16), na.rm = TRUE),
+         personality_7 = mean(c(personality_7_14, personality_7_16), na.rm = TRUE),
+         personality_8 = mean(c(personality_8_14, personality_8_16), na.rm = TRUE),
+         personality_9 = mean(c(personality_9_14, personality_9_16), na.rm = TRUE),
+         personality_10 = mean(c(personality_10_14, personality_10_16), na.rm = TRUE)) %>% 
+  select(id, personality_1, personality_2, personality_3, personality_4, 
+         personality_5, personality_6, personality_7, personality_8,
+         personality_9, personality_10)
 
 yearly_variables_79 <- tidy_data_79 %>% 
   dplyr::filter(variable %in% c("job_satisfaction_global", "age")) %>% 
@@ -94,11 +105,15 @@ data_mutations_79 <- columnar_data_79 %>%
   select(id, year, job_number, employer_id, 
          job_satisfaction,
          age, avg_age_job_year, tenure,
-         hours_worked_week, hourly_pay)
+         hours_worked, hourly_pay)
 
 mutations_with_personality_79 <- data_mutations_79 %>% 
   left_join(personality_vars_79) %>% 
   mutate(id = paste(id, "_79"),
          cohort = "1979")
 
-# save(mutations_with_personality_79, file = "./data/prepped_79.RData")
+# rescale dependent variable
+final_data_79 <- mutations_with_personality_79 %>% 
+  mutate(job_satisfaction_scaled = rescale(job_satisfaction, to = c(1, 10)))
+
+# save(final_data_79, file = "./data/paper/prepped_79.RData")

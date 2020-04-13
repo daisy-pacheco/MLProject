@@ -2,16 +2,11 @@ library(tidyverse)
 library(zoo)
 
 # load data
-load("prepped_79.RData")
-load("prepped_97.RData")
-
-cohort_79 <- mutations_with_personality_79
-cohort_97 <- mutations_with_personality_97 %>% 
-  rename(hours_worked_week = hours_worked) %>% 
-  select(-unique_employer_id)
+load("data/paper/prepped_79.RData")
+load("data/paper/prepped_97.RData")
 
 # join data
-joined_data <- rbind(cohort_79, cohort_97) 
+joined_data <- rbind(final_data_79, final_data_97) 
 
 # train test split
 unique_ids <- joined_data$id %>% unique
@@ -46,36 +41,62 @@ imputed_data <- joined_data %>%
   mutate(hourly_pay = ifelse(is.na(hourly_pay), 
                              mean(hourly_pay, na.rm = T), 
                              hourly_pay)) %>% 
-  ungroup()
-
-imputed_data_final <- imputed_data %>% 
   filter(hours_worked_week >= 35)
 
-# centering NOT DONE --- OLD VERSION!!!
-## group mean centering level 1 (job) variables
-centered_data <- imputed_data_final %>%
-  dplyr::group_by(id) %>% 
-  dplyr:: mutate(hourly_pay_mean_per_person = mean(hourly_pay, na.rm = TRUE),
-                 hourly_pay_centered = hourly_pay - hourly_pay_mean_per_person,
-                 avg_age_per_job_mean_per_person = mean(avg_age_per_job, na.rm = TRUE),
-                 avg_age_per_job_centered = avg_age_per_job - avg_age_per_job_mean_per_person,
-                 tenure_mean_per_person = mean(tenure, na.rm = TRUE),
-                 tenure_centered = tenure - tenure_mean_per_person,
-                 hours_mean_per_person = mean(hours_worked_week, na.rm = TRUE),
-                 hours_worked_week_centered = hours_worked_week - hours_mean_per_person) %>%
-  dplyr::select(-hourly_pay_mean_per_person, -avg_age_per_job_mean_per_person, 
-                -tenure_mean_per_person, -hours_mean_per_person) %>%
-  ungroup
+# centering 
+centerData <- function(data){
+  centered_data <- data %>% 
+    # group mean centering level 1 (job) variables
+    group_by(id) %>% 
+    mutate(
+      hourly_pay_mean_per_person = mean(hourly_pay, na.rm = TRUE),
+      hourly_pay_centered = hourly_pay - hourly_pay_mean_per_person,
+      avg_age_job_year_per_person = mean(avg_age_job_year, na.rm = TRUE),
+      avg_age_job_year_centered = avg_age_job_year - avg_age_job_year_per_person,
+      tenure_mean_per_person = mean(tenure, na.rm = TRUE),
+      tenure_centered = tenure - tenure_mean_per_person,
+      hours_mean_per_person = mean(hours_worked, na.rm = TRUE),
+      hours_worked_centered = hours_worked - hours_mean_per_person
+    ) %>%
+    ungroup() %>% 
+    # grand mean centering level 2 (individual) variables
+    mutate(
+      personality_1_centered = personality_1 - mean(personality_1, na.rm = TRUE),
+      personality_2_centered = personality_2 - mean(personality_2, na.rm = TRUE),
+      personality_3_centered = personality_3 - mean(personality_3, na.rm = TRUE),
+      personality_4_centered = personality_4 - mean(personality_4, na.rm = TRUE),
+      personality_5_centered = personality_5 - mean(personality_5, na.rm = TRUE),
+      personality_6_centered = personality_6 - mean(personality_6, na.rm = TRUE),
+      personality_7_centered = personality_7 - mean(personality_7, na.rm = TRUE),
+      personality_8_centered = personality_8 - mean(personality_8, na.rm = TRUE),
+      personality_9_centered = personality_9 - mean(personality_9, na.rm = TRUE),
+      personality_10_centered = personality_10 - mean(personality_10, na.rm = TRUE)
+    ) %>% 
+    select(-hourly_pay_mean_per_person, -avg_age_job_year_per_person, 
+           -tenure_mean_per_person, -hours_mean_per_person)
 
-## grand mean centering level 2 (individual) variables
-centered_data <- centered_data %>%
-  dplyr:: mutate(rotter_score_centered = rotter_score - (mean(rotter_score, na.rm = TRUE)),
-                 rosenberg_score_centered = rosenberg_score - (mean(rosenberg_score, na.rm = TRUE)))
+  return(centered_data)
+}
 
-# final transformations, dropping uncentered, dropping NAs
-prepped_data <- centered_data %>% 
-  dplyr::select(-age, -rosenberg_score, -rotter_score, -tenure, 
-                -hourly_pay) %>% 
-  dplyr::drop_na()
+centered_train_data <- centerData(imputed_train_data)
+centered_test_data <- centerData(imputed_test_data)
 
-# save(prepped_data, file = "prepped_data.RData")
+# drop remaining NAs and unused columns
+cleanData <- function(data){
+  clean_data <- data %>% 
+    select(id, year, job_number, employer_id,
+           job_satisfaction_scaled, hourly_pay_centered, 
+           avg_age_job_year_centered, tenure_centered,
+           hours_worked_centered, personality_1_centered,
+           personality_2_centered, personality_3_centered,
+           personality_4_centered, personality_5_centered, 
+           personality_6_centered, personality_7_centered, 
+           personality_8_centered, personality_9_centered, 
+           personality_10_centered) %>% 
+    drop_na()
+
+  return(clean_data)
+}
+
+clean_train_data <- cleanData(centered_train_data)
+clean_test_data <- cleanData(centered_test_data)

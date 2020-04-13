@@ -85,13 +85,15 @@ data_mutations_97 <- columnar_data_97 %>%
     avg_age_job_year, 
     tenure,
     hours_worked, 
-    hourly_pay, 
-    unique_employer_id
-  ) 
+    hourly_pay) 
 
 mutations_with_personality_97 <- data_mutations_97 %>% 
   left_join(personality_vars_97)%>% 
   mutate(id = paste(id, "_97"),
          cohort = "1997")
 
-# save(mutations_with_personality_97, file = "./data/prepped_97.RData")
+# rescale dependent variable
+final_data_97 <- mutations_with_personality_97 %>% 
+  mutate(job_satisfaction_scaled = rescale(job_satisfaction, to = c(1, 10)))
+
+# save(final_data_97, file = "./data/paper/prepped_97.RData")
