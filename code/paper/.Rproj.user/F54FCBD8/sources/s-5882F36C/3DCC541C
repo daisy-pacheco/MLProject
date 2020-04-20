@@ -1,0 +1,33 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1587366851395.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "3DCC541C",
+    "lastKnownWriteTime" : 0,
+    "last_content_update" : 1587366851395,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "7031C3EA",
+        "caption" : "baked_train",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=baked_train&cache_key=7031C3EA",
+        "displayedObservations" : 13740,
+        "environment" : "",
+        "expression" : "baked_train",
+        "object" : "baked_train",
+        "preview" : 0,
+        "totalObservations" : 13740,
+        "variables" : 20
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1587366565804.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "436C3A68",
+    "lastKnownWriteTime" : 1587298389,
+    "last_content_update" : 1587298389,
+    "path" : "~/Documents/GitHub/MLProject/code/paper/02_data_prep_joined.R",
+    "project_path" : "02_data_prep_joined.R",
+    "properties" : {
+        "cursorPosition" : "21,0",
+        "scrollLine" : "3"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
