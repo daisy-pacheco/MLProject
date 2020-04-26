@@ -21,7 +21,6 @@ joined_data %>%
 vis_miss(joined_data, cluster = TRUE)
 
 # KNN
-
 train_data_fix <- train_data %>% 
   dplyr::select(-id, -job_satisfaction) %>% 
   dplyr::mutate(cohort = as_factor(cohort))

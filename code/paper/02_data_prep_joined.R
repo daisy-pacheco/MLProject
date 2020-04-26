@@ -1,5 +1,9 @@
 library(tidyverse)
 library(zoo)
+library(VIM)
+library(mice)
+
+set.seed(123)
 
 # load data
 load("data/paper/prepped_79.RData")
@@ -11,7 +15,7 @@ joined_data <- rbind(final_data_79, final_data_97)
 # train test split
 unique_ids <- joined_data$id %>% unique
 train_id_sample <- sample(1:length(unique_ids), 
-                   size = ceiling(0.7 * length(unique_ids)))
+                          size = ceiling(0.7 * length(unique_ids)))
 
 train_ids <- unique_ids[train_id_sample]
 test_ids <- unique_ids[-train_id_sample]
@@ -19,29 +23,82 @@ test_ids <- unique_ids[-train_id_sample]
 train_data <- joined_data[joined_data$id %in% train_ids, ]
 test_data <- joined_data[joined_data$id %in% test_ids, ]
 
-# imputation NOT DONE --- OLD VERSION!!!
-## linear interpolation for values measured at least twice
-## otherwise, mean imputation
-imputed_data <- joined_data %>% 
-  group_by(id) %>% 
-  mutate(rosenberg_score = na.approx(rosenberg_score, na.rm = FALSE)) %>% 
-  mutate(rosenberg_score = ifelse(is.na(rosenberg_score), 
-                                  mean(rosenberg_score, na.rm = T), 
-                                  rosenberg_score)) %>% 
-  mutate(rotter_score = na.approx(rotter_score, na.rm = FALSE)) %>% 
-  mutate(rotter_score = ifelse(is.na(rotter_score), 
-                               mean(rotter_score, na.rm = T), 
-                               rotter_score)) %>% 
-  mutate(tenure = ifelse(is.na(tenure), 
-                         mean(tenure, na.rm = T), 
-                         tenure)) %>% 
-  mutate(hours_worked_week = ifelse(is.na(hours_worked_week), 
-                                    mean(hours_worked_week, na.rm = T), 
-                                    hours_worked_week)) %>% 
-  mutate(hourly_pay = ifelse(is.na(hourly_pay), 
-                             mean(hourly_pay, na.rm = T), 
-                             hourly_pay)) %>% 
-  filter(hours_worked_week >= 35)
+# imputation 
+## visualize missing data
+joined_data %>%
+  is.na() %>%
+  reshape2::melt() %>%
+  ggplot(aes(Var2, Var1, fill=value)) + 
+  geom_raster() + 
+  coord_flip() +
+  scale_y_continuous(NULL, expand = c(0, 0)) +
+  scale_fill_grey(name = "", 
+                  labels = c("Present", 
+                             "Missing")) +
+  xlab("Observation") +
+  theme(axis.text.y  = element_text(size = 4))
+
+imputeData <- function(data){
+  # linear interpolation for values measured at least twice
+  linear_imp_data <- data %>% 
+    group_by(id) %>% 
+    mutate(tenure = na.approx(tenure, na.rm = FALSE),
+           hours_worked = na.approx(hours_worked, na.rm = FALSE),
+           hourly_pay = na.approx(hours_worked, na.rm = FALSE),
+           avg_age_job_year = na.approx(avg_age_job_year, na.rm = FALSE))
+  
+  # mice for other yearly variables
+  ini <- mice(linear_imp_data, maxit = 0)
+  pred <- ini$pred
+  pred[ ,"id"] <- -2 # specify grouping variable
+  pred[ ,-1] <- 1 # fixed effects
+  meth <- ini$meth
+  meth[c(7:9)] <- "2l.lmer" # for multi-level imputation
+  meth[c(11:20)] <- "" # ignore these
+  impu <- mice(linear_imp_data, meth = meth, pred = pred, print = FALSE)
+  mice_data <- complete(impu)
+  
+  # knn for personality
+  data_one_row <- mice_data %>% 
+    select(id, cohort, year, starts_with("personality")) %>% 
+    mutate(keep = case_when(
+      cohort == "1979" & year == 2008 ~ 1,
+      cohort == "1979" & year == 2010 ~ 1,
+      cohort == "1979" & year == 2012 ~ 1,
+      cohort == "1979" & year == 2014 ~ 1,
+      cohort == "1979" & year == 2016 ~ 1,
+      cohort == "1997" & year == 2004 ~ 1,
+      cohort == "1997" & year == 2006 ~ 1,
+      cohort == "1997" & year == 2008 ~ 1,
+      cohort == "1997" & year == 2010 ~ 1,
+      cohort == "1997" & year == 2012 ~ 1,
+      TRUE ~ 0
+    )) %>% 
+    filter(keep == 1) %>% 
+    group_by(id) %>% 
+    filter(year == min(year)) %>% 
+    select(-keep)
+  
+  knn_data <- kNN(data_one_row[, -1], k = 3)
+  knn_data <- knn_data[, 1:12]
+  id <- data.frame(data_one_row[, 1])
+  knn_done <- cbind(id, knn_data[, -2])
+  
+  # re-join data sets
+  imputed_data <- mice_data %>% 
+    select(-starts_with("personality")) %>% 
+    left_join(knn_done, by = c("id", "cohort"))
+  
+  imputed_data <- imputed_data %>% 
+    filter(hours_worked >= 35) %>% 
+    drop_na()
+  
+  return(imputed_data)
+  
+}
+
+imputed_train_data <- imputeData(train_data)
+imputed_test_data <- imputeData(test_data)
 
 # centering 
 centerData <- function(data){
@@ -72,18 +129,6 @@ centerData <- function(data){
       personality_9_centered = personality_9 - mean(personality_9, na.rm = TRUE),
       personality_10_centered = personality_10 - mean(personality_10, na.rm = TRUE)
     ) %>% 
-    select(-hourly_pay_mean_per_person, -avg_age_job_year_per_person, 
-           -tenure_mean_per_person, -hours_mean_per_person)
-
-  return(centered_data)
-}
-
-centered_train_data <- centerData(imputed_train_data)
-centered_test_data <- centerData(imputed_test_data)
-
-# drop remaining NAs and unused columns
-cleanData <- function(data){
-  clean_data <- data %>% 
     select(id, year, job_number, employer_id,
            job_satisfaction_scaled, hourly_pay_centered, 
            avg_age_job_year_centered, tenure_centered,
@@ -92,11 +137,13 @@ cleanData <- function(data){
            personality_4_centered, personality_5_centered, 
            personality_6_centered, personality_7_centered, 
            personality_8_centered, personality_9_centered, 
-           personality_10_centered) %>% 
-    drop_na()
-
-  return(clean_data)
+           personality_10_centered)
+  
+  return(centered_data)
 }
 
-clean_train_data <- cleanData(centered_train_data)
-clean_test_data <- cleanData(centered_test_data)
+final_train_data <- centerData(imputed_train_data)
+final_test_data <- centerData(imputed_test_data)
+
+
+
