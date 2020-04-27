@@ -145,5 +145,5 @@ centerData <- function(data){
 final_train_data <- centerData(imputed_train_data)
 final_test_data <- centerData(imputed_test_data)
 
-
-
+# save(final_train_data, file = "data/paper/final_train_data.RData")
+# save(final_test_data, file = "data/paper/final_test_data.RData")
