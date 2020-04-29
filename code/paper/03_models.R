@@ -3,6 +3,9 @@ library(lme4)
 library(lmerTest)
 library(xgboost)
 library(vip)
+library(earth)
+library(caret)
+library(pdp) 
 
 set.seed(123)
 
@@ -119,3 +122,52 @@ RMSE(preds, testY)
 
 # feature importance
 vip(xgbTrain)
+
+# MARS ------------------------------------------------------------------
+mars_train_data <- final_train_data %>%
+  select(-id, -job_number, -employer_id)
+
+# create a tuning grid
+hyper_grid <- expand.grid(
+  degree = 1:3, 
+  nprune = seq(2, 100, length.out = 10) %>% floor()
+)
+
+cv_mars <- train(
+  x = subset(mars_train_data, select = -job_satisfaction_scaled),
+  y = mars_train_data$job_satisfaction_scaled,
+  method = "earth",
+  metric = "RMSE",
+  trControl = trainControl(method = "cv", number = 10),
+  tuneGrid = hyper_grid
+)
+
+cv_mars$bestTune
+
+# variable importance plots
+p1 <- vip(cv_mars, num_features = 40, geom = "point", value = "gcv") + ggtitle("GCV")
+p2 <- vip(cv_mars, num_features = 40, geom = "point", value = "rss") + ggtitle("RSS")
+
+gridExtra::grid.arrange(p1, p2, ncol = 2)
+
+# partial dependence plots (to better understand the relationship between these features and job_satisfaction)
+p1 <- partial(cv_mars, pred.var = "personality_1_centered", grid.resolution = 10) %>% 
+  autoplot()
+p2 <- partial(cv_mars, pred.var = "tenure_centered", grid.resolution = 10) %>% 
+  autoplot()
+p3 <- partial(cv_mars, pred.var = c("personality_1_centered", "tenure_centered"), 
+              grid.resolution = 10) %>% 
+  plotPartial(levelplot = FALSE, zlab = "yhat", drape = TRUE, colorkey = TRUE, 
+              screen = list(z = -20, x = -60))
+
+gridExtra::grid.arrange(p1, p2, p3, ncol = 3)
+
+# final model
+marsModel <- earth(
+  job_satisfaction_scaled ~ .,  
+  data = mars_train_data,
+  degree = 3,
+  nk = 23
+)
+
+summary(marsModel)
