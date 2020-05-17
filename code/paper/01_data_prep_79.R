@@ -1,4 +1,5 @@
 library(tidyverse)
+library(scales)
 
 original_data_79 <- read_csv('data/paper/fulldata_79.csv')
 names_dictionary_79 <- read.csv('data/paper/dictionary_79.csv', sep = ";")
@@ -21,8 +22,7 @@ tidy_data_79 <- original_data_79 %>%
     gender = R0214800,
     religion = R0010300
   ) %>% 
-  dplyr::select(-variable_id, -religion, 
-                -ethnicity, -gender)
+  dplyr::select(-variable_id)
 
 personality_vars_79 <- tidy_data_79 %>% 
   filter(grepl("personality", variable)) %>% 
@@ -48,7 +48,11 @@ personality_vars_79 <- tidy_data_79 %>%
          personality_9, personality_10)
 
 yearly_variables_79 <- tidy_data_79 %>% 
-  dplyr::filter(variable %in% c("job_satisfaction_global", "age")) %>% 
+  dplyr::filter(variable %in% c("job_satisfaction_global", 
+                                "age", 
+                                "highest_grade",
+                                "urban_rural",
+                                "family_income")) %>% 
   dplyr::select(id, year, variable, value) %>%
   tidyr::pivot_wider(
     names_from = variable,
@@ -60,8 +64,15 @@ tidy_data_fix_79 <- tidy_data_79 %>%
   left_join(yearly_variables_79)
 
 columnar_data_79 <- tidy_data_fix_79 %>% 
-  group_by(id, variable, job_number, 
-           year, job_satisfaction_global, age) %>% 
+  group_by(id, 
+           variable, 
+           job_number, 
+           year, 
+           job_satisfaction_global, 
+           age,
+           highest_grade, 
+           urban_rural, 
+           family_income) %>% 
   mutate(row = row_number()) %>%
   pivot_wider(
     names_from = variable,
@@ -91,10 +102,28 @@ data_mutations_79 <- columnar_data_79 %>%
       TRUE ~ job_satisfaction
     )
   ) %>% 
+  group_by(id) %>%
+  fill(highest_grade, .direction = c("down")) %>% 
+  fill(highest_grade, .direction = c("up")) %>%   
+  ungroup() %>% 
   mutate(
+    cohort = "1979",
     hourly_pay = log((hourly_pay * cpi) + 1),
+    family_income = log((family_income * cpi) + 1),
     tenure = tenure / 52,
     avg_age_job_year = ((age - tenure) + age) / 2,
+    male = as_factor(
+      ifelse(gender == 1, 1, 0)
+    ),
+    white = as_factor(
+      ifelse(ethnicity == 3, 1, 0)
+    ),
+    religious = as_factor(
+      ifelse(religion != 0, 1, 0)
+    ),
+    urban = as_factor(
+      ifelse(urban_rural == 2, NA, urban_rural)
+    ),
     public = case_when(year <= 1993 & sector == 2 ~ 1, 
                        year > 1993 & sector == 1 ~ 1,
                        TRUE ~ 0)
@@ -102,18 +131,16 @@ data_mutations_79 <- columnar_data_79 %>%
   filter(public == 1 & 
            !is.na(employer_id) & 
            !is.na(job_satisfaction)) %>% 
-  select(id, year, job_number, employer_id, 
-         job_satisfaction,
-         age, avg_age_job_year, tenure,
-         hours_worked, hourly_pay)
+  select(-currently_working, -industry, 
+         -sector, -cpi, -urban_rural, -gender, -age, 
+         -religion, -public, -ethnicity) 
 
 mutations_with_personality_79 <- data_mutations_79 %>% 
   left_join(personality_vars_79) %>% 
-  mutate(id = paste(id, "_79"),
-         cohort = "1979")
+  mutate(id = paste(id, "_79"))
 
 # rescale dependent variable
 final_data_79 <- mutations_with_personality_79 %>% 
-  mutate(job_satisfaction_scaled = rescale(job_satisfaction, to = c(1, 10)))
+  mutate(job_satisfaction = rescale(job_satisfaction, newrange = c(1, 10)))
 
 # save(final_data_79, file = "./data/paper/prepped_79.RData")

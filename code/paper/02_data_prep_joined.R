@@ -45,7 +45,8 @@ imputeData <- function(data){
     mutate(tenure = na.approx(tenure, na.rm = FALSE),
            hours_worked = na.approx(hours_worked, na.rm = FALSE),
            hourly_pay = na.approx(hours_worked, na.rm = FALSE),
-           avg_age_job_year = na.approx(avg_age_job_year, na.rm = FALSE))
+           avg_age_job_year = na.approx(avg_age_job_year, na.rm = FALSE),
+           family_income = na.approx(family_income, na.rm = FALSE))
   
   # mice for other yearly variables
   ini <- mice(linear_imp_data, maxit = 0)
@@ -53,8 +54,8 @@ imputeData <- function(data){
   pred[ ,"id"] <- -2 # specify grouping variable
   pred[ ,-1] <- 1 # fixed effects
   meth <- ini$meth
-  meth[c(7:9)] <- "2l.lmer" # for multi-level imputation
-  meth[c(11:20)] <- "" # ignore these
+  meth[c(4, 5, 6, 7, 10, 13, 17)] <- "2l.lmer" # for multi-level imputation
+  meth[c(14, 18:27)] <- "" # ignore these
   impu <- mice(linear_imp_data, meth = meth, pred = pred, print = FALSE)
   mice_data <- complete(impu)
   
@@ -90,8 +91,7 @@ imputeData <- function(data){
     left_join(knn_done, by = c("id", "cohort"))
   
   imputed_data <- imputed_data %>% 
-    filter(hours_worked >= 35) %>% 
-    drop_na()
+    filter(hours_worked >= 35) 
   
   return(imputed_data)
   
@@ -100,6 +100,38 @@ imputeData <- function(data){
 imputed_train_data <- imputeData(train_data)
 imputed_test_data <- imputeData(test_data)
 
+# add personality interactions
+addPersonalityInteractions <- function(data){
+  final_data <- data %>% 
+    mutate(
+      tenure_personality1 = tenure * personality_1,
+      tenure_personality2 = tenure * personality_2,
+      tenure_personality3 = tenure * personality_3,
+      tenure_personality4 = tenure * personality_4,
+      tenure_personality5 = tenure * personality_5,
+      tenure_personality6 = tenure * personality_6,
+      tenure_personality7 = tenure * personality_7,
+      tenure_personality8 = tenure * personality_8,
+      tenure_personality9 = tenure * personality_9,
+      tenure_personality10 = tenure * personality_10,
+      pay_personality1 = hourly_pay * personality_1,
+      pay_personality2 = hourly_pay * personality_2,
+      pay_personality3 = hourly_pay * personality_3,
+      pay_personality4 = hourly_pay * personality_4,
+      pay_personality5 = hourly_pay * personality_5,
+      pay_personality6 = hourly_pay * personality_6,
+      pay_personality7 = hourly_pay * personality_7,
+      pay_personality8 = hourly_pay * personality_8,
+      pay_personality9 = hourly_pay * personality_9,
+      pay_personality10 = hourly_pay * personality_10) 
+  
+  return(final_data)
+}
+
+personality_train_data <- addPersonalityInteractions(imputed_train_data)
+personality_test_data <- addPersonalityInteractions(imputed_test_data)
+
+
 # centering 
 centerData <- function(data){
   centered_data <- data %>% 
@@ -107,43 +139,31 @@ centerData <- function(data){
     group_by(id) %>% 
     mutate(
       hourly_pay_mean_per_person = mean(hourly_pay, na.rm = TRUE),
-      hourly_pay_centered = hourly_pay - hourly_pay_mean_per_person,
+      hourly_pay = hourly_pay - hourly_pay_mean_per_person,
       avg_age_job_year_per_person = mean(avg_age_job_year, na.rm = TRUE),
-      avg_age_job_year_centered = avg_age_job_year - avg_age_job_year_per_person,
+      avg_age_job_year = avg_age_job_year - avg_age_job_year_per_person,
       tenure_mean_per_person = mean(tenure, na.rm = TRUE),
-      tenure_centered = tenure - tenure_mean_per_person,
+      tenure = tenure - tenure_mean_per_person,
       hours_mean_per_person = mean(hours_worked, na.rm = TRUE),
-      hours_worked_centered = hours_worked - hours_mean_per_person
+      hours_worked = hours_worked - hours_mean_per_person
     ) %>%
     ungroup() %>% 
     # grand mean centering level 2 (individual) variables
-    mutate(
-      personality_1_centered = personality_1 - mean(personality_1, na.rm = TRUE),
-      personality_2_centered = personality_2 - mean(personality_2, na.rm = TRUE),
-      personality_3_centered = personality_3 - mean(personality_3, na.rm = TRUE),
-      personality_4_centered = personality_4 - mean(personality_4, na.rm = TRUE),
-      personality_5_centered = personality_5 - mean(personality_5, na.rm = TRUE),
-      personality_6_centered = personality_6 - mean(personality_6, na.rm = TRUE),
-      personality_7_centered = personality_7 - mean(personality_7, na.rm = TRUE),
-      personality_8_centered = personality_8 - mean(personality_8, na.rm = TRUE),
-      personality_9_centered = personality_9 - mean(personality_9, na.rm = TRUE),
-      personality_10_centered = personality_10 - mean(personality_10, na.rm = TRUE)
-    ) %>% 
-    select(id, year, job_number, employer_id,
-           job_satisfaction_scaled, hourly_pay_centered, 
-           avg_age_job_year_centered, tenure_centered,
-           hours_worked_centered, personality_1_centered,
-           personality_2_centered, personality_3_centered,
-           personality_4_centered, personality_5_centered, 
-           personality_6_centered, personality_7_centered, 
-           personality_8_centered, personality_9_centered, 
-           personality_10_centered)
+    mutate_at(vars(family_income, 
+                   starts_with("personality"), 
+                   starts_with("tenure_personality"),
+                   starts_with("pay_personality")),
+              funs(. - mean(., na.rm = TRUE))) %>% 
+    select(-hourly_pay_mean_per_person, 
+           -avg_age_job_year_per_person,
+           -tenure_mean_per_person,
+           -hours_mean_per_person)
   
   return(centered_data)
 }
 
-final_train_data <- centerData(imputed_train_data)
-final_test_data <- centerData(imputed_test_data)
+final_train_data <- centerData(personality_train_data)
+final_test_data <- centerData(personality_test_data)
 
 # save(final_train_data, file = "data/paper/final_train_data.RData")
 # save(final_test_data, file = "data/paper/final_test_data.RData")

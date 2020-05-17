@@ -17,32 +17,48 @@ load("data/paper/final_test_data.RData")
 options(scipen = 999)
 
 # LMER -----------------------------------------------------
-lmerModel <- lmer(job_satisfaction_scaled ~ 
+lmer_data <- rbind(final_test_data, final_train_data)
+
+lmerModel <- lmer(job_satisfaction ~ 
                     year + 
-                    hourly_pay_centered  + 
-                    avg_age_job_year_centered + 
-                    tenure_centered +
-                    hours_worked_centered +
-                    personality_1_centered +
-                    personality_2_centered +
-                    personality_3_centered +
-                    personality_4_centered +
-                    personality_5_centered +
-                    personality_6_centered +
-                    personality_7_centered +
-                    personality_8_centered +
-                    personality_9_centered +
-                    personality_10_centered +
+                    cohort +
+                    hourly_pay  + 
+                    avg_age_job_year + 
+                    tenure +
+                    hours_worked +
+                    job_number + 
+                    union +
+                    white +
+                    highest_grade +
+                    family_income + 
+                    male +
+                    religious +
+                    urban + 
+                    personality_1 +
+                    personality_2 +
+                    personality_3 +
+                    personality_4 +
+                    personality_5 +
+                    personality_6 +
+                    personality_7 +
+                    personality_8 +
+                    personality_9 +
+                    personality_10 +
                     (1 | id), 
-                  data = final_train_data)
+                  data = lmer_data)
 
 summary(lmerModel)
 
 # XGBoost -----------------------------------------------------
 
 # variables
-X <- final_train_data %>% select(-id, -employer_id, -job_number, -job_satisfaction_scaled) %>% as.matrix()
-Y <- final_train_data$job_satisfaction_scaled
+X <- final_train_data %>% 
+  select(-id, -employer_id, -job_number, -job_satisfaction) %>%
+  mutate_at(vars(male, white, religious, urban, cohort),
+            funs(as.numeric)) %>% 
+  as.matrix()
+
+Y <- final_train_data$job_satisfaction
 
 # hyperparameters
 hyper_grid <- expand.grid(
@@ -107,8 +123,13 @@ xgbTrain <- xgboost(
 )
 
 # prediction 
-testY <- final_test_data$job_satisfaction_scaled
-test_matrix <- final_test_data %>% select(-id, -employer_id, -job_number, -job_satisfaction_scaled) %>% as.matrix()
+testY <- final_test_data$job_satisfaction
+
+test_matrix <- final_test_data %>% 
+  select(-id, -employer_id, -job_number, -job_satisfaction) %>%
+  mutate_at(vars(male, white, religious, urban, cohort),
+            funs(as.numeric)) %>% 
+  as.matrix()
 
 preds <- predict(xgbTrain, as.matrix(test_matrix))
 
@@ -117,8 +138,7 @@ RMSE <- function(predicted, real){
 }
 
 RMSE(preds, testY)
-# 2.076 with centered
-# 2.078 with uncentered data
+# 2.152 
 
 # feature importance
 vip(xgbTrain)
@@ -134,8 +154,8 @@ hyper_grid <- expand.grid(
 )
 
 cv_mars <- train(
-  x = subset(mars_train_data, select = -job_satisfaction_scaled),
-  y = mars_train_data$job_satisfaction_scaled,
+  x = subset(mars_train_data, select = -job_satisfaction),
+  y = mars_train_data$job_satisfaction,
   method = "earth",
   metric = "RMSE",
   trControl = trainControl(method = "cv", number = 10),
@@ -164,7 +184,7 @@ gridExtra::grid.arrange(p1, p2, p3, ncol = 3)
 
 # final model
 marsModel <- earth(
-  job_satisfaction_scaled ~ .,  
+  job_satisfaction ~ .,  
   data = mars_train_data,
   degree = 3,
   nk = 23
