@@ -145,7 +145,8 @@ vip(xgbTrain)
 
 # MARS ------------------------------------------------------------------
 mars_train_data <- final_train_data %>%
-  select(-id, -job_number, -employer_id)
+  select(-id, -job_number, -employer_id) %>% 
+  drop_na()
 
 # create a tuning grid
 hyper_grid <- expand.grid(
@@ -171,11 +172,11 @@ p2 <- vip(cv_mars, num_features = 40, geom = "point", value = "rss") + ggtitle("
 gridExtra::grid.arrange(p1, p2, ncol = 2)
 
 # partial dependence plots (to better understand the relationship between these features and job_satisfaction)
-p1 <- partial(cv_mars, pred.var = "personality_1_centered", grid.resolution = 10) %>% 
+p1 <- partial(cv_mars, pred.var = "personality_1", grid.resolution = 10) %>% 
   autoplot()
-p2 <- partial(cv_mars, pred.var = "tenure_centered", grid.resolution = 10) %>% 
+p2 <- partial(cv_mars, pred.var = "white", grid.resolution = 10) %>% 
   autoplot()
-p3 <- partial(cv_mars, pred.var = c("personality_1_centered", "tenure_centered"), 
+p3 <- partial(cv_mars, pred.var = c("personality_1", "white"), 
               grid.resolution = 10) %>% 
   plotPartial(levelplot = FALSE, zlab = "yhat", drape = TRUE, colorkey = TRUE, 
               screen = list(z = -20, x = -60))
@@ -183,11 +184,30 @@ p3 <- partial(cv_mars, pred.var = c("personality_1_centered", "tenure_centered")
 gridExtra::grid.arrange(p1, p2, p3, ncol = 3)
 
 # final model
-marsModel <- earth(
+mars_model <- earth(
   job_satisfaction ~ .,  
   data = mars_train_data,
-  degree = 3,
+  degree = 1,
   nk = 23
 )
 
-summary(marsModel)
+summary(mars_model)
+
+# prediction 
+final_test_data_na <- final_test_data %>% 
+  drop_na()
+
+test_y_mars <- final_test_data_na$job_satisfaction
+
+final_test_data_na <- final_test_data_na %>% 
+  select(-id, -employer_id, -job_number, -job_satisfaction)
+
+preds_mars <- predict(mars_model, final_test_data_na)
+
+RMSE_mars <- function(predicted, real){
+  sqrt(mean((predicted - real)^2))
+}
+
+RMSE_mars(preds_mars, test_y_mars)
+# 2.064 
+
