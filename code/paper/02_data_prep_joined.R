@@ -91,7 +91,8 @@ imputeData <- function(data){
     left_join(knn_done, by = c("id", "cohort"))
   
   imputed_data <- imputed_data %>% 
-    filter(hours_worked >= 35) 
+    filter(hours_worked >= 35) %>% 
+    drop_na()
   
   return(imputed_data)
   

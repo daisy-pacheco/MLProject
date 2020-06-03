@@ -138,15 +138,14 @@ RMSE <- function(predicted, real){
 }
 
 RMSE(preds, testY)
-# 2.152 
+# 2.048
 
 # feature importance
 vip(xgbTrain)
 
 # MARS ------------------------------------------------------------------
 mars_train_data <- final_train_data %>%
-  select(-id, -job_number, -employer_id) %>% 
-  drop_na()
+  select(-id, -job_number, -employer_id)
 
 # create a tuning grid
 hyper_grid <- expand.grid(
@@ -194,15 +193,12 @@ mars_model <- earth(
 summary(mars_model)
 
 # prediction 
+test_y_mars <- final_test_data$job_satisfaction
+
 final_test_data_na <- final_test_data %>% 
-  drop_na()
-
-test_y_mars <- final_test_data_na$job_satisfaction
-
-final_test_data_na <- final_test_data_na %>% 
   select(-id, -employer_id, -job_number, -job_satisfaction)
 
-preds_mars <- predict(mars_model, final_test_data_na)
+preds_mars <- predict(mars_model, final_test_data)
 
 RMSE_mars <- function(predicted, real){
   sqrt(mean((predicted - real)^2))
