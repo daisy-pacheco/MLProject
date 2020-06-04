@@ -187,7 +187,7 @@ mars_model <- earth(
   job_satisfaction ~ .,  
   data = mars_train_data,
   degree = 1,
-  nk = 23
+  nk = 26
 )
 
 summary(mars_model)
@@ -195,15 +195,15 @@ summary(mars_model)
 # prediction 
 test_y_mars <- final_test_data$job_satisfaction
 
-final_test_data_na <- final_test_data %>% 
+test_matrix_mars <- final_test_data %>% 
   select(-id, -employer_id, -job_number, -job_satisfaction)
 
-preds_mars <- predict(mars_model, final_test_data)
+preds_mars <- predict(mars_model, test_matrix_mars)
 
 RMSE_mars <- function(predicted, real){
   sqrt(mean((predicted - real)^2))
 }
 
 RMSE_mars(preds_mars, test_y_mars)
-# 2.064 
+# 2.066 
 
