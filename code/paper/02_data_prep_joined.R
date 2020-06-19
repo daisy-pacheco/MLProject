@@ -163,8 +163,25 @@ centerData <- function(data){
   return(centered_data)
 }
 
-final_train_data <- centerData(personality_train_data)
-final_test_data <- centerData(personality_test_data)
+final_train_data_personality <- centerData(personality_train_data)
+final_test_data_personality <- centerData(personality_test_data)
+
+# save(final_train_data_personality, file = "data/paper/final_train_data_personality.RData")
+# save(final_test_data_personality, file = "data/paper/final_test_data_personality.RData")
+
+final_train_data <- final_train_data_personality %>% 
+  dplyr::mutate(
+    pay_tenure = hourly_pay * tenure, 
+    pay_age = hourly_pay * avg_age_job_year
+  ) %>% 
+  dplyr::select(id, job_number, year, highest_grade, family_income, tenure, hours_worked, hourly_pay, employer_id, union, job_satisfaction, cohort, avg_age_job_year, male, white, religious, urban, pay_tenure, pay_age)
+
+final_test_data <- final_test_data_personality %>% 
+  dplyr::mutate(
+    pay_tenure = hourly_pay * tenure, 
+    pay_age = hourly_pay * avg_age_job_year
+  ) %>% 
+  dplyr::select(id, job_number, year, highest_grade, family_income, tenure, hours_worked, hourly_pay, employer_id, union, job_satisfaction, cohort, avg_age_job_year, male, white, religious, urban, pay_tenure, pay_age)
 
 # save(final_train_data, file = "data/paper/final_train_data.RData")
 # save(final_test_data, file = "data/paper/final_test_data.RData")
