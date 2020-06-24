@@ -1,41 +1,57 @@
 library(lime)
 library(shapper)
-library(randomForest)
+library(lme4)
+library(dplyr)
+
+num_data_train <- final_train_data %>%
+  select(-id, -employer_id) %>% 
+  mutate_all(funs(as.numeric))
+
+num_data_train$id <- final_train_data$id
+
+write.csv(num_data_train, "num_data_train.csv")
+
+num_data_test <- final_test_data %>%
+  select(-id, -employer_id) %>% 
+  mutate_all(funs(as.numeric))
+
+num_data_test$id <- final_test_data$id
+
+write.csv(num_data_test, "num_data_test.csv")
+
 
 # LMER -----------------------------------------------------
-lmer_data <- rbind(final_test_data, final_train_data)
 
 lmerModel <- lmer(job_satisfaction ~ 
                     year + 
-                    cohort +
                     hourly_pay  + 
                     avg_age_job_year + 
                     tenure +
                     hours_worked +
-                    job_number + 
-                    union +
-                    white +
-                    highest_grade +
-                    family_income + 
-                    male +
-                    religious +
-                    urban + 
-                    personality_1 +
-                    personality_2 +
-                    personality_3 +
-                    personality_4 +
-                    personality_5 +
-                    personality_6 +
-                    personality_7 +
-                    personality_8 +
-                    personality_9 +
-                    personality_10 +
                     (1 | id), 
-                  data = lmer_data)
+                  data = num_data)
 
 summary(lmerModel)
 
+# LM ----------------------------------------------------------
+lmModel <- lm(job_satisfaction ~ 
+                    year + 
+                    hourly_pay  + 
+                    avg_age_job_year + 
+                    tenure +
+                    hours_worked,
+                  data = data.frame(num_data))
 
+# SHAP ---------------------------------------------------------
+p_function <- function(model, data) predict(model, newdata = data, type = "response")
+
+ive <- individual_variable_effect(lmModel, data = num_data[,-6], predict_function = p_function,
+                                  new_observation = num_data[1,], nsamples = 50)
+
+
+
+
+# LIME ---------------------------------------------------------
 
 features <- as.data.frame(final_train_data) %>% 
   select(-job_satisfaction, -id, -job_number, -employer_id)
