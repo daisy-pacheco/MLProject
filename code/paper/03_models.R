@@ -45,5 +45,5 @@ testY <- final_test_data$job_satisfaction
 preds <- predict(lmerModel, final_test_data, allow.new.levels = TRUE)
 
 RMSE(preds, testY)
-# 2.12
+# 2.14
 

@@ -161,18 +161,22 @@ centerData <- function(data){
       tenure_mean_per_person = mean(tenure, na.rm = TRUE),
       tenure = tenure - tenure_mean_per_person,
       hours_mean_per_person = mean(hours_worked, na.rm = TRUE),
-      hours_worked = hours_worked - hours_mean_per_person
+      hours_worked = hours_worked - hours_mean_per_person,
+      pay_tenure_mean_per_person = mean(pay_tenure, na.rm = TRUE),
+      pay_tenure = pay_tenure - pay_tenure_mean_per_person,
+      pay_age_mean_per_person = mean(pay_age, na.rm = TRUE),
+      pay_age = pay_tenure - pay_age_mean_per_person
     ) %>%
     ungroup() %>% 
     # grand mean centering level 2 (individual) variables
-    mutate_at(vars(family_income, 
-                   pay_tenure, 
-                   pay_age),
+    mutate_at(vars(family_income),
               funs(. - mean(., na.rm = TRUE))) %>% 
     select(-hourly_pay_mean_per_person, 
            -avg_age_job_year_per_person,
            -tenure_mean_per_person,
-           -hours_mean_per_person)
+           -hours_mean_per_person,
+           -pay_tenure_mean_per_person,
+           -pay_age_mean_per_person)
   
   return(centered_data)
 }
