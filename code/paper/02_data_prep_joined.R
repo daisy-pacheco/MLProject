@@ -165,7 +165,7 @@ centerData <- function(data){
       pay_tenure_mean_per_person = mean(pay_tenure, na.rm = TRUE),
       pay_tenure = pay_tenure - pay_tenure_mean_per_person,
       pay_age_mean_per_person = mean(pay_age, na.rm = TRUE),
-      pay_age = pay_tenure - pay_age_mean_per_person
+      pay_age = pay_age - pay_age_mean_per_person
     ) %>%
     ungroup() %>% 
     # grand mean centering level 2 (individual) variables
