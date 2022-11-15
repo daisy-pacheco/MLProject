@@ -7,8 +7,8 @@ library(rpart.plot)
 set.seed(123)
 
 # load data
-load("data/paper/final_train_data.RData")
-load("data/paper/final_test_data.RData")
+load("data/final_train_data.RData")
+load("data/final_test_data.RData")
 
 # turn off scientific notation
 options(scipen = 999)

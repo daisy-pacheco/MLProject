@@ -1,6 +1,9 @@
 library(tidyverse)
 set.seed(123)
 
+# load
+load("data/full_prepped_data.RData")
+
 # filtering for full time
 full_time_data <- prepped_data %>% 
   filter(hours_worked_week >= 35) %>% 

@@ -236,4 +236,4 @@ prepped_data <- centered_data %>%
          public = factor(public)) %>% 
   dplyr::drop_na()
 
-save(prepped_data, file = "full_prepped_data.RData")
+save(prepped_data, file = "data/full_prepped_data.RData")

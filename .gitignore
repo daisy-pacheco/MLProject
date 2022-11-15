@@ -1,8 +1,4 @@
-
-code/final-project/.DS_Store
-code/paper/.Rhistory
-data/.Rhistory
-experiments/.Rhistory
-data/.DS_Store
-code/.DS_Store
-figures/.DS_Store
+*.DS_Store
+*.Rhistory
+background-info/Paper 1 Job Satisfaction and Personality.docx
+code/paper/.Rproj.user/*

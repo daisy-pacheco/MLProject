@@ -1,9 +1,9 @@
 library(tidyverse)
 library(scales)
 
-original_data_79 <- read_csv('data/paper/fulldata_79.csv')
-names_dictionary_79 <- read.csv('data/paper/dictionary_79.csv', sep = ";")
-cpi <- read_csv('data/paper/CPI.csv')
+original_data_79 <- read_csv('data/fulldata_79.csv')
+names_dictionary_79 <- read.csv('data/dictionary_79.csv', sep = ";")
+cpi <- read_csv('data/CPI.csv')
 
 tidy_data_79 <- original_data_79 %>% 
   tidyr::pivot_longer(
@@ -128,12 +128,11 @@ data_mutations_79 <- columnar_data_79 %>%
                        year > 1993 & sector == 1 ~ 1,
                        TRUE ~ 0)
   ) %>% 
-  filter(public == 1 & 
-           !is.na(employer_id) & 
-           !is.na(job_satisfaction)) %>% 
+  filter(!is.na(employer_id) & 
+         !is.na(job_satisfaction)) %>% 
   select(-currently_working, -industry, 
          -sector, -cpi, -urban_rural, -gender, -age, 
-         -religion, -public, -ethnicity) 
+         -religion, -ethnicity) 
 
 mutations_with_personality_79 <- data_mutations_79 %>% 
   left_join(personality_vars_79) %>% 
@@ -143,4 +142,4 @@ mutations_with_personality_79 <- data_mutations_79 %>%
 final_data_79 <- mutations_with_personality_79 %>% 
   mutate(job_satisfaction = rescale(job_satisfaction, newrange = c(1, 10)))
 
-# save(final_data_79, file = "./data/paper/prepped_79.RData")
+save(final_data_79, file = "data/prepped_79_full.RData")

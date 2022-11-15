@@ -9,15 +9,11 @@ num_data_train <- final_train_data %>%
 
 num_data_train$id <- final_train_data$id
 
-write.csv(num_data_train, "num_data_train.csv")
-
 num_data_test <- final_test_data %>%
   select(-id, -employer_id) %>% 
   mutate_all(funs(as.numeric))
 
 num_data_test$id <- final_test_data$id
-
-write.csv(num_data_test, "num_data_test.csv")
 
 
 # LMER -----------------------------------------------------

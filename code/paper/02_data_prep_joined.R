@@ -6,8 +6,8 @@ library(mice)
 set.seed(123)
 
 # load data
-load("data/paper/prepped_79.RData")
-load("data/paper/prepped_97.RData")
+load("data/prepped_79_full.RData")
+load("data/prepped_97_full.RData")
 
 # join data
 joined_data <- rbind(final_data_79, final_data_97) 
@@ -169,7 +169,7 @@ centerData <- function(data){
     ) %>%
     ungroup() %>% 
     # grand mean centering level 2 (individual) variables
-    mutate_at(vars(family_income),
+    mutate_at(vars(family_income, highest_grade),
               funs(. - mean(., na.rm = TRUE))) %>% 
     select(-hourly_pay_mean_per_person, 
            -avg_age_job_year_per_person,
@@ -184,5 +184,5 @@ centerData <- function(data){
 final_train_data <- centerData(interactions_train_data)
 final_test_data <- centerData(interactions_test_data)
 
-# save(final_train_data, file = "data/paper/final_train_data.RData")
-# save(final_test_data, file = "data/paper/final_test_data.RData")
+save(final_train_data, file = "data/final_train_data_full.RData")
+save(final_test_data, file = "data/final_test_data_full.RData")
