@@ -15,7 +15,7 @@ public_data <- full_time_data %>%
   select(-public)
 
 
-# mixor
+# mixor ------------------------------------------------------------------------
 library(mixor)
 
 ## full time only
@@ -42,7 +42,21 @@ public_model <- mixor(job_satisfaction ~
 
 summary(public_model)
 
-## balanced class example 
+# ordinal --------------------------------------------------------------------------
+library(ordinal)
+
+public_data$job_satisfaction <- as.factor(public_data$job_satisfaction)
+
+public_model_clmm <- clmm(job_satisfaction ~
+                           religion + ethnicity + gender + highest_grade + urban_rural + net_family_income_centered +
+                           job_number + union + 
+                           hourly_pay_centered + avg_age_per_job_centered + tenure_centered + 
+                           rotter_score_centered + rosenberg_score_centered + (1|id),
+                         link = "logit",
+                         data = public_data)
+
+
+## balanced class example -----------------------------------------------------
 library(caret)
 full_time_data$job_satisfaction <- as.factor(full_time_data$job_satisfaction)
 balanced_data <- downSample(x = full_time_data,
