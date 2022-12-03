@@ -96,8 +96,8 @@ data_mutations <- columnar_data %>%
       religion == 8 ~ "jewish",
       religion == 9 ~ 'other'
     )),
-    urban_rural = as_factor(
-      ifelse(urban_rural, "urban", "rural")
+    urban = as_factor(
+      ifelse(urban_rural, 1, 0)
     ),
     highest_grade = as_factor(
       dplyr::case_when(
@@ -109,7 +109,7 @@ data_mutations <- columnar_data %>%
       )
     ),
     union = as_factor(
-      ifelse(union == 1, "union", "no_union")
+      ifelse(union == 1, 1, 0)
     ),
     industry = as_factor(dplyr::case_when(
       year <= 2000 & industry >= 17 & industry <= 28 ~ "agriculture",
@@ -208,7 +208,7 @@ imputed_test_data <- imputeData(test_data)
 fullTimePublicPayInteractions <- function(data){
 
   data <- data %>% 
-    dplyr::select(id, religion, ethnicity, gender, year, highest_grade, urban_rural, age, net_family_income, rosenberg_score,
+    dplyr::select(id, religion, ethnicity, gender, year, highest_grade, urban, age, net_family_income, rosenberg_score,
                   rotter_score, job_number, tenure, hours_worked_week, hourly_pay, industry, job_satisfaction, avg_age_per_job, 
                   sector, union) %>% 
     dplyr::mutate(full_time = as_factor(case_when(
@@ -275,7 +275,7 @@ finalTransformations <- function(data){
       gender,
       year,
       highest_grade,
-      urban_rural, 
+      urban, 
       job_number,
       hours_worked_week,
       industry,
