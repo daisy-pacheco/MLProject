@@ -7,7 +7,7 @@ library(mice)
 set.seed(0)
 
 # read data
-original_data <- readr::read_csv('data/fulldata.csv')
+original_data <- readr::read_csv('data/survey_data.csv')
 names_dictionary <- readr::read_csv('data/dictionary.csv')
 cpi <- readr::read_csv('data/CPI.csv')
 

@@ -95,13 +95,15 @@ TODOs:
 1. Once we have confirmed we have replicated things well enough, we should re-run the
 data_prep.R script, and un-comment out the line to save the full_prepped_data.RData file.
 I made some small changes to the dataset and this should also be updated for consistency.
+We will also need to update the column names in this script to match the new ones.
 
-2. Add public * age and public * tenure to the full model
+2. Add public * age and public * tenure to the models. The features have already been
+created in the updated prepped data.
 
 3. Create tables with N and goodness-of-fit measures, in Word format
 
 4. Check linear model assumptions (VIF, residual plots)
 
-5. marginal probability plots for public vs. private, and tenure vs. age
+5. Create marginal probability plots for public vs. private, and tenure vs. age
 Details here: https://drizopoulos.github.io/GLMMadaptive/articles/Ordinal_Mixed_Models.html
 "
