@@ -92,8 +92,7 @@ summary(private_glmm)
 "
 TODOs:
 
-1. Add public * age and public * tenure to the models. The features have already been
-created in the updated prepped data.
+1. Add public * age and public * tenure to the models. 
 
 2. Create tables with N and goodness-of-fit measures, in Word format
 
