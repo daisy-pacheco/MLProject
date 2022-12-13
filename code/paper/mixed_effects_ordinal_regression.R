@@ -1,8 +1,12 @@
 library(tidyverse)
+library(GLMMadaptive)
+
 set.seed(123)
 
 # load
 load("data/full_prepped_data.RData")
+
+prepped_data$job_satisfaction = as.factor(prepped_data$job_satisfaction)
 
 # filtering for full time
 full_time_data <- prepped_data %>% 
@@ -17,47 +21,6 @@ public_data <- full_time_data %>%
 private_data <- full_time_data %>% 
   filter(public == 0) %>% 
   select(-public)
-
-
-# mixor ------------------------------------------------------------------------
-library(mixor)
-
-full_time_mixor <- mixor(job_satisfaction ~
-                           religion + ethnicity + gender + highest_grade + urban_rural + net_family_income_centered +
-                           job_number + union + public + 
-                           hourly_pay_centered + avg_age_per_job_centered + tenure_centered + 
-                           rotter_score_centered + rosenberg_score_centered,
-                         id = id, 
-                         link = "logit",
-                         data = full_time_data)
-summary(full_time_mixor)
-
-public_mixor <- mixor(job_satisfaction ~
-                        religion + ethnicity + gender + highest_grade + urban_rural + net_family_income_centered +
-                        job_number + union + 
-                        hourly_pay_centered + avg_age_per_job_centered + tenure_centered + 
-                        rotter_score_centered + rosenberg_score_centered,
-                      id = id, 
-                      link = "logit",
-                      data = public_data)
-summary(public_mixor)
-
-private_mixor <- mixor(job_satisfaction ~
-                        religion + ethnicity + gender + highest_grade + urban_rural + net_family_income_centered +
-                        job_number + union + 
-                        hourly_pay_centered + avg_age_per_job_centered + tenure_centered + 
-                        rotter_score_centered + rosenberg_score_centered,
-                      id = id, 
-                      link = "logit",
-                      data = private_data)
-summary(private_data)
-
-# GLMMadaptive --------------------------------------------------------------------------
-library(GLMMadaptive)
-
-full_time_data$job_satisfaction = as.factor(full_time_data$job_satisfaction)
-public_data$job_satisfaction = as.factor(public_data$job_satisfaction)
-private_data$job_satisfaction = as.factor(private_data$job_satisfaction)
 
 full_glmm <- mixed_model(job_satisfaction ~
                            religion + ethnicity + gender + highest_grade + urban_rural + net_family_income_centered +
@@ -80,19 +43,20 @@ public_glmm <- mixed_model(job_satisfaction ~
 summary(public_glmm)
 
 private_glmm <- mixed_model(job_satisfaction ~
-                    religion + ethnicity + gender + highest_grade + urban_rural + net_family_income_centered +
-                    job_number + union + 
-                    hourly_pay_centered + avg_age_per_job_centered + tenure_centered + 
-                    rotter_score_centered + rosenberg_score_centered,
-                  random = ~ 1 | id, 
-                  data = private_data,
-                  family = binomial())
+                              religion + ethnicity + gender + highest_grade + urban_rural + net_family_income_centered +
+                              job_number + union + 
+                              hourly_pay_centered + avg_age_per_job_centered + tenure_centered + 
+                              rotter_score_centered + rosenberg_score_centered,
+                            random = ~ 1 | id, 
+                            data = private_data,
+                            family = binomial(),
+                            max_coef_value=15)
 summary(private_glmm)
 
 "
 TODOs:
 
-1. Add public * age and public * tenure to the models. 
+1. Add public * age and public * tenure to the models.
 
 2. Create tables with N and goodness-of-fit measures, in Word format
 
