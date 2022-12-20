@@ -1,3 +1,12 @@
+---
+title: "Job Satisfaction: Mixed Effects Ordinal Regression"
+author: "Marina Wyss & Daisy Pacheco"
+date: "12/19/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(GLMMadaptive)
 library(car)
@@ -5,7 +14,7 @@ library(lattice)
 
 set.seed(123)
 
-# load
+# load and filter data
 load("data/full_prepped_data.RData")
 
 prepped_data$job_satisfaction = as.factor(prepped_data$job_satisfaction)
@@ -23,29 +32,44 @@ public_data <- full_time_data %>%
 private_data <- full_time_data %>% 
   filter(public == 0) %>% 
   select(-public)
+```
 
-# Mixed-Effects Ordinal Regression --------------------------------------------------------
-full_glmm <- mixed_model(job_satisfaction ~
-                           religion + 
-                           ethnicity + 
-                           gender + 
-                           highest_grade + 
-                           urban_rural +
-                           net_family_income_centered +
-                           job_number + 
-                           union + 
-                           hourly_pay_centered + 
-                           rotter_score_centered + 
-                           rosenberg_score_centered +
-                           public + 
-                           avg_age_per_job_centered + 
-                           tenure_centered + 
-                         random = ~ 1 | id, 
-                         data = full_time_data,
-                         family = binomial())
+## Linear Model Assumptions Checks
 
-summary(full_glmm)
+```{r}
+model_vif <- glm(job_satisfaction ~
+                   religion + 
+                   ethnicity + 
+                   gender + 
+                   highest_grade + 
+                   urban_rural +
+                   net_family_income_centered +
+                   job_number + 
+                   union + 
+                   hourly_pay_centered + 
+                   rotter_score_centered + 
+                   rosenberg_score_centered +
+                   public + 
+                   avg_age_per_job_centered + 
+                   tenure_centered,
+                 data = full_time_data,
+                 family = binomial())
 
+summary(model_vif)
+
+vif_values <- vif(model_vif)
+
+res <- resid(model_vif)
+
+plot(fitted(model_vif), res)
+```
+
+
+## Mixed-Effects Ordinal Regression Models
+
+### Full Model
+
+```{r}
 full_glmm_interact <- mixed_model(job_satisfaction ~
                                     religion + 
                                     ethnicity + 
@@ -68,7 +92,11 @@ full_glmm_interact <- mixed_model(job_satisfaction ~
                                   family = binomial())
 
 summary(full_glmm_interact)
+```
 
+### Public Sector Ony
+
+```{r}
 public_glmm <- mixed_model(job_satisfaction ~
                              religion + 
                              ethnicity + 
@@ -88,7 +116,13 @@ public_glmm <- mixed_model(job_satisfaction ~
                            family = binomial())
 
 summary(public_glmm)
+```
 
+### Private Sector Ony
+
+Note that for some reason this momdel has a very large (though no significant) coef for folks with "other" highest level of education.
+
+```{r}
 private_glmm <- mixed_model(job_satisfaction ~
                               religion + 
                               ethnicity + 
@@ -109,46 +143,5 @@ private_glmm <- mixed_model(job_satisfaction ~
                             max_coef_value = 15)
 
 summary(private_glmm)
+```
 
-# Linear Model Assumptions Checks -------------------------------------------------------
-model_vif <- glm(job_satisfaction ~
-                   religion + 
-                   ethnicity + 
-                   gender + 
-                   highest_grade + 
-                   urban_rural +
-                   net_family_income_centered +
-                   job_number + 
-                   union + 
-                   hourly_pay_centered + 
-                   rotter_score_centered + 
-                   rosenberg_score_centered +
-                   public + 
-                   avg_age_per_job_centered + 
-                   tenure_centered,
-                 data = full_time_data,
-                 family = binomial())
-
-summary(model_vif)
-
-vif_values <- vif(model_vif)
-vif_values
-
-res <- resid(model_vif)
-
-plot(fitted(model_vif), res)
-
-# Marginal Probability Plots -------------------------------------------------------
-# TODO finish these -- they aren't working yet.
-
-plot_data_m <- effectPlotData(public_glmm, public_data)
-
-expit <- function (x) exp(x) / (1 + exp(x))
-my_panel_bands <- function(x, y, upper, lower, fill, col, subscripts, ..., font, 
-                           fontface) {
-  upper <- upper[subscripts]
-  lower <- lower[subscripts]
-  panel.polygon(c(x, rev(x)), c(upper, rev(lower)), col = fill, border = FALSE, ...)
-}
-
-xyplot(expit(pred) ~ tenure_centered | avg_age_per_job_centered, data = plot_data_m)
