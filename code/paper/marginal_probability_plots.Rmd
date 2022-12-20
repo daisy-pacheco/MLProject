@@ -1,0 +1,67 @@
+---
+title: "Marginal Probability Plots"
+author: "Marina Wyss & Daisy Pacheco"
+date: "12/20/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(GLMMadaptive)
+library(lattice)
+
+full_glmm_interact <- readRDS("trained_models/full_glmm_interact.rds")
+
+load("data/full_prepped_data.RData")
+
+prepped_data$job_satisfaction = as.factor(prepped_data$job_satisfaction)
+
+# filtering for full time
+full_time_data <- prepped_data %>% 
+  filter(hours_worked_week >= 35) %>% 
+  select(-full_time)
+```
+
+
+```{r}
+# helper functions
+expit <- function (x) exp(x) / (1 + exp(x))
+
+my_panel_bands <- function(x, y, upper, lower, fill, col, subscripts, ..., font, 
+                           fontface) {
+  upper <- upper[subscripts]
+  lower <- lower[subscripts]
+  panel.polygon(c(x, rev(x)), c(upper, rev(lower)), col = fill, border = FALSE, ...)
+}
+
+# prep plot data
+# take a sample since memory is exhausted otherwise
+sample_data <- full_time_data[sample(nrow(full_time_data), 1000), ]
+
+plot_data <- effectPlotData(full_glmm_interact,
+                             sample_data,
+                             direction = "forward",
+                             marginal = TRUE)
+saveRDS(plot_data, "data/marginal_prob_plot_data.rds")
+
+# plot_data <- readRDS("data/marginal_prob_plot_data.rds")
+
+# prep keys
+key <- list(space = "top", rep = FALSE,
+            text = list(levels(full_time_data$job_satisfaction)[1:2]),
+            lines = list(lty = c(1, 1), lwd = c(2, 2), col = c("#0080ff", "#ff00ff")),
+            text = list(levels(full_time_data$job_satisfaction)[3:4]),
+            lines = list(lty = c(1, 1), lwd = c(2, 2), col = c("darkgreen", "#ff0000")))
+
+# plot
+xyplot(expit(pred) ~ tenure_centered | avg_age_per_job_centered,
+       group = ordinal_response,
+       data = plot_data, 
+       upper = expit(plot_data$upp), low = expit(plot_data$low), type = "l",
+       panel = function (x, y, ...) {
+           panel.superpose(x, y, panel.groups = my_panel_bands, ...)
+           panel.xyplot(x, y, lwd = 2,  ...)
+       }, xlab = "Follow-up time", 
+       ylab = "Marginal Probabilities\nalso w.r.t Random Effects", 
+       key = key)
+```
+
