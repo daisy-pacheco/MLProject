@@ -1,0 +1,57 @@
+---
+title: "Job Satisfaction: Linear Model Assumption Checks"
+author: "Marina Wyss & Daisy Pacheco"
+date: "12/19/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(car)
+
+
+set.seed(123)
+
+# load and filter data
+load("data/full_prepped_data.RData")
+
+# filtering for full time
+full_time_data <- prepped_data %>% 
+  filter(hours_worked_week >= 35) %>% 
+  dplyr::select(-full_time)
+```
+
+## Linear Model Assumptions Checks
+
+```{r}
+linear_model <- lm(job_satisfaction ~
+                       religion + 
+                       ethnicity + 
+                       gender + 
+                       highest_grade + 
+                       urban_rural +
+                       net_family_income_centered +
+                       job_number + 
+                       union + 
+                       hourly_pay_centered + 
+                       rotter_score_centered + 
+                       rosenberg_score_centered +
+                       public + 
+                       avg_age_per_job_centered + 
+                       tenure_centered,
+                     data = full_time_data)
+
+summary(linear_model)
+```
+
+```{r}
+vif_values <- vif(linear_model)
+vif_values
+```
+No high VIFs, so we don't need to worry about multicollinearity among the independent variables.
+
+```{r}
+plot(linear_model)
+```
+These definitely look strange. 

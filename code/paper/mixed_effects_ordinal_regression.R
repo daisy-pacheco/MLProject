@@ -110,33 +110,6 @@ private_glmm <- mixed_model(job_satisfaction ~
 
 summary(private_glmm)
 
-# Linear Model Assumptions Checks -------------------------------------------------------
-model_vif <- glm(job_satisfaction ~
-                   religion + 
-                   ethnicity + 
-                   gender + 
-                   highest_grade + 
-                   urban_rural +
-                   net_family_income_centered +
-                   job_number + 
-                   union + 
-                   hourly_pay_centered + 
-                   rotter_score_centered + 
-                   rosenberg_score_centered +
-                   public + 
-                   avg_age_per_job_centered + 
-                   tenure_centered,
-                 data = full_time_data,
-                 family = binomial())
-
-summary(model_vif)
-
-vif_values <- vif(model_vif)
-vif_values
-
-res <- resid(model_vif)
-
-plot(fitted(model_vif), res)
 
 # Marginal Probability Plots -------------------------------------------------------
 # TODO finish these -- they aren't working yet.
