@@ -10,8 +10,6 @@ library(GLMMadaptive)
 library(lattice)
 library(dplyr)
 
-full_glmm_interact <- readRDS("trained_models/full_glmm_interact.rds")
-
 load("data/full_prepped_data.RData")
 
 prepped_data$job_satisfaction = as.factor(prepped_data$job_satisfaction)
@@ -22,58 +20,72 @@ full_time_data <- prepped_data %>%
   select(-full_time)
 ```
 
+```{r}
+ids <- sample(unique(full_time_data$id), size = 100)
+sample_data <- full_time_data %>% filter(id %in% ids)
+
+ft_vals <- cr_setup(sample_data$job_satisfaction)
+ft_data <- sample_data[ft_vals$subs, ]
+ft_data$y_new <- ft_vals$y
+ft_data$cohort <- ft_vals$cohort
+
+full_glmm_interact <- mixed_model(y_new ~
+                                    cohort +
+                                    religion + 
+                                    ethnicity + 
+                                    gender + 
+                                    highest_grade + 
+                                    urban_rural +
+                                    net_family_income_centered +
+                                    job_number + 
+                                    union + 
+                                    hourly_pay_centered + 
+                                    rotter_score_centered + 
+                                    rosenberg_score_centered +
+                                    public + 
+                                    avg_age_per_job_centered + 
+                                    tenure_centered + 
+                                    public * avg_age_per_job_centered + 
+                                    public * tenure_centered,
+                                  random = ~ 1 | id, 
+                                  data = ft_data,
+                                  family = binomial())
+summary(full_glmm_interact)
+```
+
 
 ```{r}
+expit <- function (x) exp(x) / (1 + exp(x))
+my_panel_bands <- function(x, y, upper, lower, fill, col, subscripts, ..., font, 
+                           fontface) {
+    upper <- upper[subscripts]
+    lower <- lower[subscripts]
+    panel.polygon(c(x, rev(x)), c(upper, rev(lower)), col = fill, border = FALSE, ...)
+}
+
+key <- list(space = "top", rep = FALSE,
+            text = list(levels(sample_data$job_satisfaction)[1:2]),
+            lines = list(lty = c(1, 1), lwd = c(2, 2), col = c("#0080ff", "#ff00ff")),
+            text = list(levels(sample_data$job_satisfaction)[3:4]),
+            lines = list(lty = c(1, 1), lwd = c(2, 2), col = c("darkgreen", "#ff0000")))
+
+
 # prep plot data
-# take a sample since memory is exhausted otherwise
-# sample_data <- full_time_data[sample(nrow(full_time_data), 1000), ]
+plot_data <- effectPlotData(full_glmm_interact,
+                             ft_data,
+                             CR_cohort_varname = "cohort", 
+                             direction = "forward",
+                             marginal = TRUE
+                            )
 
-# plot_data <- effectPlotData(full_glmm_interact,
-#                             sample_data,
-#                             direction = "forward",
-#                             marginal = TRUE)
-# saveRDS(plot_data, "data/marginal_prob_plot_data.rds")
-plot_data <- readRDS("data/marginal_prob_plot_data.rds")
+xyplot(expit(pred) ~ avg_age_per_job_centered | public, group = ordinal_response, data = plot_data, 
+       upper = expit(plot_data$upp), low = expit(plot_data$low), type = "l",
+       panel = function (x, y, ...) {
+           panel.superpose(x, y, panel.groups = my_panel_bands, ...)
+           panel.xyplot(x, y, lwd = 2,  ...)
+       }, xlab = "Average Ave per Job (Centered)", 
+       ylab = "Marginal Probabilities\nalso w.r.t Random Effects", 
+       key = key)
 
-# plot
-xyplot(pred ~ avg_age_per_job_centered,
-       data = plot_data, 
-       group = public,
-       type = c("p", "smooth"),
-       auto.key = TRUE,
-       xlab = "Tenure (Centered)",
-       ylab = "Marginal Probabilities\nalso w.r.t Random Effects",
-       main = "Marginal Probability Plot for Public (1) and Private (0) Sector Employees"
-)
-
-xyplot(pred ~ tenure_centered,
-       data = plot_data, 
-       group = public,
-       type = c("p", "smooth"),
-       auto.key = TRUE,
-       xlab = "Tenure (Centered)",
-       ylab = "Marginal Probabilities\nalso w.r.t Random Effects",
-       main = "Marginal Probability Plot for Public (1) and Private (0) Sector Employees"
-)
-
-xyplot(pred ~ avg_age_per_job_centered | public,
-       data = plot_data, 
-       group = job_satisfaction,
-       upper = plot_data$upp,
-       low = plot_data$low, 
-       type = "p",
-       xlab = "Average Age in a Given Job (Centered)",
-       ylab = "Marginal Probabilities\nalso w.r.t Random Effects"
-)
-
-xyplot(pred ~ tenure_centered | public,
-       data = plot_data, 
-       group = job_satisfaction,
-       upper = plot_data$upp,
-       low = plot_data$low, 
-       type = "p",
-       xlab = "Tenure (Centered)",
-       ylab = "Marginal Probabilities\nalso w.r.t Random Effects"
-)
 ```
 
